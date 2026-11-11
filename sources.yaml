@@ -18,10 +18,6 @@ sources:
     url: https://www.sciencedaily.com/rss/health_medicine.xml
     category: 医学研究
 
-  - name: Mayo Clinic 新闻
-    url: https://newsnetwork.mayoclinic.org/feed/
-    category: 权威机构
-
   # --- 全球公共卫生 ---
   - name: WHO News
     url: https://www.who.int/rss-feeds/news-english.xml
