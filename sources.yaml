@@ -1,0 +1,27 @@
+sources:
+  # --- 老年人慢病 & 常见疾病科学处理（英文） ---
+  - name: Patient.info
+    url: http://patient.info/health/rss
+    category: 慢病指南
+
+  - name: Johns Hopkins 公共卫生
+    url: http://www.jhsph.edu/publichealthnews/rss
+    category: 公共卫生
+
+  - name: ScienceDaily 健康医学
+    url: https://www.sciencedaily.com/rss/health_medicine.xml
+    category: 医学研究
+
+  # --- 日常营养与辟谣（中文） ---
+  - name: 果壳网
+    url: http://www.guokr.com/rss/
+    category: 科学辟谣
+
+  - name: 科学松鼠会
+    url: http://songshuhui.net/feed
+    category: 科学辟谣
+
+  # --- 综合性家庭健康（中文） ---
+  - name: 丁香医生
+    url: https://rss.lilydjwg.me/zhihuzhuanlan/dingxiangyisheng
+    category: 家庭健康
