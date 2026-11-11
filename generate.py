@@ -37,16 +37,20 @@ def build_cards(items):
         category = html.escape(item.get("category", ""))
         published = html.escape(format_time(item.get("published", "")))
 
-        # 健康主题配色
+        # 健康主题配色系统
         tag_style = ""
         if "慢病" in category:
             tag_style = "background: #e0f2fe; color: #075985;"   # 蓝绿
+        elif "权威聚合" in category:
+            tag_style = "background: #ccfbf1; color: #115e59;"   # 青色
         elif "公共卫生" in category:
             tag_style = "background: #dbeafe; color: #1e40af;"   # 深蓝
+        elif "权威科普" in category:
+            tag_style = "background: #ffedd5; color: #9a3412;"   # 琥珀橙
         elif "医学研究" in category:
             tag_style = "background: #f3e8ff; color: #6b21a8;"   # 紫色
         elif "辟谣" in category:
-            tag_style = "background: #fef3c7; color: #92400e;"   # 橙黄
+            tag_style = "background: #fef08a; color: #854d0e;"   # 亮黄
         elif "家庭健康" in category:
             tag_style = "background: #dcfce7; color: #166534;"   # 绿色
         else:
