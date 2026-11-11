@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-11T06:12:27.366858+00:00",
-  "count": 40,
+  "updated": "2026-11-11T06:29:13.333458+00:00",
+  "count": 56,
   "items": [
     {
       "title": "心梗发作前，身体会发出哪些警报？",
@@ -251,12 +251,28 @@
       "published": "2026-11-01T23:00:00+00:00"
     },
     {
+      "title": "The following updates were made to MedlinePlus in October 2026:",
+      "link": "https://medlineplus.gov/whatsnew/",
+      "summary": "The following updates were made to MedlinePlus in October 2026:",
+      "source": "MedlinePlus 官方索引",
+      "category": "健康指南",
+      "published": "2026-10-31T04:00:00+00:00"
+    },
+    {
       "title": "Find out if you are eligible for a free NHS flu vaccination",
       "link": "https://patient.info/healthy-living/flu-checker",
       "summary": "Open the flu jab Is the flu vaccine free for you this winter? The flu vaccine is free on the NHS for people most likely to get seriously ill from flu, and for those who could easily pass it on to someone at risk. Whether you qualify depends on your age, your health, and a few other things such as be",
       "source": "Patient.info",
       "category": "慢病指南",
       "published": "2026-10-25T23:00:00+00:00"
+    },
+    {
+      "title": "New WHO technical package to help countries improve health data for COVID-19 response and beyond",
+      "link": "https://www.who.int/news/item/27-08-2020-new-who-technical-package-health-data-for-covid-19-response",
+      "summary": "Today, as part of its commitment to strengthening health information systems and improving health[1], especially in the context of the COVID-19 pandemic, WHO announced a new approach to improving access to life-saving data: the SCORE for Health Data Technical Package. The COVID-19 pandemic has highl",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2026-10-10T07:49:45+00:00"
     },
     {
       "title": "Travelling to remote locations",
@@ -321,6 +337,118 @@
       "source": "Patient.info",
       "category": "慢病指南",
       "published": "2026-05-27T00:00:00+00:00"
+    },
+    {
+      "title": "COVID-19 disrupting mental health services in most countries, WHO survey",
+      "link": "https://www.who.int/news/item/05-10-2020-covid-19-disrupting-mental-health-services-in-most-countries-who-survey",
+      "summary": "The COVID-19 pandemic has disrupted or halted critical mental health services in 93% of countries worldwide while the demand for mental health is increasing, according to a new WHO survey. The survey of 130 countries provides the first global data showing the devastating impact of COVID-19 on access",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2020-10-06T16:42:38+00:00"
+    },
+    {
+      "title": "Global partnership to make available 120 million affordable, quality COVID-19 rapid tests for low- and middle-income countries",
+      "link": "https://www.who.int/news/item/28-09-2020-global-partnership-to-make-available-120-million-affordable-quality-covid-19-rapid-tests-for-low--and-middle-income-countries",
+      "summary": "A full access package includes WHO policy guidance on the use of antigen-based rapid diagnostic tests, manufacturer volume guarantees for low and middle-income countries, catalytic funding to assist governments to deploy the tests and an initial US$50 million procurement fund Several rapid, point-of",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2020-09-28T18:37:30+00:00"
+    },
+    {
+      "title": "Managing the COVID-19 infodemic: Promoting healthy behaviours and mitigating the harm from misinformation and disinformation",
+      "link": "https://www.who.int/news/item/23-09-2020-managing-the-covid-19-infodemic-promoting-healthy-behaviours-and-mitigating-the-harm-from-misinformation-and-disinformation",
+      "summary": "The Coronavirus disease (COVID-19) is the first pandemic in history in which technology and social media are being used on a massive scale to keep people safe, informed, productive and connected. At the same time, the technology we rely on to keep connected and informed is enabling and amplifying an",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2020-09-23T13:51:01+00:00"
+    },
+    {
+      "title": "WHO’s three messages for UNGA75",
+      "link": "https://www.who.int/news/item/15-09-2020-who-s-three-messages-for-unga75",
+      "summary": "As the world comes together at an unprecedented virtual session of the 75th UN General Assembly (UNGA), WHO has three messages to share.",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2020-09-15T16:06:51+00:00"
+    },
+    {
+      "title": "COVID-19 could reverse decades of progress toward eliminating preventable child deaths, agencies warn",
+      "link": "https://www.who.int/news/item/09-09-2020-covid-19-could-reverse-decades-of-progress-toward-eliminating-preventable-child-deaths-agencies-warn",
+      "summary": "With the number of under-five deaths at an all-time recorded low of 5.2 million in 2019, disruptions in child and maternal health services due to the COVID-19 pandemic are putting millions of additional lives at stake The number of global under-five deaths dropped to its lowest point on record in 20",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2020-09-09T00:01:05+00:00"
+    },
+    {
+      "title": "In WHO global pulse survey, 90% of countries report disruptions to essential health services since COVID-19 pandemic",
+      "link": "https://www.who.int/news/item/31-08-2020-in-who-global-pulse-survey-90-of-countries-report-disruptions-to-essential-health-services-since-covid-19-pandemic",
+      "summary": "WHO to roll out learning and monitoring tools to improve service provision during pandemic The World Health Organization (WHO) today published a first indicative survey on the impact of COVID-19 on health systems based on 105 countries’ reports. Data collected from five regions over the period from ",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2020-08-31T10:00:25+00:00"
+    },
+    {
+      "title": "172 countries and multiple candidate vaccines engaged in COVID-19 vaccine Global Access Facility",
+      "link": "https://www.who.int/news/item/24-08-2020-172-countries-and-multiple-candidate-vaccines-engaged-in-covid-19-vaccine-global-access-facility",
+      "summary": "Nine CEPI-supported candidate vaccines are part of the COVAX initiative, with a further nine candidates under evaluation, and procurement conversations on-going with additional producers not currently receiving research and development (R&D) funding through COVAX – giving COVAX the largest and most ",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2020-08-24T16:44:16+00:00"
+    },
+    {
+      "title": "Global polio eradication initiative applauds WHO African region for wild polio-free certification",
+      "link": "https://www.who.int/news/item/25-08-2020-global-polio-eradication-initiative-applauds-who-african-region-for-wild-polio-free-certification",
+      "summary": "Today, the Africa Regional Certification Commission certified the WHO African Region as wild polio-free after four years without a case. With this historic milestone, five of the six WHO regions – representing over 90% of the world’s population – are now free of the wild poliovirus, moving the world",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2020-08-24T12:56:01+00:00"
+    },
+    {
+      "title": "World Humanitarian Day 2020: A tribute to aid workers on the front lines",
+      "link": "https://www.who.int/news/item/19-08-2020-world-humanitarian-day-2020-a-tribute-to-aid-workers-on-the-front-lines",
+      "summary": "Amid a global pandemic, unprecedented needs and growing insecurity, aid workers and health-care responders are staying and delivering to the world’s most vulnerable people. Last year was the most violent on record for humanitarians, with 483 attacked, 125 killed, 234 wounded and 124 kidnapped. The U",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2020-08-19T07:55:05+00:00"
+    },
+    {
+      "title": "Plane carrying WHO trauma and surgical supplies arrives in Beirut, Lebanon",
+      "link": "https://www.who.int/news/item/05-08-2020-plane-carrying-who-trauma-and-surgical-supplies-arrives-in-beirut-lebanon",
+      "summary": "A plane carrying 20 tonnes of WHO health supplies has landed in Beirut, Lebanon, to support the treatment of patients injured by the massive blast that occurred in the city on 4 August. The supplies will cover 1000 trauma interventions and 1000 surgical interventions for people suffering from injuri",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2020-08-07T14:38:20+00:00"
+    },
+    {
+      "title": "COVID-19 Emergency Committee highlights need for response efforts over long term",
+      "link": "https://www.who.int/news/item/01-08-2020-covid-19-emergency-committee-highlights-need-for-response-efforts-over-long-term",
+      "summary": "The Emergency Committee on COVID-19, convened by the WHO Director-General under the International Health Regulations (2005) (IHR), held its fourth meeting on 31 July. In its statement following the meeting, published today, it expressed “appreciation for WHO and partners’ COVID-19 pandemic response ",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2020-08-01T14:47:25+00:00"
+    },
+    {
+      "title": "WHO statement on heated tobacco products and the US FDA decision regarding IQOS",
+      "link": "https://www.who.int/news/item/27-07-2020-who-statement-on-heated-tobacco-products-and-the-us-fda-decision-regarding-iqos",
+      "summary": "WHO takes this opportunity to remind Member States that are Parties to the WHO Framework Convention of Tobacco Control (FCTC) of their obl i gations under the Convention. Heated tobacco products are tobacco products, meaning that the WHO FCTC fully applies to these products. (Decision FCTC/COP8(22))",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2020-07-27T11:57:34+00:00"
+    },
+    {
+      "title": "World Hepatitis Day: fast-tracking the elimination of hepatitis B among mothers and children",
+      "link": "https://www.who.int/news/item/27-07-2020-world-hepatitis-day-fast-tracking-the-elimination-of-hepatitis-b-among-mothers-and-children",
+      "summary": "On World Hepatitis Day 2020, WHO is calling for united and stepped-up action to prevent mother-to-child transmission of hepatitis B (HBV), a preventable viral infection that attacks the liver and claims the lives of nearly 900 000 people each year.",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2020-07-27T09:59:42+00:00"
+    },
+    {
+      "title": "New COVID-19 Law Lab to provide vital legal information and support for the global COVID-19 response",
+      "link": "https://www.who.int/news/item/22-07-2020-new-covid-19-law-lab-to-provide-vital-legal-information-and-support-for-the-global-covid-19-response",
+      "summary": "Launching today, the COVID-19 Law Lab initiative gathers and shares legal documents from over 190 countries across the world to help states establish and implement strong legal frameworks to manage the pandemic. The goal is to ensure that laws protect the health and wellbeing of individuals and comm",
+      "source": "WHO News",
+      "category": "全球卫生",
+      "published": "2020-07-22T14:01:26+00:00"
     }
   ]
 }
