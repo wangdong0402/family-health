@@ -13,12 +13,7 @@ sources:
     url: https://medlineplus.gov/feeds/whatsnew.xml
     category: 健康指南
 
-  # --- 前沿医学研究与机构动态 ---
+  # --- 前沿医学研究 ---
   - name: ScienceDaily 健康医学
     url: https://www.sciencedaily.com/rss/health_medicine.xml
     category: 医学研究
-
-  # --- 全球公共卫生 ---
-  - name: WHO News
-    url: https://www.who.int/rss-feeds/news-english.xml
-    category: 全球卫生
