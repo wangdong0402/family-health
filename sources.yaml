@@ -4,6 +4,11 @@ sources:
     url: https://healviews.com/feed.xml
     category: 权威聚合
 
+  # --- 国内专业医疗社区 ---
+  - name: 丁香园
+    url: https://www.dxy.cn/atom.xml
+    category: 专业医疗
+
   # --- 慢病与日常指南 ---
   - name: Patient.info
     url: http://patient.info/health/rss
