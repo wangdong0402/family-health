@@ -1,21 +1,16 @@
 sources:
-  # --- 国内权威媒体聚合 ---
+  # --- 核心中文权威源 ---
   - name: 明白健康
     url: https://healviews.com/feed.xml
     category: 权威聚合
 
-  # --- 官方公共卫生数据 ---
-  - name: 中国疾控中心周报
-    url: https://weekly.chinacdc.cn/ys/rss/current.xml
-    category: 公共卫生
+  - name: 丁香园
+    url: https://www.dxy.cn/atom.xml
+    category: 专业医疗
 
-  # --- 国内权威科普（替代失效的丁香医生） ---
-  - name: 科普中国-健康
-    url: https://rsshub.app/kepuchina/health
-    category: 权威科普
-
-  - name: 科普中国-辟谣
-    url: https://rsshub.app/kepuchina/piyao
+  # --- 桥接尝试（科普中国）---
+  - name: 科学辟谣
+    url: https://rsshub.rssforever.com/kepuchina/piyao
     category: 科学辟谣
 
   # --- 权威英文源 ---
