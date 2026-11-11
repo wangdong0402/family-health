@@ -39,20 +39,16 @@ def build_cards(items):
 
         # 健康主题配色系统
         tag_style = ""
-        if "慢病" in category:
-            tag_style = "background: #e0f2fe; color: #075985;"   # 蓝绿
+        if "专业医疗" in category:
+            tag_style = "background: #ffe4e6; color: #9f1239;"   # 玫瑰红（丁香园）
         elif "权威聚合" in category:
-            tag_style = "background: #ccfbf1; color: #115e59;"   # 青色
-        elif "公共卫生" in category:
-            tag_style = "background: #dbeafe; color: #1e40af;"   # 深蓝
-        elif "权威科普" in category:
-            tag_style = "background: #ffedd5; color: #9a3412;"   # 琥珀橙
+            tag_style = "background: #ccfbf1; color: #115e59;"   # 青色（明白健康）
+        elif "慢病" in category:
+            tag_style = "background: #e0f2fe; color: #075985;"   # 蓝绿（Patient.info）
         elif "医学研究" in category:
-            tag_style = "background: #f3e8ff; color: #6b21a8;"   # 紫色
+            tag_style = "background: #f3e8ff; color: #6b21a8;"   # 紫色（ScienceDaily）
         elif "辟谣" in category:
-            tag_style = "background: #fef08a; color: #854d0e;"   # 亮黄
-        elif "家庭健康" in category:
-            tag_style = "background: #dcfce7; color: #166534;"   # 绿色
+            tag_style = "background: #fef08a; color: #854d0e;"   # 亮黄（科学辟谣）
         else:
             tag_style = "background: #f3f4f6; color: #374151;"   # 默认灰
 
