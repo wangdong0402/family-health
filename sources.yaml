@@ -1,9 +1,4 @@
 sources:
-  # --- 核心中文科普与家庭健康 ---
-  - name: 丁香医生
-    url: https://rss.lilydjwg.me/zhihuzhuanlan/dingxiangyisheng
-    category: 家庭健康
-
   # --- 国内权威媒体聚合 ---
   - name: 明白健康
     url: https://healviews.com/feed.xml
@@ -14,7 +9,16 @@ sources:
     url: https://weekly.chinacdc.cn/ys/rss/current.xml
     category: 公共卫生
 
-  # --- 权威英文源（已测试连通） ---
+  # --- 国内权威科普（替代失效的丁香医生） ---
+  - name: 科普中国-健康
+    url: https://rsshub.app/kepuchina/health
+    category: 权威科普
+
+  - name: 科普中国-辟谣
+    url: https://rsshub.app/kepuchina/piyao
+    category: 科学辟谣
+
+  # --- 权威英文源 ---
   - name: Patient.info
     url: http://patient.info/health/rss
     category: 慢病指南
