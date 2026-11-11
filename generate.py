@@ -37,18 +37,16 @@ def build_cards(items):
         category = html.escape(item.get("category", ""))
         published = html.escape(format_time(item.get("published", "")))
 
-        # 健康主题配色系统
+        # 修正后的高对比度健康主题配色系统
         tag_style = ""
-        if "专业医疗" in category:
-            tag_style = "background: #ffe4e6; color: #9f1239;"   # 玫瑰红（丁香园）
-        elif "权威聚合" in category:
-            tag_style = "background: #ccfbf1; color: #115e59;"   # 青色（明白健康）
-        elif "慢病" in category:
-            tag_style = "background: #e0f2fe; color: #075985;"   # 蓝绿（Patient.info）
+        if "权威聚合" in category:
+            tag_style = "background: #ccfbf1; color: #0f766e; border: 1px solid #14b8a6;"   # 鲜明青色
+        elif "慢病指南" in category:
+            tag_style = "background: #dbeafe; color: #1d4ed8; border: 1px solid #3b82f6;"   # 鲜明蓝色
+        elif "健康指南" in category:
+            tag_style = "background: #ffedd5; color: #c2410c; border: 1px solid #f97316;"   # 鲜明橙色
         elif "医学研究" in category:
-            tag_style = "background: #f3e8ff; color: #6b21a8;"   # 紫色（ScienceDaily）
-        elif "辟谣" in category:
-            tag_style = "background: #fef08a; color: #854d0e;"   # 亮黄（科学辟谣）
+            tag_style = "background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;"   # 鲜明紫色
         else:
             tag_style = "background: #f3f4f6; color: #374151;"   # 默认灰
 
