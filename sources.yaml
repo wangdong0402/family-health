@@ -1,23 +1,28 @@
 sources:
-  # --- 核心中文权威源 ---
+  # --- 国内权威媒体聚合 ---
   - name: 明白健康
     url: https://healviews.com/feed.xml
     category: 权威聚合
 
-  - name: 丁香园
-    url: https://www.dxy.cn/atom.xml
-    category: 专业医疗
-
-  # --- 桥接尝试（科普中国）---
-  - name: 科学辟谣
-    url: https://rsshub.rssforever.com/kepuchina/piyao
-    category: 科学辟谣
-
-  # --- 权威英文源 ---
+  # --- 慢病与日常指南 ---
   - name: Patient.info
     url: http://patient.info/health/rss
     category: 慢病指南
 
+  - name: MedlinePlus 官方索引
+    url: https://medlineplus.gov/feeds/whatsnew.xml
+    category: 健康指南
+
+  # --- 前沿医学研究与机构动态 ---
   - name: ScienceDaily 健康医学
     url: https://www.sciencedaily.com/rss/health_medicine.xml
     category: 医学研究
+
+  - name: Mayo Clinic 新闻
+    url: https://newsnetwork.mayoclinic.org/feed/
+    category: 权威机构
+
+  # --- 全球公共卫生 ---
+  - name: WHO News
+    url: https://www.who.int/rss-feeds/news-english.xml
+    category: 全球卫生
