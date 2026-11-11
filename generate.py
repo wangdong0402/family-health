@@ -37,10 +37,12 @@ def build_cards(items):
         category = html.escape(item.get("category", ""))
         published = html.escape(format_time(item.get("published", "")))
 
-        # 修正后的高对比度健康主题配色系统
+        # 健康主题配色系统
         tag_style = ""
         if "权威聚合" in category:
             tag_style = "background: #ccfbf1; color: #0f766e; border: 1px solid #14b8a6;"   # 鲜明青色
+        elif "专业医疗" in category:
+            tag_style = "background: #ffe4e6; color: #be123c; border: 1px solid #f43f5e;"   # 玫瑰红（丁香园）
         elif "慢病指南" in category:
             tag_style = "background: #dbeafe; color: #1d4ed8; border: 1px solid #3b82f6;"   # 鲜明蓝色
         elif "健康指南" in category:
@@ -135,19 +137,21 @@ h2 a:hover {{ text-decoration: underline; }}
 }}
 .disclaimer {{
   text-align: center;
-  font-size: 11px;
-  color: #98989d;
+  font-size: 12px;
+  color: #6e6e73;
   margin-top: 24px;
-  padding: 0 16px;
-  line-height: 1.6;
+  padding: 16px;
+  line-height: 1.8;
+  background: #fff;
+  border-radius: 12px;
 }}
 @media (prefers-color-scheme: dark) {{
   body {{ background: #000; color: #f5f5f7; }}
   header {{ background: rgba(0, 0, 0, .8); border-bottom-color: rgba(255, 255, 255, .12); }}
   .sub, .meta {{ color: #98989d; }}
-  .card, .empty {{ background: #1c1c1e; box-shadow: none; }}
+  .card, .empty, .disclaimer {{ background: #1c1c1e; box-shadow: none; }}
   .summary {{ color: #d1d1d6; }}
-  .disclaimer {{ color: #636366; }}
+  .disclaimer {{ color: #98989d; }}
 }}
 </style>
 </head>
@@ -158,9 +162,13 @@ h2 a:hover {{ text-decoration: underline; }}
 </header>
 <main>
 {cards}
+
 <div class="disclaimer">
+  <strong>💡 阅读小贴士：</strong><br>
+  中英文对照阅读效果更佳，英文内容可点击浏览器菜单选择“翻译”。<br><br>
   本网站内容仅供家庭日常参考，不能替代专业医疗诊断。如有不适，请及时就医。
 </div>
+
 </main>
 </body>
 </html>'''
