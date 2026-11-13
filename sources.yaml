@@ -4,13 +4,13 @@ sources:
     url: https://healviews.com/feed.xml
     category: 权威聚合
 
-  # --- 国内专业医疗社区 ---
-  - name: 丁香园
-    url: https://www.dxy.cn/atom.xml
-    category: 专业医疗
+  # --- 国内主流健康新闻 ---
+  - name: 中国新闻网健康
+    url: http://www.chinanews.com.cn/rss/health.xml
+    category: 国内健康新闻
 
   # --- 慢病与日常指南 ---
-  - name: Patient.info
+  - name: 患者信息
     url: http://patient.info/health/rss
     category: 慢病指南
 
@@ -19,6 +19,6 @@ sources:
     category: 健康指南
 
   # --- 前沿医学研究 ---
-  - name: ScienceDaily 健康医学
+  - name: 每日科学健康医学
     url: https://www.sciencedaily.com/rss/health_medicine.xml
     category: 医学研究
