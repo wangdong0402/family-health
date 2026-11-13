@@ -3,7 +3,10 @@ import os
 import html
 from datetime import datetime
 
-DATA_FILE = "data/news.json"
+NEWS_FILE = "data/news.json"
+REPORTS_FILE = "data/reports.json"
+SENTIMENT_FILE = "data/sentiment.json"
+MACRO_FILE = "data/macro.json"
 OUTPUT_FILE = "dist/index.html"
 
 
@@ -17,17 +20,16 @@ def format_time(value):
         return str(value)[:16]
 
 
-def load_data():
-    if not os.path.exists(DATA_FILE):
-        return {"updated": "", "count": 0, "items": []}
-    with open(DATA_FILE, "r", encoding="utf-8") as f:
+def load_json(filepath, default):
+    if not os.path.exists(filepath):
+        return default
+    with open(filepath, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
-def build_cards(items):
+def build_news_cards(items):
     if not items:
-        return '<div class="empty">还没有数据。请等待每日自动任务运行，或手动运行 fetch.py 后再生成。</div>'
-
+        return '<div class="empty">还没有新闻数据。</div>'
     cards = []
     for item in items:
         title = html.escape(item.get("title", ""))
@@ -36,24 +38,23 @@ def build_cards(items):
         source = html.escape(item.get("source", ""))
         category = html.escape(item.get("category", ""))
         published = html.escape(format_time(item.get("published", "")))
-
-        # 健康主题配色系统
+        
+        # 更新后的多色彩标签系统
         tag_style = ""
         if "权威聚合" in category:
-            tag_style = "background: #ccfbf1; color: #0f766e; border: 1px solid #14b8a6;"   # 鲜明青色
-        elif "专业医疗" in category:
-            tag_style = "background: #ffe4e6; color: #be123c; border: 1px solid #f43f5e;"   # 玫瑰红（丁香园）
+            tag_style = "background: #ccfbf1; color: #0f766e; border: 1px solid #14b8a6;"   # 青色（明白健康）
+        elif "国内健康新闻" in category:
+            tag_style = "background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;"   # 中国红（中新网）
         elif "慢病指南" in category:
-            tag_style = "background: #dbeafe; color: #1d4ed8; border: 1px solid #3b82f6;"   # 鲜明蓝色
+            tag_style = "background: #dbeafe; color: #1d4ed8; border: 1px solid #3b82f6;"   # 蓝色（患者信息）
         elif "健康指南" in category:
-            tag_style = "background: #ffedd5; color: #c2410c; border: 1px solid #f97316;"   # 鲜明橙色
+            tag_style = "background: #ffedd5; color: #c2410c; border: 1px solid #f97316;"   # 橙色（MedlinePlus）
         elif "医学研究" in category:
-            tag_style = "background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;"   # 鲜明紫色
+            tag_style = "background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;"   # 紫色（每日科学）
         else:
             tag_style = "background: #f3f4f6; color: #374151;"   # 默认灰
 
         summary_html = f'<p class="summary">{summary}</p>' if summary else ""
-
         cards.append(f'''
         <article class="card">
           <div class="meta">
@@ -64,16 +65,15 @@ def build_cards(items):
           <h2><a href="{link}" target="_blank" rel="noopener noreferrer">{title}</a></h2>
           {summary_html}
         </article>''')
-
     return "\n".join(cards)
 
 
 def main():
-    data = load_data()
-    items = data.get("items", [])
-    updated = format_time(data.get("updated", ""))
-    count = data.get("count", len(items))
-    cards = build_cards(items)
+    news_data = load_json(NEWS_FILE, {"updated": "", "count": 0, "items": []})
+    news_items = news_data.get("items", [])
+    news_updated = format_time(news_data.get("updated", ""))
+    news_count = news_data.get("count", len(news_items))
+    news_cards_html = build_news_cards(news_items)
 
     html_doc = f'''<!doctype html>
 <html lang="zh-CN">
@@ -158,10 +158,10 @@ h2 a:hover {{ text-decoration: underline; }}
 <body>
 <header>
   <h1>家庭健康资讯</h1>
-  <div class="sub">更新：{updated or "暂无"} · 共 {count} 条</div>
+  <div class="sub">更新：{news_updated or "暂无"} · 共 {news_count} 条</div>
 </header>
 <main>
-{cards}
+{news_cards_html}
 
 <div class="disclaimer">
   <strong>💡 阅读小贴士：</strong><br>
@@ -176,8 +176,7 @@ h2 a:hover {{ text-decoration: underline; }}
     os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(html_doc)
-
-    print(f"已生成 {OUTPUT_FILE}，共 {len(items)} 条")
+    print(f"已生成 {OUTPUT_FILE}，包含新分类颜色。")
 
 
 if __name__ == "__main__":
