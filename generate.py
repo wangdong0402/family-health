@@ -40,7 +40,6 @@ def build_cards(items):
     
     existing_categories = set(item.get("category", "") for item in items if item.get("category"))
     desired_order = ["国内健康新闻", "权威聚合", "医学研究", "慢病指南"]
-    
     sorted_categories = []
     for cat in desired_order:
         if cat in existing_categories:
@@ -162,6 +161,12 @@ h2 a:hover {{ text-decoration: underline; }}
 .search-input:focus {{ border-color: #3b82f6; }}
 .search-tips {{ text-align: center; color: #98989d; font-size: 13px; margin-top: 20px; }}
 
+/* 疾病查询卡片内部结构 */
+.disease-card h3 {{ font-size: 18px; margin: 0 0 10px; color: #1d1d1f; }}
+.disease-section {{ margin-bottom: 10px; font-size: 14px; line-height: 1.6; }}
+.disease-section strong {{ color: #3b82f6; margin-right: 6px; }}
+.disease-section span {{ color: #3a3a3c; }}
+
 .back-to-top {{ position: fixed; bottom: 30px; right: 20px; width: 44px; height: 44px; background: #1d1d1f; color: #fff; border-radius: 50%; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; z-index: 999; border: none; font-size: 20px; }}
 
 .disclaimer {{ text-align: center; font-size: 12px; color: #6e6e73; margin-top: 24px; padding: 16px; line-height: 1.8; background: #fff; border-radius: 12px; }}
@@ -177,6 +182,9 @@ h2 a:hover {{ text-decoration: underline; }}
   .back-to-top {{ background: #f5f5f7; color: #000; }}
   .tab-btn {{ color: #98989d; }}
   .tab-btn.active {{ color: #f5f5f7; border-bottom-color: #f5f5f7; }}
+  
+  .disease-card h3 {{ color: #f5f5f7; }}
+  .disease-section span {{ color: #d1d1d6; }}
 }}
 </style>
 </head>
@@ -198,10 +206,10 @@ h2 a:hover {{ text-decoration: underline; }}
 
   <div id="tab-disease" style="display: none;">
     <div class="search-container">
-      <input type="text" id="disease-search" class="search-input" placeholder="🔍 输入症状或疾病名称（如：高血压、头痛）..." oninput="debounceSearch()">
+      <input type="text" id="disease-search" class="search-input" placeholder="🔍 输入疾病名称（如：高血压、糖尿病）..." oninput="debounceSearch()">
     </div>
     <div id="disease-results">
-      <div class="search-tips">请输入至少 2 个字符开始查询。<br>（首次搜索需要下载约 34MB 的数据，请耐心等待 3-5 秒）</div>
+      <div class="search-tips">请输入疾病名称进行查询。<br>（首次搜索需要下载约 4MB 的知识库，秒加载）</div>
     </div>
   </div>
 
@@ -252,15 +260,14 @@ async function performSearch() {{
   const query = document.getElementById('disease-search').value.trim();
   const resultContainer = document.getElementById('disease-results');
 
-  if (query.length < 2) {{
-    resultContainer.innerHTML = '<div class="search-tips">请输入至少 2 个字符开始查询。</div>';
+  if (query.length < 1) {{
+    resultContainer.innerHTML = '<div class="search-tips">请输入疾病名称进行查询。</div>';
     return;
   }}
 
   if (!diseaseData) {{
     resultContainer.innerHTML = '<div class="search-tips">⏳ 正在加载医学知识库，请稍候...</div>';
     try {{
-      // 这里改为了相对路径，不带前导斜杠，防止在子目录部署时找不到文件
       const response = await fetch('search_index.json');
       if (!response.ok) throw new Error("加载失败");
       diseaseData = await response.json();
@@ -270,25 +277,32 @@ async function performSearch() {{
     }}
   }}
 
+  // 精确匹配和模糊匹配
   const matches = diseaseData.filter(item => 
-    item.title.includes(query) || item.summary.includes(query)
-  ).slice(0, 15);
+    item.title.includes(query)
+  ).slice(0, 5); // 限制最多返回 5 条，避免一屏太长
 
   if (matches.length === 0) {{
-    resultContainer.innerHTML = '<div class="search-tips">未找到相关疾病信息，请尝试其他关键词。</div>';
+    resultContainer.innerHTML = '<div class="search-tips">未找到该疾病，请尝试输入全称。</div>';
     return;
   }}
 
   let htmlStr = '';
   matches.forEach(item => {{
-    const title = item.title.replace(/</g, "&lt;");
-    const summary = item.summary.replace(/</g, "&lt;");
-    const category = item.category.replace(/</g, "&lt;");
+    const title = item.title;
+    
+    let sections = '';
+    if (item.desc) sections += `<div class="disease-section"><strong>简介：</strong><span>${{item.desc}}</span></div>`;
+    if (item.cause) sections += `<div class="disease-section"><strong>病因：</strong><span>${{item.cause}}</span></div>`;
+    if (item.symptom) sections += `<div class="disease-section"><strong>症状：</strong><span>${{item.symptom}}</span></div>`;
+    if (item.cure_way) sections += `<div class="disease-section"><strong>治疗：</strong><span>${{item.cure_way}}</span></div>`;
+    if (item.prevent) sections += `<div class="disease-section"><strong>预防：</strong><span>${{item.prevent}}</span></div>`;
+    if (item.department) sections += `<div class="disease-section"><strong>科室：</strong><span>${{item.department}}</span></div>`;
+
     htmlStr += `
-      <article class="card" style="border-left: 4px solid #10b981;">
-        <div class="meta"><span class="tag" style="background:#dcfce7; color:#166534;">${{category}}</span></div>
-        <h2>${{title}}</h2>
-        <p class="summary">${{summary}}</p>
+      <article class="card disease-card" style="border-left: 4px solid #10b981;">
+        <h3>${{title}}</h3>
+        ${{sections}}
       </article>
     `;
   }});
@@ -314,7 +328,7 @@ function scrollToTop() {{
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(html_doc)
 
-    print(f"已生成 {OUTPUT_FILE}，路径已修复。")
+    print(f"已生成 {OUTPUT_FILE}，疾病结构化展示已上线。")
 
 if __name__ == "__main__":
     main()
