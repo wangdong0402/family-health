@@ -47,6 +47,12 @@ h2 a:hover { text-decoration: underline; }
 .search-input:focus { border-color: #3b82f6; }
 .search-tips { text-align: center; color: #98989d; font-size: 13px; margin-top: 20px; }
 
+/* 疾病查询卡片内部结构 */
+.disease-card h3 { font-size: 18px; margin: 0 0 10px; color: #1d1d1f; }
+.disease-section { margin-bottom: 10px; font-size: 14px; line-height: 1.6; }
+.disease-section strong { color: #3b82f6; margin-right: 6px; }
+.disease-section span { color: #3a3a3c; }
+
 .back-to-top { position: fixed; bottom: 30px; right: 20px; width: 44px; height: 44px; background: #1d1d1f; color: #fff; border-radius: 50%; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; z-index: 999; border: none; font-size: 20px; }
 
 .disclaimer { text-align: center; font-size: 12px; color: #6e6e73; margin-top: 24px; padding: 16px; line-height: 1.8; background: #fff; border-radius: 12px; }
@@ -62,6 +68,9 @@ h2 a:hover { text-decoration: underline; }
   .back-to-top { background: #f5f5f7; color: #000; }
   .tab-btn { color: #98989d; }
   .tab-btn.active { color: #f5f5f7; border-bottom-color: #f5f5f7; }
+  
+  .disease-card h3 { color: #f5f5f7; }
+  .disease-section span { color: #d1d1d6; }
 }
 </style>
 </head>
@@ -83,7 +92,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #ccfbf1; color: #0f766e;">权威聚合</span>
             <span>明白健康</span>
-            <span class="time-text">2 小时前</span>
+            <span class="time-text">3 小时前</span>
           </div>
           <h2><a href="https://healviews.com/news/item-38113" target="_blank" rel="noopener noreferrer">GH辅助治疗在卵巢低预后患者中的循证获益与治疗价值（4）</a></h2>
           <p class="summary">GH辅助治疗在卵巢低预后患者中的循证获益与治疗价值（4）</p>
@@ -93,7 +102,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #ccfbf1; color: #0f766e;">权威聚合</span>
             <span>明白健康</span>
-            <span class="time-text">2 小时前</span>
+            <span class="time-text">3 小时前</span>
           </div>
           <h2><a href="https://healviews.com/news/item-38112" target="_blank" rel="noopener noreferrer">全身孕酮深度解码：如何立体守护妊娠结局（2）</a></h2>
           <p class="summary">全身孕酮深度解码：如何立体守护妊娠结局（2）</p>
@@ -103,7 +112,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #ccfbf1; color: #0f766e;">权威聚合</span>
             <span>明白健康</span>
-            <span class="time-text">3 小时前</span>
+            <span class="time-text">4 小时前</span>
           </div>
           <h2><a href="https://healviews.com/news/item-38103" target="_blank" rel="noopener noreferrer">过敏性疾病：从“一病多科”走向“专病一张网”</a></h2>
           <p class="summary">过敏性疾病：从“一病多科”走向“专病一张网”</p>
@@ -143,7 +152,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">4 小时前</span>
+            <span class="time-text">5 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-16/10732629.shtml" target="_blank" rel="noopener noreferrer">延寿、护心、舒缓颈椎 这项运动的好处被低估了</a></h2>
           <p class="summary">挥拍运动好处多多</p>
@@ -153,7 +162,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #ccfbf1; color: #0f766e;">权威聚合</span>
             <span>明白健康</span>
-            <span class="time-text">5 小时前</span>
+            <span class="time-text">6 小时前</span>
           </div>
           <h2><a href="https://healviews.com/news/item-38091" target="_blank" rel="noopener noreferrer">构筑新防线 更好守护我们的呼吸</a></h2>
           <p class="summary">11月的北方气温骤降，慢性阻塞性肺疾病（简称慢阻肺病）患者也迎来一年中较为难熬的时节。慢阻肺病自2024年9月被纳入国家基本公共卫生服务项目，全国约1亿患者逐步实现足不出户就能享受医生上门检查和健康随访服务。这也正是“十五五”时期卫生健康工作发力的重点方向之一。2026年全国卫生...</p>
@@ -163,7 +172,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">5 小时前</span>
+            <span class="time-text">6 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-16/10732579.shtml" target="_blank" rel="noopener noreferrer">健身半年，竟然两次真菌感染！医生提醒→</a></h2>
           <p class="summary">近日</p>
@@ -203,7 +212,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span class="time-text">16 小时前</span>
+            <span class="time-text">17 小时前</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261114202236.htm" target="_blank" rel="noopener noreferrer">Vitamin C could help block cancer-linked chemicals in your stomach, study finds</a></h2>
           <p class="summary">Scientists have discovered that vitamin C may help prevent potentially cancer-causing chemicals from forming in the stomach after eating foods containing nitrates and nitrites. A new mathematical model suggests that taking vitamin C after meals could reduce these harmful reactions, offering a possib</p>
@@ -712,10 +721,10 @@ h2 a:hover { text-decoration: underline; }
 
   <div id="tab-disease" style="display: none;">
     <div class="search-container">
-      <input type="text" id="disease-search" class="search-input" placeholder="🔍 输入症状或疾病名称（如：高血压、头痛）..." oninput="debounceSearch()">
+      <input type="text" id="disease-search" class="search-input" placeholder="🔍 输入疾病名称（如：高血压、糖尿病）..." oninput="debounceSearch()">
     </div>
     <div id="disease-results">
-      <div class="search-tips">请输入至少 2 个字符开始查询。<br>（首次搜索需要下载约 34MB 的数据，请耐心等待 3-5 秒）</div>
+      <div class="search-tips">请输入疾病名称进行查询。<br>（首次搜索需要下载约 4MB 的知识库，秒加载）</div>
     </div>
   </div>
 
@@ -766,15 +775,14 @@ async function performSearch() {
   const query = document.getElementById('disease-search').value.trim();
   const resultContainer = document.getElementById('disease-results');
 
-  if (query.length < 2) {
-    resultContainer.innerHTML = '<div class="search-tips">请输入至少 2 个字符开始查询。</div>';
+  if (query.length < 1) {
+    resultContainer.innerHTML = '<div class="search-tips">请输入疾病名称进行查询。</div>';
     return;
   }
 
   if (!diseaseData) {
     resultContainer.innerHTML = '<div class="search-tips">⏳ 正在加载医学知识库，请稍候...</div>';
     try {
-      // 这里改为了相对路径，不带前导斜杠，防止在子目录部署时找不到文件
       const response = await fetch('search_index.json');
       if (!response.ok) throw new Error("加载失败");
       diseaseData = await response.json();
@@ -784,25 +792,32 @@ async function performSearch() {
     }
   }
 
+  // 精确匹配和模糊匹配
   const matches = diseaseData.filter(item => 
-    item.title.includes(query) || item.summary.includes(query)
-  ).slice(0, 15);
+    item.title.includes(query)
+  ).slice(0, 5); // 限制最多返回 5 条，避免一屏太长
 
   if (matches.length === 0) {
-    resultContainer.innerHTML = '<div class="search-tips">未找到相关疾病信息，请尝试其他关键词。</div>';
+    resultContainer.innerHTML = '<div class="search-tips">未找到该疾病，请尝试输入全称。</div>';
     return;
   }
 
   let htmlStr = '';
   matches.forEach(item => {
-    const title = item.title.replace(/</g, "&lt;");
-    const summary = item.summary.replace(/</g, "&lt;");
-    const category = item.category.replace(/</g, "&lt;");
+    const title = item.title;
+    
+    let sections = '';
+    if (item.desc) sections += `<div class="disease-section"><strong>简介：</strong><span>${item.desc}</span></div>`;
+    if (item.cause) sections += `<div class="disease-section"><strong>病因：</strong><span>${item.cause}</span></div>`;
+    if (item.symptom) sections += `<div class="disease-section"><strong>症状：</strong><span>${item.symptom}</span></div>`;
+    if (item.cure_way) sections += `<div class="disease-section"><strong>治疗：</strong><span>${item.cure_way}</span></div>`;
+    if (item.prevent) sections += `<div class="disease-section"><strong>预防：</strong><span>${item.prevent}</span></div>`;
+    if (item.department) sections += `<div class="disease-section"><strong>科室：</strong><span>${item.department}</span></div>`;
+
     htmlStr += `
-      <article class="card" style="border-left: 4px solid #10b981;">
-        <div class="meta"><span class="tag" style="background:#dcfce7; color:#166534;">${category}</span></div>
-        <h2>${title}</h2>
-        <p class="summary">${summary}</p>
+      <article class="card disease-card" style="border-left: 4px solid #10b981;">
+        <h3>${title}</h3>
+        ${sections}
       </article>
     `;
   });
