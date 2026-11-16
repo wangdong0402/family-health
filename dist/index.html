@@ -58,6 +58,15 @@ h2 a:hover { text-decoration: underline; }
   color: #6e6e73;
   font-size: 14px;
 }
+
+/* 分类筛选栏 */
+.filter-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 4px; }
+.filter-btn { background: #fff; border: 1px solid #e5e7eb; padding: 6px 14px; border-radius: 20px; font-size: 13px; color: #3a3a3c; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+.filter-btn.active { background: #1d1d1f; color: #fff; border-color: #1d1d1f; }
+
+/* 返回顶部悬浮按钮 */
+.back-to-top { position: fixed; bottom: 30px; right: 20px; width: 44px; height: 44px; background: #1d1d1f; color: #fff; border-radius: 50%; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; z-index: 999; border: none; font-size: 20px; }
+
 .disclaimer {
   text-align: center;
   font-size: 12px;
@@ -72,664 +81,646 @@ h2 a:hover { text-decoration: underline; }
   body { background: #000; color: #f5f5f7; }
   header { background: rgba(0, 0, 0, .8); border-bottom-color: rgba(255, 255, 255, .12); }
   .sub, .meta { color: #98989d; }
-  .card, .empty, .disclaimer { background: #1c1c1e; box-shadow: none; }
+  .card, .empty, .disclaimer, .filter-btn { background: #1c1c1e; box-shadow: none; border-color: #3a3a3c; color: #f5f5f7; }
   .summary { color: #d1d1d6; }
+  .filter-btn.active { background: #f5f5f7; color: #000; border-color: #f5f5f7; }
   .disclaimer { color: #98989d; }
+  .back-to-top { background: #f5f5f7; color: #000; }
 }
 </style>
 </head>
 <body>
 <header>
   <h1>家庭健康资讯</h1>
-  <div class="sub">更新：2026-11-16 02:20 · 共 65 条</div>
+  <div class="sub">更新：0 分钟前 · 共 63 条</div>
 </header>
 <main>
-
-        <article class="card">
+<div class="filter-bar" id="filter-bar"><button class="filter-btn active" onclick="filterNews('all', this)">全部</button><button class="filter-btn" onclick="filterNews('健康指南', this)">健康指南</button><button class="filter-btn" onclick="filterNews('医学研究', this)">医学研究</button><button class="filter-btn" onclick="filterNews('国内健康新闻', this)">国内健康新闻</button><button class="filter-btn" onclick="filterNews('慢病指南', this)">慢病指南</button><button class="filter-btn" onclick="filterNews('权威聚合', this)">权威聚合</button></div>
+        <article class="card news-card" data-category="权威聚合" style="border-left: 4px solid #14b8a6;">
           <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #ccfbf1; color: #0f766e;">权威聚合</span>
+            <span>明白健康</span>
+            <span class="time-text">36 分钟前</span>
+          </div>
+          <h2><a href="https://healviews.com/news/item-38113" target="_blank" rel="noopener noreferrer">GH辅助治疗在卵巢低预后患者中的循证获益与治疗价值（4）</a></h2>
+          <p class="summary">GH辅助治疗在卵巢低预后患者中的循证获益与治疗价值（4）</p>
+        </article>
+
+        <article class="card news-card" data-category="权威聚合" style="border-left: 4px solid #14b8a6;">
+          <div class="meta">
+            <span class="tag" style="background: #ccfbf1; color: #0f766e;">权威聚合</span>
+            <span>明白健康</span>
+            <span class="time-text">36 分钟前</span>
+          </div>
+          <h2><a href="https://healviews.com/news/item-38112" target="_blank" rel="noopener noreferrer">全身孕酮深度解码：如何立体守护妊娠结局（2）</a></h2>
+          <p class="summary">全身孕酮深度解码：如何立体守护妊娠结局（2）</p>
+        </article>
+
+        <article class="card news-card" data-category="权威聚合" style="border-left: 4px solid #14b8a6;">
+          <div class="meta">
+            <span class="tag" style="background: #ccfbf1; color: #0f766e;">权威聚合</span>
+            <span>明白健康</span>
+            <span class="time-text">1 小时前</span>
+          </div>
+          <h2><a href="https://healviews.com/news/item-38103" target="_blank" rel="noopener noreferrer">过敏性疾病：从“一病多科”走向“专病一张网”</a></h2>
+          <p class="summary">过敏性疾病：从“一病多科”走向“专病一张网”</p>
+        </article>
+
+        <article class="card news-card" data-category="权威聚合" style="border-left: 4px solid #14b8a6;">
+          <div class="meta">
+            <span class="tag" style="background: #ccfbf1; color: #0f766e;">权威聚合</span>
+            <span>明白健康</span>
+            <span class="time-text">1 小时前</span>
+          </div>
+          <h2><a href="https://healviews.com/news/item-38114" target="_blank" rel="noopener noreferrer">适合网球的热身运动</a></h2>
+          <p class="summary">2413ca01e72c4f7bbf9a853d5974365c,0,1,16:9,newPlayer</p>
+        </article>
+
+        <article class="card news-card" data-category="权威聚合" style="border-left: 4px solid #14b8a6;">
+          <div class="meta">
+            <span class="tag" style="background: #ccfbf1; color: #0f766e;">权威聚合</span>
+            <span>明白健康</span>
+            <span class="time-text">1 小时前</span>
+          </div>
+          <h2><a href="https://healviews.com/news/item-38115" target="_blank" rel="noopener noreferrer">50项食品安全新国标发布</a></h2>
+          <p class="summary">9月22日，国家卫生健康委会同市场监管总局发布50项食品安全国家标准和修改单，涵盖食品产品、添加剂规范、特殊膳食、生产规范、检验检测、毒理评价等多个领域，从源头、生产到检测，全链条守护百姓“舌尖上的安全”。 强化食品污染物源头和过程管理 油炸薯条、烘焙咖啡等食品，日常生活中很常见，但高温加工过程会产生丙烯酰胺，这是一种需要加以控制的污染物</p>
+        </article>
+
+        <article class="card news-card" data-category="权威聚合" style="border-left: 4px solid #14b8a6;">
+          <div class="meta">
+            <span class="tag" style="background: #ccfbf1; color: #0f766e;">权威聚合</span>
+            <span>明白健康</span>
+            <span class="time-text">1 小时前</span>
+          </div>
+          <h2><a href="https://healviews.com/news/item-38116" target="_blank" rel="noopener noreferrer">“抗疟古药”被开发成新型催化剂</a></h2>
+          <p class="summary">科技日报讯 （记者刘园园）记者近日从西湖大学获悉，该校理学院执行院长邓力团队利用“抗疟古药”金鸡纳碱，研制出新型二季铵盐催化剂，成功实现一类特殊取代反应的精准控制，为不对称催化研究提供了新思路。 在有机合成里，SN2反应被广泛应用于药品、日用品、农药的生产。这种反应就像分子间的“换基团游戏”：换掉分子的旧基团，接上一个新基团</p>
+        </article>
+
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
+          <div class="meta">
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-16 02:12</span>
+            <span class="time-text">2 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-16/10732629.shtml" target="_blank" rel="noopener noreferrer">延寿、护心、舒缓颈椎 这项运动的好处被低估了</a></h2>
           <p class="summary">挥拍运动好处多多</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="权威聚合" style="border-left: 4px solid #14b8a6;">
           <div class="meta">
-            <span class="tag" style="background: #ccfbf1; color: #0f766e; border: 1px solid #14b8a6;">权威聚合</span>
+            <span class="tag" style="background: #ccfbf1; color: #0f766e;">权威聚合</span>
             <span>明白健康</span>
-            <span>2026-11-16 01:21</span>
+            <span class="time-text">3 小时前</span>
           </div>
           <h2><a href="https://healviews.com/news/item-38091" target="_blank" rel="noopener noreferrer">构筑新防线 更好守护我们的呼吸</a></h2>
           <p class="summary">11月的北方气温骤降，慢性阻塞性肺疾病（简称慢阻肺病）患者也迎来一年中较为难熬的时节。慢阻肺病自2024年9月被纳入国家基本公共卫生服务项目，全国约1亿患者逐步实现足不出户就能享受医生上门检查和健康随访服务。这也正是“十五五”时期卫生健康工作发力的重点方向之一。2026年全国卫生...</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
           <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-16 01:15</span>
+            <span class="time-text">3 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-16/10732579.shtml" target="_blank" rel="noopener noreferrer">健身半年，竟然两次真菌感染！医生提醒→</a></h2>
           <p class="summary">近日</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="权威聚合" style="border-left: 4px solid #14b8a6;">
           <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #ccfbf1; color: #0f766e;">权威聚合</span>
+            <span>明白健康</span>
+            <span class="time-text">3 小时前</span>
+          </div>
+          <h2><a href="https://healviews.com/news/item-38104" target="_blank" rel="noopener noreferrer">人民健康“五进”关爱服务计划走进河北省围场县</a></h2>
+          <p class="summary">人民健康“五进”关爱服务计划走进河北省围场县。近日，人民健康“五进”关爱服务计划（以下简称“五进”计划）走进河北省承德市围场满族蒙古族自治县（以下简称围场县）。在生态环境部机关服务局、土壤与农业农村生</p>
+        </article>
+
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
+          <div class="meta">
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-16 01:02</span>
+            <span class="time-text">3 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-16/10732569.shtml" target="_blank" rel="noopener noreferrer">供暖后室内干燥 医生教你如何“给空气补水”</a></h2>
           <p class="summary">朝“问”健康丨供暖后室内干燥 医生教你如何“给空气补水”</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
           <div class="meta">
-            <span class="tag" style="background: #ccfbf1; color: #0f766e; border: 1px solid #14b8a6;">权威聚合</span>
-            <span>明白健康</span>
-            <span>2026-11-16 00:00</span>
-          </div>
-          <h2><a href="https://healviews.com/news/item-38100" target="_blank" rel="noopener noreferrer">国产犬窝咳滴鼻疫苗获批 浒墅关赋能兽药创新</a></h2>
-          <p class="summary">波氏杆菌，对大多数宠物主人来说是个陌生的名字，但它却是犬类呼吸道疾病中最常见病原之一，引起犬传染性支气管炎，俗称“犬窝咳”。</p>
-        </article>
-
-        <article class="card">
-          <div class="meta">
-            <span class="tag" style="background: #ccfbf1; color: #0f766e; border: 1px solid #14b8a6;">权威聚合</span>
-            <span>明白健康</span>
-            <span>2026-11-16 00:00</span>
-          </div>
-          <h2><a href="https://healviews.com/news/item-38099" target="_blank" rel="noopener noreferrer">医保钱包2.0版上线，“异地孝心”一键直达</a></h2>
-          <p class="summary">今年前三季度，全国省内共济3.8亿人次，共济金额467.62亿元，其中用于支付近亲属医药费用3.71亿人次、金额445.20亿元，用于近亲属参加城乡居民医保、长期护理保险个人缴费等914万人次、金额22.42亿元。</p>
-        </article>
-
-        <article class="card">
-          <div class="meta">
-            <span class="tag" style="background: #ccfbf1; color: #0f766e; border: 1px solid #14b8a6;">权威聚合</span>
-            <span>明白健康</span>
-            <span>2026-11-16 00:00</span>
-          </div>
-          <h2><a href="https://healviews.com/news/item-38098" target="_blank" rel="noopener noreferrer">别让皮质醇背下所有锅</a></h2>
-          <p class="summary">短期压力带来的皮质醇升高属于正常生理反应，压力解除之后，激素水平就会回归正常。正常生理状态下，入夜之后皮质醇水平逐步回落，身体的交感神经慢慢平复，我们才能够放松身心，顺利入睡。</p>
-        </article>
-
-        <article class="card">
-          <div class="meta">
-            <span class="tag" style="background: #ccfbf1; color: #0f766e; border: 1px solid #14b8a6;">权威聚合</span>
-            <span>明白健康</span>
-            <span>2026-11-16 00:00</span>
-          </div>
-          <h2><a href="https://healviews.com/news/item-38097" target="_blank" rel="noopener noreferrer">“0卡糖”应该怎么选？减肥控糖必看</a></h2>
-          <p class="summary">若配料表前几位出现白砂糖、果葡糖浆、蜂蜜、麦芽糖浆，就不是真正的“0卡糖”，这也是一些人吃了血糖还升的原因。</p>
-        </article>
-
-        <article class="card">
-          <div class="meta">
-            <span class="tag" style="background: #ccfbf1; color: #0f766e; border: 1px solid #14b8a6;">权威聚合</span>
-            <span>明白健康</span>
-            <span>2026-11-16 00:00</span>
-          </div>
-          <h2><a href="https://healviews.com/news/item-38096" target="_blank" rel="noopener noreferrer">专家解读食品标签：&quot;0蔗糖&quot;&quot;零添加&quot;未必更健康</a></h2>
-          <p class="summary">要留意调味酸奶、果汁饮料、酱料中的隐形糖，少吃甜点和高糖加工食品，用白开水、淡茶水替代甜饮料，用适量新鲜水果替代甜点。</p>
-        </article>
-
-        <article class="card">
-          <div class="meta">
-            <span class="tag" style="background: #ccfbf1; color: #0f766e; border: 1px solid #14b8a6;">权威聚合</span>
-            <span>明白健康</span>
-            <span>2026-11-16 00:00</span>
-          </div>
-          <h2><a href="https://healviews.com/news/item-38095" target="_blank" rel="noopener noreferrer">国家卫健委：重点人群应优先接种流感疫苗</a></h2>
-          <p class="summary">13日，国家卫生健康委召开新闻发布会，介绍时令节气与健康（立冬、小雪）有关情况。王大燕表示，外卖小哥、网约车司机等公共服务业从业人员接触人员较多，流动性较强，接触流感等呼吸道传染病的概率较高，建议接种流感疫苗。</p>
-        </article>
-
-        <article class="card">
-          <div class="meta">
-            <span class="tag" style="background: #ccfbf1; color: #0f766e; border: 1px solid #14b8a6;">权威聚合</span>
-            <span>明白健康</span>
-            <span>2026-11-16 00:00</span>
-          </div>
-          <h2><a href="https://healviews.com/news/item-38094" target="_blank" rel="noopener noreferrer">警惕AI陪伴成为情绪刚需</a></h2>
-          <p class="summary">2026年7月，《人工智能拟人化互动服务管理暂行办法》正式施行，针对拟人化情感陪伴类AI智能体聊天存在的乱象等问题和风险作出规范。</p>
-        </article>
-
-        <article class="card">
-          <div class="meta">
-            <span class="tag" style="background: #ccfbf1; color: #0f766e; border: 1px solid #14b8a6;">权威聚合</span>
-            <span>明白健康</span>
-            <span>2026-11-16 00:00</span>
-          </div>
-          <h2><a href="https://healviews.com/news/item-38093" target="_blank" rel="noopener noreferrer">谈健康，要把握一个“度”</a></h2>
-          <p class="summary">这些年，深耕卫生事业与医院管理领域，我愈发体会到，树立正确健康观，最终是要回答普通人最朴素的生活命题。孩子能否健康成长，成年人能否有精力兼顾工作与陪伴，老年人能否保有尽可能多的自主生活能力，患病者能否获得恰当的照护与尊重。</p>
-        </article>
-
-        <article class="card">
-          <div class="meta">
-            <span class="tag" style="background: #ccfbf1; color: #0f766e; border: 1px solid #14b8a6;">权威聚合</span>
-            <span>明白健康</span>
-            <span>2026-11-16 00:00</span>
-          </div>
-          <h2><a href="https://healviews.com/news/item-38092" target="_blank" rel="noopener noreferrer">新版医保药品目录发布</a></h2>
-          <p class="summary">国家医保局、人力资源社会保障部发布2026年国家医保药品目录调整情况。今年继续同步开展商业健康保险创新药品目录调整，新增12种药品，其中不乏全球首个实体瘤CAR-T、中国首个血友病基因治疗药物等重大创新药品。</p>
-        </article>
-
-        <article class="card">
-          <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-15 23:58</span>
+            <span class="time-text">4 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-16/10732549.shtml" target="_blank" rel="noopener noreferrer">抗过敏药吃7天就停？儿童过敏防治这四个误区要避开</a></h2>
           <p class="summary">立冬过后，进入规划来年过敏防治的关键时段，关于季节性过敏的防治，可能存在哪些误区？我们一一澄清。为孩子治疗过敏，不少家长都会纠结一个问题：抗过敏药连续吃了7天，是不是就该停药，效果不好要不要立刻换药？</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-15 14:13</span>
+            <span class="time-text">14 小时前</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261114202236.htm" target="_blank" rel="noopener noreferrer">Vitamin C could help block cancer-linked chemicals in your stomach, study finds</a></h2>
           <p class="summary">Scientists have discovered that vitamin C may help prevent potentially cancer-causing chemicals from forming in the stomach after eating foods containing nitrates and nitrites. A new mathematical model suggests that taking vitamin C after meals could reduce these harmful reactions, offering a possib</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-15 14:03</span>
+            <span class="time-text">14 小时前</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261113232105.htm" target="_blank" rel="noopener noreferrer">A common osteoporosis drug blocked spinal damage in a surprising new study</a></h2>
           <p class="summary">Scientists have uncovered a surprising genetic connection to spinal degeneration and found that an existing osteoporosis drug can prevent damaging mineral buildup in zebrafish spines. The discovery could pave the way for new treatments that slow or prevent a major cause of chronic back pain.</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-15 12:36</span>
+            <span class="time-text">16 小时前</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261113232000.htm" target="_blank" rel="noopener noreferrer">A simple supplement could help your immune system fight cancer and viral infections</a></h2>
           <p class="summary">A surprising discovery from Rockefeller University suggests that a common amino acid could play a powerful role in protecting against cancer and viral infections. Scientists found that low arginine levels interfere with the immune system&#x27;s ability to recognize dangerous cells, while increasing argin</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
           <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-15 11:46</span>
+            <span class="time-text">17 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-15/10732458.shtml" target="_blank" rel="noopener noreferrer">专家学者南京共话宫颈癌防控 聚焦精准分流与AI赋能</a></h2>
           <p class="summary">中新网南京11月15日电 (记者 徐珊珊)11月14日，由中国妇幼保健协会主办的生殖健康与宫颈癌综合防控学术交流会在南京举行。500多位国内外公共卫生专家、临床学者及行业代表齐聚一堂，分享最新科研成果与本土实践路径。</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-15 04:31</span>
+            <span class="time-text">昨天 12:31</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261114202130.htm" target="_blank" rel="noopener noreferrer">Alzheimer’s may start shrinking two brain regions years before memory loss</a></h2>
           <p class="summary">Johns Hopkins scientists have uncovered hidden warning signs of Alzheimer’s disease that may appear up to a decade before memory loss begins. Brain scans revealed that two regions involved in memory and emotion start shrinking before the hippocampus, the area doctors typically examine for signs of A</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
           <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-15 01:55</span>
+            <span class="time-text">昨天 09:55</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-15/10732247.shtml" target="_blank" rel="noopener noreferrer">职场年轻人谨防胃肠“亮红灯” 专家：条件允许尽量自制餐食</a></h2>
           <p class="summary">中新网广州11月15日电(记者 蔡敏婕)“由于很多疾病都是吃出来的，所以我们必须要有合理的生活规律，条件允许，尽可能自己做饭。”中山大学附属第一医院消化内科主任曾志荣14日表示，当前很多职场年轻人存在生活作息紊乱的问题，再加上长期熬夜，这些行为对消化系统伤害显著。</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-15 01:05</span>
+            <span class="time-text">昨天 09:05</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261112230456.htm" target="_blank" rel="noopener noreferrer">AI discovers a hidden heart signal that could predict sudden death</a></h2>
           <p class="summary">Scientists have uncovered a hidden warning sign in routine heart scans that could predict sudden cardiac death before it strikes. The AI-powered discovery outperformed conventional screening methods, potentially revealing thousands of people at risk of a fatal heart malfunction that doctors might ot</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
           <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-15 00:50</span>
+            <span class="time-text">昨天 08:50</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-15/10732228.shtml" target="_blank" rel="noopener noreferrer">肺癌一发现就是晚期？出现这些症状，千万别拖！</a></h2>
           <p class="summary">近期，“国家癌症中心公布发病前五位癌症”登上热搜话题。根据国家癌症中心最新发布的数据，2024年全国癌症发病前五位为：肺癌、乳腺癌、甲状腺癌、结直肠癌、肝癌，肺癌位居首位。</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
           <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-14 13:00</span>
+            <span class="time-text">昨天 21:00</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-14/10732182.shtml" target="_blank" rel="noopener noreferrer">第三届中国呼吸健康大会开幕 钟南山发布年度十大进展</a></h2>
           <p class="summary">中新网广州11月14日电 (记者 蔡敏婕)第三届中国呼吸健康大会14日在广州启幕。中国工程院院士钟南山发布“2025#8209;2026年度全国呼吸健康年度十大进展”。</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
           <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-14 12:55</span>
+            <span class="time-text">昨天 20:55</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-14/10732173.shtml" target="_blank" rel="noopener noreferrer">青年医者捐献“生命种子”：以热血为舟，传递爱与希望</a></h2>
           <p class="summary">中新网杭州11月14日电(张煜欢 胡莘菻)爱心采集室里，血细胞分离机低低嗡鸣，管路中的血液缓缓流转、分离、回输，每一次循环都牵系着一份生命的期盼。近日，浙江省血液中心体检医生高臣顺利完成造血干细胞采集，成为浙江省第1500例造血干细胞捐献者。从采供血一线的“血液人”到无偿献血者，再到造血干细胞捐献者，他以亲身践行诠释医者担当，成为播撒“生命种子”的大爱使者。</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
           <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-14 12:53</span>
+            <span class="time-text">昨天 20:53</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-14/10732172.shtml" target="_blank" rel="noopener noreferrer">从实验室到手术室——中国眼谷技术创新背后的生态涵养</a></h2>
           <p class="summary">中新网温州11月14日电(张益聪)在眼眶、鼻腔与颅底交错的毫米级术野里做微创手术，好比在层叠交错的立交桥缝隙间精准穿行，毫厘偏差便可能触碰神经与血管的“安全红线”。</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-14 12:48</span>
+            <span class="time-text">昨天 20:48</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261113231624.htm" target="_blank" rel="noopener noreferrer">Scientists find a simple daily routine linked to less pain and depression</a></h2>
           <p class="summary">A simple change to your daily routine could make a surprising difference in how you feel, both physically and mentally. University of Missouri researchers found that older adults who followed consistent daily schedules reported less physical pain and fewer symptoms of depression, even when they stru</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-14 12:35</span>
+            <span class="time-text">昨天 20:35</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261112230450.htm" target="_blank" rel="noopener noreferrer">A new fiber supplement could help millions suffering from irritable bowel syndrome</a></h2>
           <p class="summary">Scientists have developed a promising new fiber supplement that improves gut health in people with irritable bowel syndrome (IBS) without worsening bloating, pain, or other digestive symptoms. The specially designed blend also improved gut-related anxiety and produced surprisingly rapid changes in g</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
           <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-14 12:26</span>
+            <span class="time-text">昨天 20:26</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-14/10732159.shtml" target="_blank" rel="noopener noreferrer">膳承千年国粹 广西以赛为媒推动药食同源产业融合发展</a></h2>
           <p class="summary">中新网南宁11月14日电(黄艳梅 王伟臣 许征难)第三届广西药膳大赛总决赛暨药食同源产业发展大会开幕式14日在广西职业技术大学举行。活动集赛事竞技、产业交流、成果展示、文化传播和惠民体验于一体，既是一场药膳技能的集中检阅，也是一次推动中医药文化传承创新、促进药食同源产业融合发展的交流盛会。</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-14 12:25</span>
+            <span class="time-text">昨天 20:25</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261112230444.htm" target="_blank" rel="noopener noreferrer">Stanford scientists discover hidden brain signals that predict Alzheimer’s years before symptoms</a></h2>
           <p class="summary">Stanford researchers have discovered that hidden patterns of brain activity can predict Alzheimer’s risk years before memory problems appear, potentially offering an earlier warning than traditional biomarkers. The same patterns also reveal which brains are unusually resistant to aging, raising hope</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-14 12:14</span>
+            <span class="time-text">昨天 20:14</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261112025538.htm" target="_blank" rel="noopener noreferrer">Exercise after ACL surgery may protect knees from early osteoarthritis</a></h2>
           <p class="summary">A new study suggests that the right kind of exercise could help protect young adults from early knee osteoarthritis following ACL surgery. Researchers found that a four-month supervised rehabilitation program improved pain, muscle strength, and quality of life without damaging knee cartilage. The fi</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
           <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-14 11:07</span>
+            <span class="time-text">昨天 19:07</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-14/10732115.shtml" target="_blank" rel="noopener noreferrer">中新健康｜男子视力一周内掉到几乎看不见，医生紧急提醒</a></h2>
           <p class="summary">中新网北京11月14日电(罗春昊)男子视力一周内掉到只能“数指”，到底是什么病？</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
           <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-14 09:31</span>
+            <span class="time-text">昨天 17:31</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-14/10732047.shtml" target="_blank" rel="noopener noreferrer">ChinaMAP绘就国人“代谢图谱” 向全球开放数据申请</a></h2>
           <p class="summary">中新网上海11月14日电 (记者 陈静)国家内分泌与代谢性疾病临床医学研究中心(下称：中心)14日在沪发布中国代谢解析计划ChinaMAP(China Metabolic Analytics Project)(下称：ChinaMAP)的最新进展，并面向全球开放数据申请。</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
           <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-14 09:03</span>
+            <span class="time-text">昨天 17:03</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-14/10732021.shtml" target="_blank" rel="noopener noreferrer">没感觉≠没风险 专家提醒：糖尿病患者擅自停药会增加发生并发症风险</a></h2>
           <p class="summary">中新网上海11月14日电 (记者 陈静)糖尿病是需要长期管理的慢性疾病，药物治疗是实现血糖控制的重要手段。“在制定治疗方案时，需要综合考虑患者的血糖控制目标、心肾情况及长期管理需求，在专业评估基础上选择适宜的治疗方案，并根据病情变化动态调整。”上海交通大学医学院附属第一人民医院内分泌代谢科主任医师王育璠14日表示。</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="国内健康新闻" style="border-left: 4px solid #ef4444;">
           <div class="meta">
-            <span class="tag" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444;">国内健康新闻</span>
+            <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span>2026-11-14 06:02</span>
+            <span class="time-text">昨天 14:02</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-14/10731981.shtml" target="_blank" rel="noopener noreferrer">管好血糖，最该做的是“早行动” | 联合国糖尿病日</a></h2>
           <p class="summary">2026年11月14日是第20个联合国糖尿病日，今年的主题是“早发现，早行动”。</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-14 04:26</span>
+            <span class="time-text">11-14 12:26</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261112230452.htm" target="_blank" rel="noopener noreferrer">Yale scientists reveal what really slows aging and what doesn&#x27;t</a></h2>
           <p class="summary">Yale researchers have discovered that certain prescription drugs, healthy diets, and exercise can measurably slow biological aging, while popular anti-aging supplements appear largely ineffective. Their analysis of 51 studies could transform how scientists evaluate anti-aging treatments, although wh</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-13 12:55</span>
+            <span class="time-text">11-13 20:55</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261112025531.htm" target="_blank" rel="noopener noreferrer">Scientists discover a hidden danger of viral infections that vaccines may prevent</a></h2>
           <p class="summary">A new study reveals that viral infections may leave behind hidden damage to the immune system long after symptoms disappear. Researchers found that mice recovering from an acute infection experienced lasting changes to their spleens and weakened immune responses, potentially leaving them more vulner</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-13 12:14</span>
+            <span class="time-text">11-13 20:14</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261112025534.htm" target="_blank" rel="noopener noreferrer">Stopping statins after 70 may be safer than expected, but there&#x27;s a catch</a></h2>
           <p class="summary">A major study of nearly 1,900 older adults suggests that stopping statins after age 70 may be relatively safe in the short term for people who have never experienced a heart attack or stroke. However, a higher rate of serious cardiovascular events or death during longer follow-up raises questions ab</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-13 02:28</span>
+            <span class="time-text">11-13 10:28</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261111221643.htm" target="_blank" rel="noopener noreferrer">Without this protein, damaged muscle fills with fat and scar tissue</a></h2>
           <p class="summary">Researchers have uncovered a surprising hidden function of a protein that may hold the key to repairing damaged muscles and treating muscular dystrophy. Known for protecting chromosomes, TRF2 also helps muscle stem cells maintain their identity and regenerate injured tissue. When scientists removed </p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-12 09:34</span>
+            <span class="time-text">11-12 17:34</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261112025527.htm" target="_blank" rel="noopener noreferrer">Common forever chemicals linked to nearly double the rate of aggressive breast cancer</a></h2>
           <p class="summary">An NIH study found that women with high levels of two common “forever chemicals” had up to 93% higher rates of an aggressive form of breast cancer. The discovery raises concerns about the potential health effects of persistent chemicals found in everyday products.</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="医学研究" style="border-left: 4px solid #a855f7;">
           <div class="meta">
-            <span class="tag" style="background: #f3e8ff; color: #7e22ce; border: 1px solid #a855f7;">医学研究</span>
+            <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span>2026-11-12 04:39</span>
+            <span class="time-text">11-12 12:39</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261111221501.htm" target="_blank" rel="noopener noreferrer">Scientists discover a common sugar may help cancer cells break free and spread</a></h2>
           <p class="summary">Scientists have uncovered a surprising way that fructose, a sugar commonly found in sweetened foods and drinks, may help aggressive ovarian cancer spread. Researchers discovered that cancer cells surviving chemotherapy release fructose that weakens the bonds holding neighboring tumor cells together,</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="慢病指南" style="border-left: 4px solid #3b82f6;">
           <div class="meta">
-            <span class="tag" style="background: #dbeafe; color: #1d4ed8; border: 1px solid #3b82f6;">慢病指南</span>
+            <span class="tag" style="background: #dbeafe; color: #1d4ed8;">慢病指南</span>
             <span>患者信息</span>
-            <span>2026-11-01 23:00</span>
+            <span class="time-text">11-02 07:00</span>
           </div>
           <h2><a href="https://patient.info/infections/influenza-and-flu-like-illness/immunisation-for-flu" target="_blank" rel="noopener noreferrer">Immunisation for flu</a></h2>
           <p class="summary">Getting the flu vaccine is a safe and effective way to protect against becoming seriously ill with flu.</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2026-10-31 04:00</span>
+            <span class="time-text">10-31 12:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">The following updates were made to MedlinePlus in October 2026:</a></h2>
           <p class="summary">The following updates were made to MedlinePlus in October 2026:</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="慢病指南" style="border-left: 4px solid #3b82f6;">
           <div class="meta">
-            <span class="tag" style="background: #dbeafe; color: #1d4ed8; border: 1px solid #3b82f6;">慢病指南</span>
+            <span class="tag" style="background: #dbeafe; color: #1d4ed8;">慢病指南</span>
             <span>患者信息</span>
-            <span>2026-10-25 23:00</span>
+            <span class="time-text">10-26 07:00</span>
           </div>
           <h2><a href="https://patient.info/healthy-living/flu-checker" target="_blank" rel="noopener noreferrer">Find out if you are eligible for a free NHS flu vaccination</a></h2>
           <p class="summary">Open the flu jab Is the flu vaccine free for you this winter? The flu vaccine is free on the NHS for people most likely to get seriously ill from flu, and for those who could easily pass it on to someone at risk. Whether you qualify depends on your age, your health, and a few other things such as be</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2026-09-30 04:00</span>
+            <span class="time-text">09-30 12:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">The following updates were made to MedlinePlus in September 2026:</a></h2>
           <p class="summary">The following updates were made to MedlinePlus in September 2026:</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="慢病指南" style="border-left: 4px solid #3b82f6;">
           <div class="meta">
-            <span class="tag" style="background: #dbeafe; color: #1d4ed8; border: 1px solid #3b82f6;">慢病指南</span>
+            <span class="tag" style="background: #dbeafe; color: #1d4ed8;">慢病指南</span>
             <span>患者信息</span>
-            <span>2026-09-29 23:00</span>
+            <span class="time-text">09-30 07:00</span>
           </div>
           <h2><a href="https://patient.info/travel-and-vaccinations/health-advice-for-travel-abroad/travelling-to-remote-locations" target="_blank" rel="noopener noreferrer">Travelling to remote locations</a></h2>
           <p class="summary">Remote travel is easy and accessible. However, once you get to your destination you may be in a very different environment from the one you&#x27;re used to.</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="慢病指南" style="border-left: 4px solid #3b82f6;">
           <div class="meta">
-            <span class="tag" style="background: #dbeafe; color: #1d4ed8; border: 1px solid #3b82f6;">慢病指南</span>
+            <span class="tag" style="background: #dbeafe; color: #1d4ed8;">慢病指南</span>
             <span>患者信息</span>
-            <span>2026-09-04 23:00</span>
+            <span class="time-text">09-05 07:00</span>
           </div>
           <h2><a href="https://patient.info/childrens-health/8-weekhealthybabycourse" target="_blank" rel="noopener noreferrer">8-Week Healthy Baby Course</a></h2>
           <p class="summary">We&#x27;re excited to launch our new 8-Week Healthy Baby Course. Each week we focus on key topics such as sleep, bonding with your baby, breastfeeding, teething, and weaning. Join us for practical advice and useful tips to help support the health and wellbeing of both you and your baby.</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2026-08-31 04:00</span>
+            <span class="time-text">08-31 12:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">The following updates were made to MedlinePlus in August 2026:</a></h2>
           <p class="summary">The following updates were made to MedlinePlus in August 2026:</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="慢病指南" style="border-left: 4px solid #3b82f6;">
           <div class="meta">
-            <span class="tag" style="background: #dbeafe; color: #1d4ed8; border: 1px solid #3b82f6;">慢病指南</span>
+            <span class="tag" style="background: #dbeafe; color: #1d4ed8;">慢病指南</span>
             <span>患者信息</span>
-            <span>2026-08-13 23:00</span>
+            <span class="time-text">08-14 07:00</span>
           </div>
           <h2><a href="https://patient.info/treatment-and-medication/medical-cannabis-in-palliative-care" target="_blank" rel="noopener noreferrer">Medical cannabis in palliative care</a></h2>
           <p class="summary">Medical cannabis is sometimes considered as an additional treatment option for palliative care when standard approaches have not provided sufficient relief or have caused troublesome side effects.</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="慢病指南" style="border-left: 4px solid #3b82f6;">
           <div class="meta">
-            <span class="tag" style="background: #dbeafe; color: #1d4ed8; border: 1px solid #3b82f6;">慢病指南</span>
+            <span class="tag" style="background: #dbeafe; color: #1d4ed8;">慢病指南</span>
             <span>患者信息</span>
-            <span>2026-08-04 00:00</span>
+            <span class="time-text">08-04 08:00</span>
           </div>
           <h2><a href="https://patient.info/travel-and-vaccinations/travel-vaccinations-leaflet" target="_blank" rel="noopener noreferrer">Travel vaccinations</a></h2>
           <p class="summary">Travel vaccinations are an essential part of holiday and travel planning, particularly if your journey takes you to an exotic destination or &#x27;off the beaten track&#x27;. The risks are not restricted to tropical travel, although most travel vaccines are targeted at diseases which are more common in the tr</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="慢病指南" style="border-left: 4px solid #3b82f6;">
           <div class="meta">
-            <span class="tag" style="background: #dbeafe; color: #1d4ed8; border: 1px solid #3b82f6;">慢病指南</span>
+            <span class="tag" style="background: #dbeafe; color: #1d4ed8;">慢病指南</span>
             <span>患者信息</span>
-            <span>2026-08-04 00:00</span>
+            <span class="time-text">08-04 08:00</span>
           </div>
           <h2><a href="https://patient.info/travel-and-vaccinations/dengue-leaflet" target="_blank" rel="noopener noreferrer">Dengue</a></h2>
           <p class="summary">Dengue (which used to be called dengue fever) is a viral illness which is very common in the tropics and subtropics. It is usually a flu-like illness lasting under a week but it can sometimes be very serious, even fatal.</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="慢病指南" style="border-left: 4px solid #3b82f6;">
           <div class="meta">
-            <span class="tag" style="background: #dbeafe; color: #1d4ed8; border: 1px solid #3b82f6;">慢病指南</span>
+            <span class="tag" style="background: #dbeafe; color: #1d4ed8;">慢病指南</span>
             <span>患者信息</span>
-            <span>2026-08-04 00:00</span>
+            <span class="time-text">08-04 08:00</span>
           </div>
           <h2><a href="https://patient.info/travel-and-vaccinations/chikungunya-fever-leaflet" target="_blank" rel="noopener noreferrer">Chikungunya fever</a></h2>
           <p class="summary">Chikungunya fever is an illness caused by a virus. The virus infects you when you are bitten by a certain type of mosquito. You cannot catch chikungunya fever in the UK but you may be at risk of catching it when abroad. It usually causes a high temperature (the &#x27;fever&#x27;) and joint pains. In most peop</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="慢病指南" style="border-left: 4px solid #3b82f6;">
           <div class="meta">
-            <span class="tag" style="background: #dbeafe; color: #1d4ed8; border: 1px solid #3b82f6;">慢病指南</span>
+            <span class="tag" style="background: #dbeafe; color: #1d4ed8;">慢病指南</span>
             <span>患者信息</span>
-            <span>2026-08-03 23:00</span>
+            <span class="time-text">08-04 07:00</span>
           </div>
           <h2><a href="https://patient.info/skin-conditions/keratosis-pilaris" target="_blank" rel="noopener noreferrer">Keratosis pilaris</a></h2>
           <p class="summary">Keratosis pilaris is a very common skin condition which affects children and teenagers more than adults. It causes rough skin, particularly over the upper arms, outer legs and buttocks.</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2026-07-31 04:00</span>
+            <span class="time-text">07-31 12:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">The following updates were made to MedlinePlus in July 2026:</a></h2>
           <p class="summary">The following updates were made to MedlinePlus in July 2026:</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2026-06-30 04:00</span>
+            <span class="time-text">06-30 12:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">The following updates were made to MedlinePlus in June 2026:</a></h2>
           <p class="summary">The following updates were made to MedlinePlus in June 2026:</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="慢病指南" style="border-left: 4px solid #3b82f6;">
           <div class="meta">
-            <span class="tag" style="background: #dbeafe; color: #1d4ed8; border: 1px solid #3b82f6;">慢病指南</span>
+            <span class="tag" style="background: #dbeafe; color: #1d4ed8;">慢病指南</span>
             <span>患者信息</span>
-            <span>2026-05-27 00:00</span>
+            <span class="time-text">05-27 08:00</span>
           </div>
           <h2><a href="https://patient.info/eye-care/swollen-eyelid" target="_blank" rel="noopener noreferrer">Swollen eyelid</a></h2>
           <p class="summary">A swollen eyelid is very common and is usually due to allergy, inflammation, infection, or injury. It can affect either the upper or lower eyelid, or both.</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2024-10-16 04:00</span>
+            <span class="time-text">10-16 12:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">Two New Medical Tests Added to MedlinePlus</a></h2>
           <p class="summary">Two New Medical Tests Added to MedlinePlus</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2024-08-30 04:00</span>
+            <span class="time-text">08-30 12:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">Revised and updated MedlinePlus tutorial Evaluating Internet Health Information now available in Spanish</a></h2>
           <p class="summary">Revised and updated MedlinePlus tutorial Evaluating Internet Health Information now available in Spanish</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2024-07-16 04:00</span>
+            <span class="time-text">07-16 12:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">Test Your Knowledge Quizzes Added to MedlinePlus</a></h2>
           <p class="summary">Test Your Knowledge Quizzes Added to MedlinePlus</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2023-01-13 05:00</span>
+            <span class="time-text">01-13 13:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">My MedlinePlus Newsletter Discontinued</a></h2>
           <p class="summary">My MedlinePlus Newsletter Discontinued</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2023-01-04 05:00</span>
+            <span class="time-text">01-04 13:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">MedlinePlus and MedlinePlus En Español Homepages Refreshed</a></h2>
           <p class="summary">MedlinePlus and MedlinePlus En Español Homepages Refreshed</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2022-10-26 04:00</span>
+            <span class="time-text">10-26 12:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">Respiratory Syncytial Virus Infections (RSV)</a></h2>
           <p class="summary">Respiratory Syncytial Virus Infections (RSV)</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2022-09-24 04:00</span>
+            <span class="time-text">09-24 12:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">New Medical Test Added to MedlinePlus</a></h2>
           <p class="summary">New Medical Test Added to MedlinePlus</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2022-09-22 04:00</span>
+            <span class="time-text">09-22 12:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">New Health Topic Added to MedlinePlus</a></h2>
           <p class="summary">New Health Topic Added to MedlinePlus</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2022-08-11 04:00</span>
+            <span class="time-text">08-11 12:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">Help Me Understand Genetics Pages Available in Spanish</a></h2>
           <p class="summary">Help Me Understand Genetics Pages Available in Spanish</p>
         </article>
 
-        <article class="card">
+        <article class="card news-card" data-category="健康指南" style="border-left: 4px solid #f97316;">
           <div class="meta">
-            <span class="tag" style="background: #ffedd5; color: #c2410c; border: 1px solid #f97316;">健康指南</span>
+            <span class="tag" style="background: #ffedd5; color: #c2410c;">健康指南</span>
             <span>MedlinePlus 官方索引</span>
-            <span>2022-08-04 04:00</span>
+            <span class="time-text">08-04 12:00</span>
           </div>
           <h2><a href="https://medlineplus.gov/whatsnew/" target="_blank" rel="noopener noreferrer">Genetic Pages Available in Spanish</a></h2>
           <p class="summary">Genetic Pages Available in Spanish</p>
@@ -742,5 +733,41 @@ h2 a:hover { text-decoration: underline; }
 </div>
 
 </main>
+
+<button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
+
+<script>
+// 新闻分类筛选
+function filterNews(category, btn) {
+  // 更新按钮状态
+  const buttons = document.querySelectorAll('.filter-btn');
+  buttons.forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  // 过滤卡片
+  const cards = document.querySelectorAll('.news-card');
+  cards.forEach(card => {
+    if (category === 'all' || card.getAttribute('data-category') === category) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// 返回顶部逻辑
+window.onscroll = function() {
+  const btn = document.getElementById('backToTop');
+  if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+    btn.style.display = 'flex';
+  } else {
+    btn.style.display = 'none';
+  }
+};
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
 </body>
 </html>
