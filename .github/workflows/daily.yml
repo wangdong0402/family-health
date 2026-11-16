@@ -1,4 +1,4 @@
-name: 每日健康自动更新
+name: 每日健康资讯自动更新
 
 on:
   schedule:
@@ -31,8 +31,12 @@ jobs:
       - name: 安装依赖
         run: pip install -r requirements.txt
 
-      - name: 抓取新闻
+      - name: 抓取健康新闻
         run: python fetch.py
+
+      # 【新增的步骤】：生成病情知识库检索索引
+      - name: 构建病情知识索引
+        run: python build_index.py
 
       - name: 生成网页
         run: python generate.py
