@@ -21,7 +21,6 @@ def format_relative_time(value):
                 return f"{diff.seconds // 60} 分钟前"
             return f"{diff.seconds // 3600} 小时前"
         elif diff.days == 1:
-            # 转为北京时间显示
             local_dt = dt + timedelta(hours=8)
             return f"昨天 {local_dt.strftime('%H:%M')}"
         else:
@@ -42,13 +41,24 @@ def build_cards(items):
     if not items:
         return '<div class="empty">还没有数据。请等待每日自动任务运行。</div>'
     
-    # 提取所有分类
-    categories = sorted(list(set(item.get("category", "") for item in items if item.get("category"))))
+    # --- 核心修复：强制指定分类顺序 ---
+    existing_categories = set(item.get("category", "") for item in items if item.get("category"))
+    desired_order = ["国内健康新闻", "权威聚合", "医学研究", "慢病指南"]
     
+    sorted_categories = []
+    # 先按你要求的顺序添加存在的分类
+    for cat in desired_order:
+        if cat in existing_categories:
+            sorted_categories.append(cat)
+            existing_categories.remove(cat)
+            
+    # 如果未来加入了新分类，自动追加到最后
+    sorted_categories.extend(sorted(list(existing_categories)))
+
     # 构建分类筛选栏
     filter_html = '<div class="filter-bar" id="filter-bar">'
     filter_html += f'<button class="filter-btn active" onclick="filterNews(\'all\', this)">全部</button>'
-    for cat in categories:
+    for cat in sorted_categories:
         filter_html += f'<button class="filter-btn" onclick="filterNews(\'{cat}\', this)">{cat}</button>'
     filter_html += '</div>'
 
@@ -166,12 +176,10 @@ h2 a:hover {{ text-decoration: underline; }}
   font-size: 14px;
 }}
 
-/* 分类筛选栏 */
 .filter-bar {{ display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 4px; }}
 .filter-btn {{ background: #fff; border: 1px solid #e5e7eb; padding: 6px 14px; border-radius: 20px; font-size: 13px; color: #3a3a3c; cursor: pointer; white-space: nowrap; transition: all 0.2s; }}
 .filter-btn.active {{ background: #1d1d1f; color: #fff; border-color: #1d1d1f; }}
 
-/* 返回顶部悬浮按钮 */
 .back-to-top {{ position: fixed; bottom: 30px; right: 20px; width: 44px; height: 44px; background: #1d1d1f; color: #fff; border-radius: 50%; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; z-index: 999; border: none; font-size: 20px; }}
 
 .disclaimer {{
@@ -215,14 +223,11 @@ h2 a:hover {{ text-decoration: underline; }}
 <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
 
 <script>
-// 新闻分类筛选
 function filterNews(category, btn) {{
-  // 更新按钮状态
   const buttons = document.querySelectorAll('.filter-btn');
   buttons.forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 
-  // 过滤卡片
   const cards = document.querySelectorAll('.news-card');
   cards.forEach(card => {{
     if (category === 'all' || card.getAttribute('data-category') === category) {{
@@ -233,7 +238,6 @@ function filterNews(category, btn) {{
   }});
 }}
 
-// 返回顶部逻辑
 window.onscroll = function() {{
   const btn = document.getElementById('backToTop');
   if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {{
@@ -254,7 +258,7 @@ function scrollToTop() {{
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(html_doc)
 
-    print(f"已生成 {OUTPUT_FILE}，家庭健康资讯前端已优化。")
+    print(f"已生成 {OUTPUT_FILE}，分类顺序已按需调整。")
 
 
 if __name__ == "__main__":
