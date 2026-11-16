@@ -2,15 +2,18 @@ import requests
 import json
 import os
 
-def clean_text(value):
-    """清理数据：兼容字符串、列表、None 等多种格式"""
+def clean_and_truncate(value, max_len):
+    """清理数据：兼容列表，并强制截断长度"""
     if not value:
         return ""
     if isinstance(value, list):
-        # 如果是列表，将里面的元素转化为字符串并用逗号拼接
-        return "，".join([str(v).strip() for v in value if v])
-    # 其他情况（字符串、数字等）统一转为字符串并去首尾空格
-    return str(value).strip()
+        value = "，".join([str(v).strip() for v in value if v])
+    text = str(value).strip()
+    # 替换掉文本中可能存在的换行符，方便展示
+    text = text.replace("\n", " ").replace("\r", " ")
+    if len(text) > max_len:
+        return text[:max_len] + "..."
+    return text
 
 def build_search_index():
     print("[信息] 开始获取结构化疾病知识库...")
@@ -27,7 +30,6 @@ def build_search_index():
             resp = requests.get(url, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
             resp.raise_for_status()
             
-            # JSONL 格式逐行解析
             for line in resp.text.splitlines():
                 if line.strip():
                     raw_records.append(json.loads(line))
@@ -47,29 +49,30 @@ def build_search_index():
 
     index = []
     for item in raw_records:
-        # 使用 clean_text 统一处理所有字段，彻底避免 list 报错
-        title = clean_text(item.get("name"))
+        title = clean_and_truncate(item.get("name"), 50)
         if not title:
             continue
             
+        # 【核心调整】：放宽字数限制，保留更多干货，同时兼顾体积
         index.append({
             "title": title,
-            "desc": clean_text(item.get("desc")),
-            "cause": clean_text(item.get("cause")),
-            "prevent": clean_text(item.get("prevent")),
-            "symptom": clean_text(item.get("symptom")),
-            "cure_way": clean_text(item.get("cure_way")),
-            "department": clean_text(item.get("cure_department")),
+            "desc": clean_and_truncate(item.get("desc"), 200),        # 简介 200 字
+            "cause": clean_and_truncate(item.get("cause"), 300),      # 病因 300 字
+            "symptom": clean_and_truncate(item.get("symptom"), 300),  # 症状 300 字
+            "cure_way": clean_and_truncate(item.get("cure_way"), 300),# 治疗 300 字
+            "prevent": clean_and_truncate(item.get("prevent"), 300),  # 预防 300 字
+            "department": clean_and_truncate(item.get("cure_department"), 50),
             "category": "常见疾病"
         })
 
     os.makedirs("data", exist_ok=True)
     with open("data/search_index.json", "w", encoding="utf-8") as f:
-        json.dump(index, f, ensure_ascii=False, indent=2)
+        # 紧凑格式，进一步减小体积
+        json.dump(index, f, ensure_ascii=False, separators=(',', ':'))
 
     size_kb = os.path.getsize("data/search_index.json") / 1024
-    print(f"[完成] 成功生成索引，共 {len(index)} 条高质量疾病数据")
-    print(f"[完成] 文件体积: {size_kb:.1f} KB")
+    print(f"[完成] 成功生成索引，共 {len(index)} 条数据")
+    print(f"[完成] 瘦身后文件体积: {size_kb:.1f} KB (预期在 3MB~5MB 左右)")
 
 if __name__ == "__main__":
     build_search_index()
