@@ -105,10 +105,8 @@ def main():
     count = data.get("count", len(items))
     cards_html = build_cards(items)
 
-    # 确保输出目录存在
     os.makedirs("dist", exist_ok=True)
     
-    # 【核心】：将庞大的知识库索引文件复制到发布目录，供前端异步加载
     if os.path.exists(INDEX_FILE):
         shutil.copy(INDEX_FILE, "dist/search_index.json")
         print("已复制 search_index.json 到 dist/")
@@ -159,7 +157,6 @@ h2 a:hover {{ text-decoration: underline; }}
 .filter-btn {{ background: #fff; border: 1px solid #e5e7eb; padding: 6px 14px; border-radius: 20px; font-size: 13px; color: #3a3a3c; cursor: pointer; white-space: nowrap; transition: all 0.2s; }}
 .filter-btn.active {{ background: #1d1d1f; color: #fff; border-color: #1d1d1f; }}
 
-/* 搜索框与结果 */
 .search-container {{ margin-bottom: 16px; }}
 .search-input {{ width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid #e5e7eb; font-size: 14px; background: #fff; color: #1d1d1f; outline: none; }}
 .search-input:focus {{ border-color: #3b82f6; }}
@@ -195,12 +192,10 @@ h2 a:hover {{ text-decoration: underline; }}
   </div>
 </header>
 <main>
-  <!-- 新闻 Tab -->
   <div id="tab-news">
     {cards_html}
   </div>
 
-  <!-- 疾病查询 Tab -->
   <div id="tab-disease" style="display: none;">
     <div class="search-container">
       <input type="text" id="disease-search" class="search-input" placeholder="🔍 输入症状或疾病名称（如：高血压、头痛）..." oninput="debounceSearch()">
@@ -220,7 +215,6 @@ h2 a:hover {{ text-decoration: underline; }}
 <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
 
 <script>
-// ========== Tab 切换逻辑 ==========
 function switchTab(tab) {{
   document.getElementById('tab-news').style.display = 'none';
   document.getElementById('tab-disease').style.display = 'none';
@@ -231,7 +225,6 @@ function switchTab(tab) {{
   document.getElementById('btn-' + tab).classList.add('active');
 }}
 
-// ========== 新闻过滤逻辑 ==========
 function filterNews(category, btn) {{
   const buttons = document.querySelectorAll('.filter-btn');
   buttons.forEach(b => b.classList.remove('active'));
@@ -247,13 +240,12 @@ function filterNews(category, btn) {{
   }});
 }}
 
-// ========== 疾病检索逻辑（懒加载 + 防抖） ==========
-let diseaseData = null; // 缓存数据
+let diseaseData = null;
 let searchTimer = null;
 
 function debounceSearch() {{
   clearTimeout(searchTimer);
-  searchTimer = setTimeout(performSearch, 500); // 用户停止输入 500ms 后开始搜索
+  searchTimer = setTimeout(performSearch, 500);
 }}
 
 async function performSearch() {{
@@ -265,11 +257,11 @@ async function performSearch() {{
     return;
   }}
 
-  // 1. 如果数据还没加载，去拉取 JSON
   if (!diseaseData) {{
     resultContainer.innerHTML = '<div class="search-tips">⏳ 正在加载医学知识库，请稍候...</div>';
     try {{
-      const response = await fetch('/search_index.json');
+      // 这里改为了相对路径，不带前导斜杠，防止在子目录部署时找不到文件
+      const response = await fetch('search_index.json');
       if (!response.ok) throw new Error("加载失败");
       diseaseData = await response.json();
     }} catch (err) {{
@@ -278,12 +270,10 @@ async function performSearch() {{
     }}
   }}
 
-  // 2. 在本地进行关键词匹配（限制返回前 15 条）
   const matches = diseaseData.filter(item => 
     item.title.includes(query) || item.summary.includes(query)
   ).slice(0, 15);
 
-  // 3. 渲染结果
   if (matches.length === 0) {{
     resultContainer.innerHTML = '<div class="search-tips">未找到相关疾病信息，请尝试其他关键词。</div>';
     return;
@@ -305,7 +295,6 @@ async function performSearch() {{
   resultContainer.innerHTML = htmlStr;
 }}
 
-// ========== 返回顶部逻辑 ==========
 window.onscroll = function() {{
   const btn = document.getElementById('backToTop');
   if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {{
@@ -325,7 +314,7 @@ function scrollToTop() {{
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(html_doc)
 
-    print(f"已生成 {OUTPUT_FILE}，疾病查询功能已上线。")
+    print(f"已生成 {OUTPUT_FILE}，路径已修复。")
 
 if __name__ == "__main__":
     main()
