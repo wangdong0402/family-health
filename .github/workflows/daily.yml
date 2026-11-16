@@ -2,9 +2,9 @@ name: 每日健康资讯自动更新
 
 on:
   schedule:
-    - cron: '15 23 * * *'  # 北京时间 07:15
-    - cron: '30 4 * * *'   # 北京时间 12:30
-    - cron: '45 12 * * *'  # 北京时间 20:45
+    - cron: '15 23 * * *'
+    - cron: '30 4 * * *'
+    - cron: '45 12 * * *'
   workflow_dispatch:
 
 permissions:
@@ -34,12 +34,19 @@ jobs:
       - name: 抓取健康新闻
         run: python fetch.py
 
-      # 【新增的步骤】：生成病情知识库检索索引
       - name: 构建病情知识索引
         run: python build_index.py
 
       - name: 生成网页
         run: python generate.py
+
+      - name: 确认 dist 目录存在
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "::error::dist 目录不存在，generate.py 可能执行失败"
+            mkdir -p dist
+            echo "<html><body>构建失败，请查看 Actions 日志</body></html>" > dist/index.html
+          fi
 
       - name: 保存数据和网页到仓库
         run: |
