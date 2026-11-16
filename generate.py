@@ -108,7 +108,6 @@ def main():
     
     if os.path.exists(INDEX_FILE):
         shutil.copy(INDEX_FILE, "dist/search_index.json")
-        print("已复制 search_index.json 到 dist/")
 
     html_doc = f'''<!doctype html>
 <html lang="zh-CN">
@@ -119,21 +118,8 @@ def main():
 <style>
 :root {{ color-scheme: light dark; }}
 * {{ box-sizing: border-box; }}
-body {{
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
-  background: #f5f5f7;
-  color: #1d1d1f;
-}}
-header {{
-  position: sticky;
-  top: 0;
-  backdrop-filter: blur(12px);
-  background: rgba(245, 245, 247, .85);
-  border-bottom: 1px solid rgba(0, 0, 0, .08);
-  padding: 16px 16px 0;
-  z-index: 100;
-}}
+body {{ margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f5f7; color: #1d1d1f; }}
+header {{ position: sticky; top: 0; backdrop-filter: blur(12px); background: rgba(245, 245, 247, .85); border-bottom: 1px solid rgba(0, 0, 0, .08); padding: 16px 16px 0; z-index: 100; }}
 .header-top {{ margin-bottom: 12px; }}
 h1 {{ font-size: 20px; margin: 0 0 4px; }}
 .sub {{ font-size: 12px; color: #6e6e73; }}
@@ -150,24 +136,20 @@ h2 a:hover {{ text-decoration: underline; }}
 .summary {{ font-size: 14px; line-height: 1.6; color: #3a3a3c; margin: 0; }}
 .empty {{ background: #fff; border-radius: 14px; padding: 32px 20px; text-align: center; color: #6e6e73; font-size: 14px; }}
 
-/* 新闻分类栏 */
 .filter-bar {{ display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 4px; }}
 .filter-btn {{ background: #fff; border: 1px solid #e5e7eb; padding: 6px 14px; border-radius: 20px; font-size: 13px; color: #3a3a3c; cursor: pointer; white-space: nowrap; transition: all 0.2s; }}
 .filter-btn.active {{ background: #1d1d1f; color: #fff; border-color: #1d1d1f; }}
 
-/* 搜索框 */
 .search-container {{ margin-bottom: 16px; }}
 .search-input {{ width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid #e5e7eb; font-size: 14px; background: #fff; color: #1d1d1f; outline: none; }}
 .search-input:focus {{ border-color: #3b82f6; }}
 .search-tips {{ text-align: center; color: #98989d; font-size: 13px; margin-top: 20px; }}
 
-/* 疾病列表精简卡片 */
 .disease-list-card {{ background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); cursor: pointer; border-left: 4px solid #10b981; transition: transform 0.1s; }}
 .disease-list-card:active {{ transform: scale(0.98); }}
 .disease-list-card h3 {{ font-size: 16px; margin: 0 0 6px; color: #1d1d1f; }}
 .disease-list-card p {{ font-size: 13px; color: #6e6e73; margin: 0; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.5; }}
 
-/* 底部滑出详情弹窗 */
 .modal-overlay {{ position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s; }}
 .modal-overlay.show {{ display: block; opacity: 1; }}
 .modal-content {{ position: fixed; left: 0; right: 0; bottom: -100%; max-height: 85vh; background: #f5f5f7; border-radius: 20px 20px 0 0; z-index: 1001; transition: bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; }}
@@ -185,7 +167,6 @@ h2 a:hover {{ text-decoration: underline; }}
 .label-prevent {{ background: #fff7ed; color: #ea580c; }}
 
 .back-to-top {{ position: fixed; bottom: 30px; right: 20px; width: 44px; height: 44px; background: #1d1d1f; color: #fff; border-radius: 50%; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; z-index: 999; border: none; font-size: 20px; }}
-
 .disclaimer {{ text-align: center; font-size: 12px; color: #6e6e73; margin-top: 24px; padding: 16px; line-height: 1.8; background: #fff; border-radius: 12px; }}
 
 @media (prefers-color-scheme: dark) {{
@@ -218,16 +199,14 @@ h2 a:hover {{ text-decoration: underline; }}
   </div>
 </header>
 <main>
-  <div id="tab-news">
-    {cards_html}
-  </div>
+  <div id="tab-news">{cards_html}</div>
 
   <div id="tab-disease" style="display: none;">
     <div class="search-container">
       <input type="text" id="disease-search" class="search-input" placeholder="🔍 输入疾病名称（如：高血压、糖尿病）..." oninput="debounceSearch()">
     </div>
     <div id="disease-results">
-      <div class="search-tips">请输入疾病名称进行查询。<br>（首次搜索加载约 2 秒，随后秒开）</div>
+      <div class="search-tips">请输入疾病名称进行查询。</div>
     </div>
   </div>
 
@@ -238,22 +217,43 @@ h2 a:hover {{ text-decoration: underline; }}
   </div>
 </main>
 
-<!-- 详情弹窗 -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
 <div class="modal-content" id="modal-content">
   <div class="modal-header">
     <h2 id="modal-title">疾病名称</h2>
     <button class="close-btn" onclick="closeModal()">✕</button>
   </div>
-  <div class="modal-body" id="modal-body">
-    <!-- 动态填充内容 -->
-  </div>
+  <div class="modal-body" id="modal-body"></div>
 </div>
 
 <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
 
 <script>
-// ====== Tab 切换 ======
+// ====== 新增：预加载机制 ======
+let diseaseData = null;
+let isLoadingData = false;
+
+// 当点击“疾病查询”Tab时，立刻在后台静默下载数据
+function preloadData() {{
+  if (diseaseData || isLoadingData) return;
+  isLoadingData = true;
+  console.log("开始预加载疾病数据...");
+  fetch('search_index.json?t=' + new Date().getTime())
+    .then(res => {{
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    }})
+    .then(data => {{
+      diseaseData = data;
+      isLoadingData = false;
+      console.log("预加载完成，共 " + data.length + " 条数据");
+    }})
+    .catch(err => {{
+      isLoadingData = false;
+      console.error("预加载失败:", err);
+    }});
+}}
+
 function switchTab(tab) {{
   document.getElementById('tab-news').style.display = 'none';
   document.getElementById('tab-disease').style.display = 'none';
@@ -262,9 +262,12 @@ function switchTab(tab) {{
 
   document.getElementById('tab-' + tab).style.display = 'block';
   document.getElementById('btn-' + tab).classList.add('active');
+
+  if (tab === 'disease') {{
+    preloadData(); // 切换过来立刻预加载
+  }}
 }}
 
-// ====== 新闻过滤 ======
 function filterNews(category, btn) {{
   const buttons = document.querySelectorAll('.filter-btn');
   buttons.forEach(b => b.classList.remove('active'));
@@ -280,8 +283,6 @@ function filterNews(category, btn) {{
   }});
 }}
 
-// ====== 疾病检索 ======
-let diseaseData = null;
 let searchTimer = null;
 
 function debounceSearch() {{
@@ -298,14 +299,15 @@ async function performSearch() {{
     return;
   }}
 
+  // 如果预加载还没完成，提示一下
   if (!diseaseData) {{
-    resultContainer.innerHTML = '<div class="search-tips">⏳ 正在加载知识库...</div>';
+    resultContainer.innerHTML = '<div class="search-tips">⏳ 正在紧急加载知识库，请稍候...</div>';
     try {{
-      const response = await fetch('search_index.json');
-      if (!response.ok) throw new Error("加载失败");
+      const response = await fetch('search_index.json?t=' + new Date().getTime());
+      if (!response.ok) throw new Error("HTTP Status: " + response.status);
       diseaseData = await response.json();
     }} catch (err) {{
-      resultContainer.innerHTML = '<div class="search-tips">⚠️ 知识库加载失败，请检查网络。</div>';
+      resultContainer.innerHTML = `<div class="search-tips" style="color:red;">⚠️ 加载失败: ${{err.message}}</div>`;
       return;
     }}
   }}
@@ -318,13 +320,12 @@ async function performSearch() {{
   }}
 
   let htmlStr = '';
+  window.currentSearchResults = matches;
+
   matches.forEach((item, index) => {{
     const safeTitle = item.title.replace(/</g, "&lt;");
     const shortDesc = (item.desc || "暂无简介").substring(0, 40) + "...";
     
-    // 将数据存入全局数组，方便弹窗根据索引取用
-    window.currentSearchResults = matches;
-
     htmlStr += `
       <div class="disease-list-card" onclick="openModal(${{index}})">
         <h3>${{safeTitle}}</h3>
@@ -335,7 +336,6 @@ async function performSearch() {{
   resultContainer.innerHTML = htmlStr;
 }}
 
-// ====== 弹窗控制 ======
 function openModal(index) {{
   const item = window.currentSearchResults[index];
   if (!item) return;
@@ -343,7 +343,6 @@ function openModal(index) {{
   document.getElementById('modal-title').innerText = item.title;
   
   let bodyHtml = '';
-  
   if (item.desc) bodyHtml += `<div class="detail-section"><span class="detail-label label-desc">简介</span><div>${{item.desc}}</div></div>`;
   if (item.cause) bodyHtml += `<div class="detail-section"><span class="detail-label label-cause">病因</span><div>${{item.cause}}</div></div>`;
   if (item.symptom) bodyHtml += `<div class="detail-section"><span class="detail-label label-symptom">症状</span><div>${{item.symptom}}</div></div>`;
@@ -355,7 +354,7 @@ function openModal(index) {{
   
   document.getElementById('modal-overlay').classList.add('show');
   document.getElementById('modal-content').classList.add('show');
-  document.body.style.overflow = 'hidden'; // 防止背景滚动
+  document.body.style.overflow = 'hidden';
 }}
 
 function closeModal() {{
@@ -364,7 +363,6 @@ function closeModal() {{
   document.body.style.overflow = '';
 }}
 
-// ====== 返回顶部 ======
 window.onscroll = function() {{
   const btn = document.getElementById('backToTop');
   if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {{
@@ -384,7 +382,7 @@ function scrollToTop() {{
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(html_doc)
 
-    print(f"已生成 {OUTPUT_FILE}，疾病列表与详情弹窗已上线。")
+    print(f"已生成 {OUTPUT_FILE}，加入了预加载机制。")
 
 if __name__ == "__main__":
     main()
