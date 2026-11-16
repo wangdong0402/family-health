@@ -165,6 +165,10 @@ h2 a:hover {{ text-decoration: underline; }}
 .label-symptom {{ background: #fdf4ff; color: #c026d3; }}
 .label-cure {{ background: #f0fdf4; color: #16a34a; }}
 .label-prevent {{ background: #fff7ed; color: #ea580c; }}
+.label-drug {{ background: #f3e8ff; color: #9333ea; }}
+
+.drug-tags {{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }}
+.drug-tag {{ background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; font-size: 13px; padding: 4px 10px; border-radius: 6px; }}
 
 .back-to-top {{ position: fixed; bottom: 30px; right: 20px; width: 44px; height: 44px; background: #1d1d1f; color: #fff; border-radius: 50%; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; z-index: 999; border: none; font-size: 20px; }}
 .disclaimer {{ text-align: center; font-size: 12px; color: #6e6e73; margin-top: 24px; padding: 16px; line-height: 1.8; background: #fff; border-radius: 12px; }}
@@ -184,6 +188,7 @@ h2 a:hover {{ text-decoration: underline; }}
   .tab-btn.active {{ color: #f5f5f7; border-bottom-color: #f5f5f7; }}
   .modal-content {{ background: #000; }}
   .close-btn {{ background: #3a3a3c; color: #f5f5f7; }}
+  .drug-tag {{ background: #2c2c2e; border-color: #3a3a3c; color: #d1d1d6; }}
 }}
 </style>
 </head>
@@ -203,7 +208,7 @@ h2 a:hover {{ text-decoration: underline; }}
 
   <div id="tab-disease" style="display: none;">
     <div class="search-container">
-      <input type="text" id="disease-search" class="search-input" placeholder="🔍 输入疾病名称（如：高血压、糖尿病）..." oninput="debounceSearch()">
+      <input type="text" id="disease-search" class="search-input" placeholder="🔍 输入疾病名称（如：感冒、高血压）..." oninput="debounceSearch()">
     </div>
     <div id="disease-results">
       <div class="search-tips">请输入疾病名称进行查询。</div>
@@ -212,8 +217,7 @@ h2 a:hover {{ text-decoration: underline; }}
 
   <div class="disclaimer">
     <strong>💡 阅读小贴士：</strong><br>
-    中英文对照阅读效果更佳，英文内容可点击浏览器菜单选择“翻译”。<br><br>
-    本网站内容仅供家庭日常参考，不能替代专业医疗诊断。如有不适，请及时就医。
+    本网站内容仅供家庭日常参考，不能替代专业医疗诊断。用药请遵医嘱。如有不适，请及时就医。
   </div>
 </main>
 
@@ -229,15 +233,12 @@ h2 a:hover {{ text-decoration: underline; }}
 <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
 
 <script>
-// ====== 新增：预加载机制 ======
 let diseaseData = null;
 let isLoadingData = false;
 
-// 当点击“疾病查询”Tab时，立刻在后台静默下载数据
 function preloadData() {{
   if (diseaseData || isLoadingData) return;
   isLoadingData = true;
-  console.log("开始预加载疾病数据...");
   fetch('search_index.json?t=' + new Date().getTime())
     .then(res => {{
       if (!res.ok) throw new Error("HTTP " + res.status);
@@ -246,7 +247,6 @@ function preloadData() {{
     .then(data => {{
       diseaseData = data;
       isLoadingData = false;
-      console.log("预加载完成，共 " + data.length + " 条数据");
     }})
     .catch(err => {{
       isLoadingData = false;
@@ -264,7 +264,7 @@ function switchTab(tab) {{
   document.getElementById('btn-' + tab).classList.add('active');
 
   if (tab === 'disease') {{
-    preloadData(); // 切换过来立刻预加载
+    preloadData();
   }}
 }}
 
@@ -299,9 +299,8 @@ async function performSearch() {{
     return;
   }}
 
-  // 如果预加载还没完成，提示一下
   if (!diseaseData) {{
-    resultContainer.innerHTML = '<div class="search-tips">⏳ 正在紧急加载知识库，请稍候...</div>';
+    resultContainer.innerHTML = '<div class="search-tips">⏳ 正在加载知识库...</div>';
     try {{
       const response = await fetch('search_index.json?t=' + new Date().getTime());
       if (!response.ok) throw new Error("HTTP Status: " + response.status);
@@ -348,6 +347,18 @@ function openModal(index) {{
   if (item.symptom) bodyHtml += `<div class="detail-section"><span class="detail-label label-symptom">症状</span><div>${{item.symptom}}</div></div>`;
   if (item.cure_way) bodyHtml += `<div class="detail-section"><span class="detail-label label-cure">治疗</span><div>${{item.cure_way}}</div></div>`;
   if (item.prevent) bodyHtml += `<div class="detail-section"><span class="detail-label label-prevent">预防</span><div>${{item.prevent}}</div></div>`;
+  
+  // 新增：用药参考区块
+  if (item.drugs && item.drugs.length > 0) {{
+    let drugTags = item.drugs.map(d => `<span class="drug-tag">${{d}}</span>`).join('');
+    bodyHtml += `
+      <div class="detail-section">
+        <span class="detail-label label-drug">用药参考</span>
+        <div class="drug-tags">${{drugTags}}</div>
+      </div>
+    `;
+  }}
+
   if (item.department) bodyHtml += `<div class="detail-section"><span class="detail-label label-desc">就诊科室</span><div>${{item.department}}</div></div>`;
 
   document.getElementById('modal-body').innerHTML = bodyHtml;
@@ -382,7 +393,7 @@ function scrollToTop() {{
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(html_doc)
 
-    print(f"已生成 {OUTPUT_FILE}，加入了预加载机制。")
+    print(f"已生成 {OUTPUT_FILE}。")
 
 if __name__ == "__main__":
     main()
