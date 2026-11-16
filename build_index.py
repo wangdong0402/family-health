@@ -1,23 +1,17 @@
 import requests
 import json
 import os
-import re
 
-def clean_and_shorten(value):
-    """清理数据：截取到第一个句号，最大100字"""
+def clean_text(value, max_len=800):
+    """清理数据：兼容列表、去除换行、限制最大字数"""
     if not value:
         return ""
     if isinstance(value, list):
         value = "，".join([str(v).strip() for v in value if v])
     
     text = str(value).strip().replace("\n", " ").replace("\r", " ")
-    # 尝试截取第一句话，保留核心定义
-    match = re.search(r'([^。！？]+[。！？])', text)
-    if match:
-        text = match.group(1)
-        
-    if len(text) > 100:
-        return text[:100] + "..."
+    if len(text) > max_len:
+        return text[:max_len] + "..."
     return text
 
 def build_search_index():
@@ -53,20 +47,30 @@ def build_search_index():
         return
 
     index = []
-    # 【核心限制】：只取前 2000 条常见病
+    # 只取前 2000 条常见病
     for item in raw_records[:2000]:
-        title = clean_and_shorten(item.get("name"))
+        title = clean_text(item.get("name"), 50)
         if not title:
             continue
             
+        # 提取并合并推荐用药和常用药品
+        drugs = []
+        if item.get("recommand_drug"):
+            drugs.extend(item["recommand_drug"])
+        if item.get("common_drug"):
+            drugs.extend(item["common_drug"])
+        # 去重并截取前 15 个药名，防止某些病变态多
+        unique_drugs = list(dict.fromkeys(drugs))[:15]
+            
         index.append({
             "title": title,
-            "desc": clean_and_shorten(item.get("desc")),
-            "cause": clean_and_shorten(item.get("cause")),
-            "symptom": clean_and_shorten(item.get("symptom")),
-            "cure_way": clean_and_shorten(item.get("cure_way")),
-            "prevent": clean_and_shorten(item.get("prevent")),
-            "department": clean_and_shorten(item.get("cure_department")),
+            "desc": clean_text(item.get("desc")),
+            "cause": clean_text(item.get("cause")),
+            "symptom": clean_text(item.get("symptom")),
+            "cure_way": clean_text(item.get("cure_way")),
+            "prevent": clean_text(item.get("prevent")),
+            "department": clean_text(item.get("cure_department"), 50),
+            "drugs": unique_drugs,
             "category": "常见疾病"
         })
 
@@ -76,7 +80,7 @@ def build_search_index():
 
     size_kb = os.path.getsize("data/search_index.json") / 1024
     print(f"[完成] 成功生成索引，共 {len(index)} 条核心数据")
-    print(f"[完成] 极限瘦身后文件体积: {size_kb:.1f} KB (预计 500KB 左右)")
+    print(f"[完成] 当前文件体积: {size_kb:.1f} KB")
 
 if __name__ == "__main__":
     build_search_index()
