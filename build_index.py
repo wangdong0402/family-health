@@ -2,11 +2,19 @@ import requests
 import json
 import os
 
+def clean_text(value):
+    """清理数据：兼容字符串、列表、None 等多种格式"""
+    if not value:
+        return ""
+    if isinstance(value, list):
+        # 如果是列表，将里面的元素转化为字符串并用逗号拼接
+        return "，".join([str(v).strip() for v in value if v])
+    # 其他情况（字符串、数字等）统一转为字符串并去首尾空格
+    return str(value).strip()
+
 def build_search_index():
     print("[信息] 开始获取结构化疾病知识库...")
     
-    # 使用经典的 DiseaseKG 结构化数据集（基于寻医问药整理，包含病因、治疗等核心字段）
-    # 注意：由于原仓库的 master 分支可能有变动，这里使用了稳定可靠的镜像地址
     urls = [
         "https://raw.githubusercontent.com/nuolade/disease-kb/master/data/medical.json",
         "https://cdn.jsdelivr.net/gh/nuolade/disease-kb@master/data/medical.json"
@@ -19,7 +27,7 @@ def build_search_index():
             resp = requests.get(url, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
             resp.raise_for_status()
             
-            # 该文件实际上是 JSONL 格式（每行一个 JSON 对象）
+            # JSONL 格式逐行解析
             for line in resp.text.splitlines():
                 if line.strip():
                     raw_records.append(json.loads(line))
@@ -39,19 +47,19 @@ def build_search_index():
 
     index = []
     for item in raw_records:
-        title = item.get("name", "").strip()
+        # 使用 clean_text 统一处理所有字段，彻底避免 list 报错
+        title = clean_text(item.get("name"))
         if not title:
             continue
             
-        # 提取你需要的全方位信息
         index.append({
             "title": title,
-            "desc": item.get("desc", "").strip(),
-            "cause": item.get("cause", "").strip(),
-            "prevent": item.get("prevent", "").strip(),
-            "symptom": item.get("symptom", "").strip(),
-            "cure_way": item.get("cure_way", "").strip(),
-            "department": item.get("cure_department", "").strip(),
+            "desc": clean_text(item.get("desc")),
+            "cause": clean_text(item.get("cause")),
+            "prevent": clean_text(item.get("prevent")),
+            "symptom": clean_text(item.get("symptom")),
+            "cure_way": clean_text(item.get("cure_way")),
+            "department": clean_text(item.get("cure_department")),
             "category": "常见疾病"
         })
 
@@ -61,7 +69,7 @@ def build_search_index():
 
     size_kb = os.path.getsize("data/search_index.json") / 1024
     print(f"[完成] 成功生成索引，共 {len(index)} 条高质量疾病数据")
-    print(f"[完成] 文件体积: {size_kb:.1f} KB (非常轻量，秒加载)")
+    print(f"[完成] 文件体积: {size_kb:.1f} KB")
 
 if __name__ == "__main__":
     build_search_index()
