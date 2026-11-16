@@ -13,7 +13,7 @@ OUTPUT_FILE = "data/news.json"
 MAX_PER_SOURCE = 15
 MAX_TOTAL = 100
 
-# 伪装成正常的浏览器，防止被部分网站当作爬虫拦截
+# 伪装成正常的浏览器
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
@@ -25,6 +25,12 @@ def clean_text(text):
     text = re.sub(r"<[^>]+>", " ", text)
     text = re.sub(r"\s+", " ", text).strip()
     return text[:300]
+
+def normalize_title(title):
+    """提取标题特征：只保留中英文和数字，去除空格与标点，转为小写"""
+    if not title:
+        return ""
+    return re.sub(r'[^\w\u4e00-\u9fa5]', '', title).lower()
 
 def parse_time(entry):
     for key in ("published_parsed", "updated_parsed"):
@@ -47,7 +53,6 @@ def fetch_source(source):
         return items
 
     try:
-        # 使用 requests 带上伪装头去获取内容，再交由 feedparser 解析
         response = requests.get(url, headers=HEADERS, timeout=15)
         response.raise_for_status()
         feed = feedparser.parse(response.content)
@@ -86,18 +91,34 @@ def main():
     for source in sources:
         all_items.extend(fetch_source(source))
 
-    seen = set()
+    # --- 智能去重与优先级排序逻辑 ---
+    
+    # 1. 定义源的优先级，数字越小越优先
+    priority_sources = ["中国新闻网健康", "明白健康"]
+    def get_priority(item):
+        source = item.get("source", "")
+        if source in priority_sources:
+            return priority_sources.index(source)
+        return 99
+
+    # 2. 先按优先级排序，确保后面的去重保留的是高优先级源的版本
+    all_items.sort(key=get_priority)
+
+    # 3. 按标题特征去重
+    seen_titles = set()
     unique_items = []
     for item in all_items:
-        link = item["link"]
-        if link in seen:
+        norm_title = normalize_title(item["title"])
+        if not norm_title or norm_title in seen_titles:
             continue
-        seen.add(link)
+        seen_titles.add(norm_title)
         unique_items.append(item)
 
+    # 4. 去重完毕后，按时间倒序排列，并限制总数
     unique_items.sort(key=lambda x: x["published"], reverse=True)
     unique_items = unique_items[:MAX_TOTAL]
 
+    # 保存数据
     os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         json.dump({
@@ -106,7 +127,7 @@ def main():
             "items": unique_items,
         }, f, ensure_ascii=False, indent=2)
 
-    print(f"完成：共写入 {len(unique_items)} 条到 {OUTPUT_FILE}")
+    print(f"完成：去重后共写入 {len(unique_items)} 条到 {OUTPUT_FILE}")
 
 if __name__ == "__main__":
     main()
