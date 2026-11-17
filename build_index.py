@@ -1,10 +1,9 @@
 import requests
 import json
 import os
-import re
 
 def clean_text(value, max_len=500):
-    """清理数据：去除换行，强制截断"""
+    """清理数据：去除换行，强制截断至 500 字"""
     if not value:
         return ""
     if isinstance(value, list):
@@ -15,18 +14,19 @@ def clean_text(value, max_len=500):
     return text
 
 def map_department(dept_str):
-    """将杂乱的科室名称归类到 6 大一级科室"""
+    """将杂乱的科室名称归类到 8 大一级科室"""
     if not dept_str:
         return "其他"
     
-    # 优先级映射字典
     mapping = {
         "内科": ["内科", "心血管", "消化", "呼吸", "神经", "内分泌", "血液", "风湿", "肾内", "传染"],
-        "外科": ["外科", "骨科", "泌尿", "肛肠", "肝胆", "血管外", "烧伤", "整形"],
+        "外科": ["外科", "骨科", "泌尿", "肛肠", "肝胆", "血管外", "烧伤", "整形", "普外"],
         "儿科": ["小儿", "儿科", "新生儿", "儿童"],
         "妇产科": ["妇科", "产科", "妇产"],
         "五官科": ["眼", "耳鼻喉", "口腔", "牙"],
-        "皮肤科": ["皮肤"]
+        "皮肤科": ["皮肤", "性病"],
+        "中医科": ["中医", "中西医结合"],
+        "其他": []
     }
     
     for main_dept, keywords in mapping.items():
@@ -37,7 +37,6 @@ def map_department(dept_str):
 
 def build_search_index():
     print("[信息] 开始获取结构化疾病知识库...")
-    
     urls = [
         "https://raw.githubusercontent.com/nuolade/disease-kb/master/data/medical.json",
         "https://cdn.jsdelivr.net/gh/nuolade/disease-kb@master/data/medical.json"
@@ -60,16 +59,14 @@ def build_search_index():
 
     if not raw_records:
         print("[失败] 无法获取数据源。")
-        os.makedirs("data", exist_ok=True)
-        with open("data/search_index.json", "w", encoding="utf-8") as f:
-            json.dump([], f)
         return
 
     # 常见病词库（用于提升权重，排在前面）
     common_keywords = ["感冒", "发烧", "发热", "高血压", "糖尿病", "胃炎", "胃溃疡", "失眠", "头痛", "便秘", "腹泻", "湿疹", "鼻炎", "咽炎", "关节炎", "痛风", "冠心病", "脑梗", "痔疮", "阑尾炎", "痛经", "近视", "结膜炎", "中耳炎", "蛀牙", "贫血", "哮喘", "肺炎", "脂肪肝", "肾结石"]
 
     index = []
-    for item in raw_records[:2000]:
+    # 【数据量扩大】：取前 5000 条
+    for item in raw_records[:5000]:
         title = clean_text(item.get("name"), 50)
         if not title:
             continue
@@ -100,13 +97,13 @@ def build_search_index():
     # 排序逻辑：先按高频词置顶，再按名称长度升序
     def sort_weight(item):
         is_common = any(kw in item["title"] for kw in common_keywords)
-        # 常见词返回 (0, 长度)，其他返回 (1, 长度)
         return (0 if is_common else 1, len(item["title"]))
 
     index.sort(key=sort_weight)
 
     os.makedirs("data", exist_ok=True)
     with open("data/search_index.json", "w", encoding="utf-8") as f:
+        # 使用紧凑格式压缩体积
         json.dump(index, f, ensure_ascii=False, separators=(',', ':'))
 
     size_kb = os.path.getsize("data/search_index.json") / 1024
