@@ -66,7 +66,7 @@ def build_search_index():
 
     index = []
     # 【数据量扩大】：取前 3000 条
-    for item in raw_records[:5000]:
+    for item in raw_records[:3000]:
         title = clean_text(item.get("name"), 50)
         if not title:
             continue
