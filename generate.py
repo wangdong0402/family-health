@@ -145,7 +145,6 @@ h2 a:hover {{ text-decoration: underline; }}
 .search-input:focus {{ border-color: #3b82f6; }}
 .search-tips {{ text-align: center; color: #98989d; font-size: 13px; margin-top: 20px; }}
 
-/* 科室分类栏 */
 .dept-bar {{ display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid #e5e7eb; }}
 .dept-btn {{ background: #f3f4f6; border: none; padding: 6px 14px; border-radius: 8px; font-size: 13px; color: #4b5563; cursor: pointer; white-space: nowrap; transition: all 0.2s; }}
 .dept-btn.active {{ background: #10b981; color: #fff; }}
@@ -217,7 +216,6 @@ h2 a:hover {{ text-decoration: underline; }}
       <input type="text" id="disease-search" class="search-input" placeholder="🔍 输入疾病名称（如：感冒、高血压）..." oninput="debounceSearch()">
     </div>
     
-    <!-- 新增：科室分类栏 -->
     <div class="dept-bar" id="dept-bar">
       <button class="dept-btn active" onclick="filterDept('all', this)">全部</button>
       <button class="dept-btn" onclick="filterDept('内科', this)">内科</button>
@@ -226,6 +224,7 @@ h2 a:hover {{ text-decoration: underline; }}
       <button class="dept-btn" onclick="filterDept('妇产科', this)">妇产科</button>
       <button class="dept-btn" onclick="filterDept('五官科', this)">五官科</button>
       <button class="dept-btn" onclick="filterDept('皮肤科', this)">皮肤科</button>
+      <button class="dept-btn" onclick="filterDept('中医科', this)">中医科</button>
     </div>
 
     <div id="disease-results">
@@ -266,7 +265,6 @@ function preloadData() {{
     .then(data => {{
       diseaseData = data;
       isLoadingData = false;
-      // 预加载完成后，如果有默认选中的科室，直接渲染
       performSearch();
     }})
     .catch(err => {{
@@ -322,12 +320,6 @@ async function performSearch() {{
   const query = document.getElementById('disease-search').value.trim();
   const resultContainer = document.getElementById('disease-results');
 
-  // 还没输入且没选科室时，给提示
-  if (query.length === 0 && currentDept === 'all') {{
-    resultContainer.innerHTML = '<div class="search-tips">请选择科室或输入疾病名称查询。</div>';
-    return;
-  }}
-
   if (!diseaseData) {{
     resultContainer.innerHTML = '<div class="search-tips">⏳ 正在加载知识库，请稍候...</div>';
     try {{
@@ -340,19 +332,22 @@ async function performSearch() {{
     }}
   }}
 
-  // 1. 如果输入了搜索词，优先按搜索词在全库过滤
   let matches = [];
+  
   if (query.length > 0) {{
     matches = diseaseData.filter(item => 
       item.title.includes(query) && (currentDept === 'all' || item.mapped_dept === currentDept)
-    ).slice(0, 20);
+    ).slice(0, 30);
   }} else {{
-    // 2. 如果没输入搜索词，只按科室导诊列出前 30 条
-    matches = diseaseData.filter(item => item.mapped_dept === currentDept).slice(0, 30);
+    if (currentDept === 'all') {{
+      matches = diseaseData.slice(0, 30);
+    }} else {{
+      matches = diseaseData.filter(item => item.mapped_dept === currentDept).slice(0, 30);
+    }}
   }}
 
   if (matches.length === 0) {{
-    resultContainer.innerHTML = '<div class="search-tips">未找到该疾病，请尝试其他关键词或科室。</div>';
+    resultContainer.innerHTML = '<div class="search-tips">未找到相关疾病，请尝试其他关键词或科室。</div>';
     return;
   }}
 
@@ -362,7 +357,6 @@ async function performSearch() {{
   matches.forEach((item, index) => {{
     const safeTitle = item.title.replace(/</g, "&lt;");
     const shortDesc = (item.desc || "暂无简介").substring(0, 40) + "...";
-    // 给卡片加一个小标签显示科室
     const deptTag = `<span style="font-size:11px; background:#e5e7eb; color:#6b7280; padding:2px 6px; border-radius:4px; float:right; margin-top:2px;">${{item.mapped_dept}}</span>`;
     
     htmlStr += `
@@ -432,7 +426,7 @@ function scrollToTop() {{
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(html_doc)
 
-    print(f"已生成 {OUTPUT_FILE}，加入了门诊分类功能。")
+    print(f"已生成 {OUTPUT_FILE}，加入了门诊分类功能与修复逻辑。")
 
 if __name__ == "__main__":
     main()
