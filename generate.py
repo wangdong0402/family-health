@@ -140,10 +140,15 @@ h2 a:hover {{ text-decoration: underline; }}
 .filter-btn {{ background: #fff; border: 1px solid #e5e7eb; padding: 6px 14px; border-radius: 20px; font-size: 13px; color: #3a3a3c; cursor: pointer; white-space: nowrap; transition: all 0.2s; }}
 .filter-btn.active {{ background: #1d1d1f; color: #fff; border-color: #1d1d1f; }}
 
-.search-container {{ margin-bottom: 16px; }}
+.search-container {{ margin-bottom: 12px; }}
 .search-input {{ width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid #e5e7eb; font-size: 14px; background: #fff; color: #1d1d1f; outline: none; }}
 .search-input:focus {{ border-color: #3b82f6; }}
 .search-tips {{ text-align: center; color: #98989d; font-size: 13px; margin-top: 20px; }}
+
+/* 科室分类栏 */
+.dept-bar {{ display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid #e5e7eb; }}
+.dept-btn {{ background: #f3f4f6; border: none; padding: 6px 14px; border-radius: 8px; font-size: 13px; color: #4b5563; cursor: pointer; white-space: nowrap; transition: all 0.2s; }}
+.dept-btn.active {{ background: #10b981; color: #fff; }}
 
 .disease-list-card {{ background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); cursor: pointer; border-left: 4px solid #10b981; transition: transform 0.1s; }}
 .disease-list-card:active {{ transform: scale(0.98); }}
@@ -176,9 +181,9 @@ h2 a:hover {{ text-decoration: underline; }}
 @media (prefers-color-scheme: dark) {{
   body {{ background: #000; color: #f5f5f7; }}
   header, .modal-header, .detail-section {{ background: #1c1c1e; border-color: #3a3a3c; }}
-  .tabs {{ border-bottom-color: #3a3a3c; }}
+  .tabs, .dept-bar {{ border-bottom-color: #3a3a3c; }}
   .sub, .meta {{ color: #98989d; }}
-  .card, .empty, .disclaimer, .filter-btn, .search-input, .disease-list-card {{ background: #1c1c1e; box-shadow: none; border-color: #3a3a3c; color: #f5f5f7; }}
+  .card, .empty, .disclaimer, .filter-btn, .search-input, .disease-list-card, .dept-btn {{ background: #1c1c1e; box-shadow: none; border-color: #3a3a3c; color: #f5f5f7; }}
   .summary, .disease-list-card p, .modal-body {{ color: #d1d1d6; }}
   .disease-list-card h3, .modal-header h2 {{ color: #f5f5f7; }}
   .filter-btn.active {{ background: #f5f5f7; color: #000; border-color: #f5f5f7; }}
@@ -189,6 +194,7 @@ h2 a:hover {{ text-decoration: underline; }}
   .modal-content {{ background: #000; }}
   .close-btn {{ background: #3a3a3c; color: #f5f5f7; }}
   .drug-tag {{ background: #2c2c2e; border-color: #3a3a3c; color: #d1d1d6; }}
+  .dept-btn.active {{ background: #10b981; color: #fff; }}
 }}
 </style>
 </head>
@@ -210,8 +216,20 @@ h2 a:hover {{ text-decoration: underline; }}
     <div class="search-container">
       <input type="text" id="disease-search" class="search-input" placeholder="🔍 输入疾病名称（如：感冒、高血压）..." oninput="debounceSearch()">
     </div>
+    
+    <!-- 新增：科室分类栏 -->
+    <div class="dept-bar" id="dept-bar">
+      <button class="dept-btn active" onclick="filterDept('all', this)">全部</button>
+      <button class="dept-btn" onclick="filterDept('内科', this)">内科</button>
+      <button class="dept-btn" onclick="filterDept('外科', this)">外科</button>
+      <button class="dept-btn" onclick="filterDept('儿科', this)">儿科</button>
+      <button class="dept-btn" onclick="filterDept('妇产科', this)">妇产科</button>
+      <button class="dept-btn" onclick="filterDept('五官科', this)">五官科</button>
+      <button class="dept-btn" onclick="filterDept('皮肤科', this)">皮肤科</button>
+    </div>
+
     <div id="disease-results">
-      <div class="search-tips">请输入疾病名称进行查询。</div>
+      <div class="search-tips">请选择科室或输入疾病名称查询。</div>
     </div>
   </div>
 
@@ -235,6 +253,7 @@ h2 a:hover {{ text-decoration: underline; }}
 <script>
 let diseaseData = null;
 let isLoadingData = false;
+let currentDept = 'all';
 
 function preloadData() {{
   if (diseaseData || isLoadingData) return;
@@ -247,6 +266,8 @@ function preloadData() {{
     .then(data => {{
       diseaseData = data;
       isLoadingData = false;
+      // 预加载完成后，如果有默认选中的科室，直接渲染
+      performSearch();
     }})
     .catch(err => {{
       isLoadingData = false;
@@ -283,6 +304,13 @@ function filterNews(category, btn) {{
   }});
 }}
 
+function filterDept(dept, btn) {{
+  currentDept = dept;
+  document.querySelectorAll('.dept-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  performSearch();
+}}
+
 let searchTimer = null;
 
 function debounceSearch() {{
@@ -294,13 +322,14 @@ async function performSearch() {{
   const query = document.getElementById('disease-search').value.trim();
   const resultContainer = document.getElementById('disease-results');
 
-  if (query.length < 1) {{
-    resultContainer.innerHTML = '<div class="search-tips">请输入疾病名称进行查询。</div>';
+  // 还没输入且没选科室时，给提示
+  if (query.length === 0 && currentDept === 'all') {{
+    resultContainer.innerHTML = '<div class="search-tips">请选择科室或输入疾病名称查询。</div>';
     return;
   }}
 
   if (!diseaseData) {{
-    resultContainer.innerHTML = '<div class="search-tips">⏳ 正在加载知识库...</div>';
+    resultContainer.innerHTML = '<div class="search-tips">⏳ 正在加载知识库，请稍候...</div>';
     try {{
       const response = await fetch('search_index.json?t=' + new Date().getTime());
       if (!response.ok) throw new Error("HTTP Status: " + response.status);
@@ -311,10 +340,19 @@ async function performSearch() {{
     }}
   }}
 
-  const matches = diseaseData.filter(item => item.title.includes(query)).slice(0, 10);
+  // 1. 如果输入了搜索词，优先按搜索词在全库过滤
+  let matches = [];
+  if (query.length > 0) {{
+    matches = diseaseData.filter(item => 
+      item.title.includes(query) && (currentDept === 'all' || item.mapped_dept === currentDept)
+    ).slice(0, 20);
+  }} else {{
+    // 2. 如果没输入搜索词，只按科室导诊列出前 30 条
+    matches = diseaseData.filter(item => item.mapped_dept === currentDept).slice(0, 30);
+  }}
 
   if (matches.length === 0) {{
-    resultContainer.innerHTML = '<div class="search-tips">未找到该疾病，请尝试其他关键词。</div>';
+    resultContainer.innerHTML = '<div class="search-tips">未找到该疾病，请尝试其他关键词或科室。</div>';
     return;
   }}
 
@@ -324,10 +362,12 @@ async function performSearch() {{
   matches.forEach((item, index) => {{
     const safeTitle = item.title.replace(/</g, "&lt;");
     const shortDesc = (item.desc || "暂无简介").substring(0, 40) + "...";
+    // 给卡片加一个小标签显示科室
+    const deptTag = `<span style="font-size:11px; background:#e5e7eb; color:#6b7280; padding:2px 6px; border-radius:4px; float:right; margin-top:2px;">${{item.mapped_dept}}</span>`;
     
     htmlStr += `
       <div class="disease-list-card" onclick="openModal(${{index}})">
-        <h3>${{safeTitle}}</h3>
+        <h3>${{safeTitle}} ${{deptTag}}</h3>
         <p>${{shortDesc}}</p>
       </div>
     `;
@@ -348,7 +388,6 @@ function openModal(index) {{
   if (item.cure_way) bodyHtml += `<div class="detail-section"><span class="detail-label label-cure">治疗</span><div>${{item.cure_way}}</div></div>`;
   if (item.prevent) bodyHtml += `<div class="detail-section"><span class="detail-label label-prevent">预防</span><div>${{item.prevent}}</div></div>`;
   
-  // 新增：用药参考区块
   if (item.drugs && item.drugs.length > 0) {{
     let drugTags = item.drugs.map(d => `<span class="drug-tag">${{d}}</span>`).join('');
     bodyHtml += `
@@ -393,7 +432,7 @@ function scrollToTop() {{
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(html_doc)
 
-    print(f"已生成 {OUTPUT_FILE}。")
+    print(f"已生成 {OUTPUT_FILE}，加入了门诊分类功能。")
 
 if __name__ == "__main__":
     main()
