@@ -65,8 +65,8 @@ def build_search_index():
     common_keywords = ["感冒", "发烧", "发热", "高血压", "糖尿病", "胃炎", "胃溃疡", "失眠", "头痛", "便秘", "腹泻", "湿疹", "鼻炎", "咽炎", "关节炎", "痛风", "冠心病", "脑梗", "痔疮", "阑尾炎", "痛经", "近视", "结膜炎", "中耳炎", "蛀牙", "贫血", "哮喘", "肺炎", "脂肪肝", "肾结石"]
 
     index = []
-    # 【数据量扩大】：取前 3000 条
-    for item in raw_records[:3000]:
+    # 【数据量扩大】：取前 2000 条
+    for item in raw_records[:2000]:
         title = clean_text(item.get("name"), 50)
         if not title:
             continue
