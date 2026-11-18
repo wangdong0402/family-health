@@ -579,49 +579,13 @@ document.querySelectorAll(".filter-item").forEach(function(btn){{
   }}
 }})
 
-function renderVideoCard(){{
-  const box = document.getElementById("videoListBox");
-  let filterData = allVideoData;
-  if(currentVideoCat !== "all"){{
-    filterData = allVideoData.filter(function(item) {{
-      return item.category === currentVideoCat;
-    }});
-  }}
-  let html = "";
-  filterData.forEach(function(item){{
-    html += "<div class=\"video-card\" onclick=\"window.open('" + item.url + "','_blank')\">"
-      + "<h4>" + item.title + "</h4>"
-      + "<div class=\"video-tag-row\">"
-      + "<span class=\"src-tag\">" + item.source + "</span>"
-      + "<span class=\"cat-tag\">" + item.category + "</span>"
-      + "</div>"
-      + "<p class=\"video-desc\">" + item.desc + "</p >"
-      + "</div>";
-  }})
-  if(filterData.length === 0){{
-    html = "<p>当前分类暂无讲座内容</p >";
-  }}
-  box.innerHTML = html;
-}}
-
-document.querySelectorAll(".filter-item").forEach(function(btn){{
-  btn.onclick = function(){{
-    document.querySelectorAll(".filter-item").forEach(function(b){{
-      b.classList.remove("active");
-    }});
-    this.classList.add("active");
-    currentVideoCat = this.dataset.cat;
-    renderVideoCard();
-  }}
-}})
-
 function filterNews(category, btn) {{
   const buttons = document.querySelectorAll('.filter-btn');
-  buttons.forEach(b => b.classList.remove('active'));
+  buttons.forEach(function(b) {{ b.classList.remove('active'); }});
   btn.classList.add('active');
 
   const cards = document.querySelectorAll('.news-card');
-  cards.forEach(card => {{
+  cards.forEach(function(card) {{
     if (category === 'all' || card.getAttribute('data-category') === category) {{
       card.style.display = 'block';
     }} else {{
