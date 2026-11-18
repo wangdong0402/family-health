@@ -214,6 +214,60 @@ h2 a:hover {{ text-decoration: underline; }}
   .drug-tag {{ background: #2c2c2e; border-color: #3a3a3c; color: #d1d1d6; }}
   .dept-btn.active {{ background: #10b981; color: #fff; }}
 }}
+
+.notice-tip {{
+  padding:10px;
+  background:#fff8e6;
+  border-radius:6px;
+  margin:10px 0;
+  font-size:14px;
+  color:#946300;
+}}
+.video-filter {{
+  display:flex;
+  gap:8px;
+  margin:12px 0;
+  flex-wrap:wrap;
+}}
+.filter-item {{
+  padding:6px 12px;
+  border:1px solid #ccc;
+  border-radius:999px;
+  background:#fff;
+}}
+.filter-item.active {{
+  background:#2b74d9;
+  color:#fff;
+  border-color:#2b74d9;
+}}
+.video-list {{
+  display:grid;
+  gap:12px;
+}}
+.video-card {{
+  border:1px solid #e8e8e8;
+  border-radius:8px;
+  padding:14px;
+  cursor:pointer;
+}}
+.video-tag-row {{
+  display:flex;
+  gap:6px;
+  margin:6px 0;
+}}
+.src-tag,.cat-tag {{
+  font-size:12px;
+  padding:2px 6px;
+  background:#f0f4fa;
+  border-radius:4px;
+  color:#2b74d9;
+}}
+.video-desc {{
+  margin:6px 0 0;
+  font-size:14px;
+  color:#555;
+}}
+
 </style>
 </head>
 <body>
@@ -225,6 +279,7 @@ h2 a:hover {{ text-decoration: underline; }}
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('news')" id="btn-news">每日资讯</button>
     <button class="tab-btn" onclick="switchTab('disease')" id="btn-disease">疾病查询</button>
+    <button class="tab-btn" onclick="switchTab('videos')" id="btn-videos">健康大视野</button>
   </div>
 </header>
 <main>
@@ -250,7 +305,19 @@ h2 a:hover {{ text-decoration: underline; }}
       <div class="search-tips">请选择科室或输入疾病名称查询。</div>
     </div>
   </div>
-
+  
+  <div class="tab-content" id="tab-videos" style="display: none;">
+  <div class="notice-tip">
+    ⚠️ 导航提示：本板块仅收录官方权威科普链接，内容版权归属原发布单位；所有视频仅作知识参考，不能替代医生面诊。
+  </div>
+  <div class="video-filter">
+    <button class="filter-item active" data-cat="all">全部</button>
+    <button class="filter-item" data-cat="代谢三高">代谢三高</button>
+    <button class="filter-item" data-cat="消化胃肠">消化胃肠</button>
+  </div>
+  <div class="video-list" id="videoListBox"></div>
+  </div>
+  
   <div class="disclaimer">
     <strong>💡 阅读小贴士：</strong><br>
     本网站内容仅供家庭日常参考，不能替代专业医疗诊断。用药请遵医嘱。如有不适，请及时就医。
@@ -321,16 +388,232 @@ function preloadData() {{
 function switchTab(tab) {{
   document.getElementById('tab-news').style.display = 'none';
   document.getElementById('tab-disease').style.display = 'none';
+  document.getElementById('tab-videos').style.display = 'none';
   document.getElementById('btn-news').classList.remove('active');
   document.getElementById('btn-disease').classList.remove('active');
+  document.getElementById('btn-videos').classList.remove('active');
 
   document.getElementById('tab-' + tab).style.display = 'block';
   document.getElementById('btn-' + tab).classList.add('active');
 
   if (tab === 'disease') {{
     preloadData();
+  }} else if (tab === 'videos') {{
+    loadVideoPage();
   }}
 }}
+
+let videoMemoryCache = null;
+let videoMemoryEtag = null;
+
+const VIDEO_DB_NAME = "HealthVideoCache";
+const VIDEO_STORE_NAME = "videoStore";
+let videoDbInstance = null;
+const VIDEO_CACHE_TTL = 7 * 24 * 60 * 60 * 1000;
+
+async function videoOpenDB() {{
+  if (videoDbInstance) return videoDbInstance;
+  return new Promise(function(resolve, reject) {{
+    const req = indexedDB.open(VIDEO_DB_NAME, 1);
+    req.onupgradeneeded = function(e) {{
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(VIDEO_STORE_NAME)) {{
+        db.createObjectStore(VIDEO_STORE_NAME);
+      }}
+    }};
+    req.onsuccess = function(e) {{
+      videoDbInstance = e.target.result;
+      resolve(videoDbInstance);
+    }};
+    req.onerror = function(e) {{
+      reject(e.target.error);
+    }};
+  }});
+}}
+
+async function videoDbPut(key, value) {{
+  const db = await videoOpenDB();
+  return new Promise(function(resolve, reject) {{
+    const tx = db.transaction(VIDEO_STORE_NAME, "readwrite");
+    const store = tx.objectStore(VIDEO_STORE_NAME);
+    const req = store.put(value, key);
+    req.onsuccess = resolve;
+    req.onerror = function(e) {{
+      reject(e.target.error);
+    }};
+  }});
+}}
+
+async function videoDbGet(key) {{
+  const db = await videoOpenDB();
+  return new Promise(function(resolve, reject) {{
+    const tx = db.transaction(VIDEO_STORE_NAME, "readonly");
+    const store = tx.objectStore(VIDEO_STORE_NAME);
+    const req = store.get(key);
+    req.onsuccess = function(e) {{
+      resolve(e.target.result);
+    }};
+    req.onerror = function(e) {{
+      reject(e.target.error);
+    }};
+  }});
+}}
+
+async function getVideoIndex(jsonUrl = "data/videos_index.json") {{
+  if (videoMemoryCache) {{
+    return videoMemoryCache;
+  }}
+
+  let localCacheData = null;
+  let localEtag = null;
+  let localCacheTime = 0;
+  try {{
+    localCacheData = await videoDbGet("videoData");
+    localEtag = await videoDbGet("videoEtag");
+    localCacheTime = await videoDbGet("videoCacheTs") || 0;
+  }} catch (err) {{
+    console.warn("视频缓存读取失败，重新下载：", err);
+  }}
+
+  let remoteEtag = null;
+  try {{
+    const controller = new AbortController();
+    const timer = setTimeout(function() {{ controller.abort(); }}, 5000);
+    const headResp = await fetch(jsonUrl, {{
+      method: "HEAD",
+      signal: controller.signal
+    }});
+    clearTimeout(timer);
+    remoteEtag = headResp.headers.get("etag");
+  }} catch (e) {{
+    console.warn("视频HEAD校验超时，使用时间兜底缓存");
+  }}
+
+  let cacheValid = false;
+  if (localCacheData) {{
+    if (remoteEtag && localEtag === remoteEtag) {{
+      cacheValid = true;
+    }} else if (!remoteEtag) {{
+      const now = Date.now();
+      if ((now - localCacheTime) < VIDEO_CACHE_TTL) {{
+        cacheValid = true;
+      }}
+    }}
+  }}
+
+  if (cacheValid) {{
+    console.log("[视频缓存命中]");
+    videoMemoryCache = localCacheData;
+    videoMemoryEtag = localEtag;
+    return localCacheData;
+  }}
+
+  console.log("[视频缓存未命中] 拉取讲座列表");
+  const resp = await fetch(jsonUrl);
+  const newEtag = resp.headers.get("etag");
+  const data = await resp.json();
+
+  videoMemoryCache = data;
+  videoMemoryEtag = newEtag;
+
+  try {{
+    await videoDbPut("videoData", data);
+    await videoDbPut("videoEtag", newEtag);
+    await videoDbPut("videoCacheTs", Date.now());
+  }} catch (err) {{
+    console.warn("写入视频缓存失败：", err);
+  }}
+  return data;
+}}
+
+let allVideoData = [];
+let currentVideoCat = "all";
+
+async function loadVideoPage() {{
+  if(allVideoData.length > 0){{
+    renderVideoCard();
+    return;
+  }}
+  try{{
+    allVideoData = await getVideoIndex();
+    renderVideoCard();
+  }}catch(e){{
+    document.getElementById("videoListBox").innerHTML = "<p>讲座列表加载失败，请稍后重试</p >";
+    console.error(e);
+  }}
+}}
+
+function renderVideoCard(){{
+  const box = document.getElementById("videoListBox");
+  let filterData = allVideoData;
+  if(currentVideoCat !== "all"){{
+    filterData = allVideoData.filter(function(item) {{
+      return item.category === currentVideoCat;
+    }});
+  }}
+  let html = "";
+  filterData.forEach(function(item){{
+    html += "<div class=\"video-card\" onclick=\"window.open('" + item.url + "','_blank')\">"
+      + "<h4>" + item.title + "</h4>"
+      + "<div class=\"video-tag-row\">"
+      + "<span class=\"src-tag\">" + item.source + "</span>"
+      + "<span class=\"cat-tag\">" + item.category + "</span>"
+      + "</div>"
+      + "<p class=\"video-desc\">" + item.desc + "</p >"
+      + "</div>";
+  }})
+  if(filterData.length === 0){{
+    html = "<p>当前分类暂无讲座内容</p >";
+  }}
+  box.innerHTML = html;
+}}
+
+document.querySelectorAll(".filter-item").forEach(function(btn){{
+  btn.onclick = function(){{
+    document.querySelectorAll(".filter-item").forEach(function(b){{
+      b.classList.remove("active");
+    }});
+    this.classList.add("active");
+    currentVideoCat = this.dataset.cat;
+    renderVideoCard();
+  }}
+}})
+
+function renderVideoCard(){{
+  const box = document.getElementById("videoListBox");
+  let filterData = allVideoData;
+  if(currentVideoCat !== "all"){{
+    filterData = allVideoData.filter(function(item) {{
+      return item.category === currentVideoCat;
+    }});
+  }}
+  let html = "";
+  filterData.forEach(function(item){{
+    html += "<div class=\"video-card\" onclick=\"window.open('" + item.url + "','_blank')\">"
+      + "<h4>" + item.title + "</h4>"
+      + "<div class=\"video-tag-row\">"
+      + "<span class=\"src-tag\">" + item.source + "</span>"
+      + "<span class=\"cat-tag\">" + item.category + "</span>"
+      + "</div>"
+      + "<p class=\"video-desc\">" + item.desc + "</p >"
+      + "</div>";
+  }})
+  if(filterData.length === 0){{
+    html = "<p>当前分类暂无讲座内容</p >";
+  }}
+  box.innerHTML = html;
+}}
+
+document.querySelectorAll(".filter-item").forEach(function(btn){{
+  btn.onclick = function(){{
+    document.querySelectorAll(".filter-item").forEach(function(b){{
+      b.classList.remove("active");
+    }});
+    this.classList.add("active");
+    currentVideoCat = this.dataset.cat;
+    renderVideoCard();
+  }}
+}})
 
 function filterNews(category, btn) {{
   const buttons = document.querySelectorAll('.filter-btn');
