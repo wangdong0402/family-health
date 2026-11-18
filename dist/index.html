@@ -177,7 +177,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #ccfbf1; color: #0f766e;">权威聚合</span>
             <span>明白健康</span>
-            <span class="time-text">25 分钟前</span>
+            <span class="time-text">38 分钟前</span>
           </div>
           <h2><a href="https://healviews.com/news/sellas-ai-zheng-yi-miao-san-qi-shi-yan-da-dao-zhu-yao-zhong-dian-gong-si-gong-bu-38566" target="_blank" rel="noopener noreferrer">SELLAS癌症疫苗三期试验达到主要终点：公司公布死亡风险相对降低41%，药品尚未获批</a></h2>
           <p class="summary">SELLAS公布AML疫苗galinpepimut-S三期REGAL试验的公司口径顶线：死亡风险相对降低41%，中位总生存期24.0个月对14.7个月。数据尚未经同行评议、药品未在任何国家获批，可跟踪的是完整数据发表与2027年上半年的上市申请计划。</p>
@@ -327,7 +327,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span class="time-text">19 小时前</span>
+            <span class="time-text">20 小时前</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261116023401.htm" target="_blank" rel="noopener noreferrer">Ozempic and Mounjaro may have a surprising effect on your brain</a></h2>
           <p class="summary">Blockbuster weight loss drugs like Ozempic and Mounjaro may do more than help people shed pounds, with growing evidence suggesting they could also influence brain health. Although studies have linked GLP-1 medications to a lower risk of dementia, major trials found that semaglutide did not slow Alzh</p>
@@ -1121,13 +1121,13 @@ function renderVideoCard(){
   }
   let html = "";
   filterData.forEach(function(item){
-    html += "<div class="video-card" data-url="" + item.url + "">"
+    html += "<div class=\"video-card\" data-url=\"" + item.url + "\">"
       + "<h4>" + item.title + "</h4>"
-      + "<div class="video-tag-row">"
-      + "<span class="src-tag">" + item.source + "</span>"
-      + "<span class="cat-tag">" + item.category + "</span>"
+      + "<div class=\"video-tag-row\">"
+      + "<span class=\"src-tag\">" + item.source + "</span>"
+      + "<span class=\"cat-tag\">" + item.category + "</span>"
       + "</div>"
-      + "<p class="video-desc">" + item.desc + "</p >"
+      + "<p class=\"video-desc\">" + item.desc + "</p >"
       + "</div>";
   })
   if(filterData.length === 0){
@@ -1135,7 +1135,6 @@ function renderVideoCard(){
   }
   box.innerHTML = html;
 
-  // 渲染完成后，给卡片绑定点击打开新页面
   document.querySelectorAll(".video-card").forEach(function(card){
     card.onclick = function(){
       const u = this.dataset.url;
