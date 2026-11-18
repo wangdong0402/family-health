@@ -553,7 +553,7 @@ function renderVideoCard(){{
   }}
   let html = "";
   filterData.forEach(function(item){{
-    html += "<div class=\"video-card\" onclick=\"window.open('" + item.url + "','_blank')\">"
+    html += "<div class=\"video-card\" data-url=\"" + item.url + "\">"
       + "<h4>" + item.title + "</h4>"
       + "<div class=\"video-tag-row\">"
       + "<span class=\"src-tag\">" + item.source + "</span>"
@@ -566,6 +566,14 @@ function renderVideoCard(){{
     html = "<p>当前分类暂无讲座内容</p >";
   }}
   box.innerHTML = html;
+
+  // 渲染完成后，给卡片绑定点击打开新页面
+  document.querySelectorAll(".video-card").forEach(function(card){{
+    card.onclick = function(){{
+      const u = this.dataset.url;
+      window.open(u, "_blank");
+    }}
+  }})
 }}
 
 document.querySelectorAll(".filter-item").forEach(function(btn){{
