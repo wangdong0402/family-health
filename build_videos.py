@@ -1,0 +1,29 @@
+import json
+import os
+
+video_list = [
+    {
+        "id": 1,
+        "title": "高血脂、高胆固醇如何科学管理",
+        "source": "央视健康之路",
+        "category": "代谢三高",
+        "tags": ["高血脂", "高胆固醇", "高脂血症"],
+        "url": "https://tv.cctv.com/lm/jkzl/",
+        "desc": "心内科专家讲解血脂管理、饮食误区、复查规范"
+    },
+    {
+        "id": 2,
+        "title": "胃炎、胃溃疡日常养护与规范治疗",
+        "source": "中国健康教育中心",
+        "category": "消化胃肠",
+        "tags": ["胃炎", "胃溃疡", "消化"],
+        "url": "https://www.cche.org.cn/portal/wcjkzsjz/A001011index_",
+        "desc": "消化科专家讲解消化道慢病防治、饮食禁忌"
+    }
+]
+
+os.makedirs("data", exist_ok=True)
+with open("data/videos_index.json", "w", encoding="utf-8") as f:
+    json.dump(video_list, f, ensure_ascii=False, separators=(',', ':'))
+
+print("✅ 视频索引生成完成，一共", len(video_list), "条")
