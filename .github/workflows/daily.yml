@@ -36,6 +36,9 @@ jobs:
 
       - name: 构建病情知识索引
         run: python build_index.py
+      
+      - name: 构建健康讲座视频索引
+        run: python build_videos.py
 
       - name: 生成网页
         run: python generate.py
