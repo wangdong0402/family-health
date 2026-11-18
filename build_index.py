@@ -61,12 +61,18 @@ def build_search_index():
         print("[失败] 无法获取数据源。")
         return
 
-    # 常见病词库（用于提升权重，排在前面）
-    common_keywords = ["感冒", "发烧", "发热", "高血压", "糖尿病", "胃炎", "眼", "胃溃疡", "失眠", "头痛", "囊肿", "皮肤", "皮脂", "过敏", "斑", "疖", "疮", "便秘", "外阴", "子宫", "卵巢", "宫颈", "腹泻", "湿疹", "鼻炎", "咽炎", "关节炎", "痛风", "冠心病", "脑梗", "痔疮", "阑尾炎", "痛经", "近视", "结膜炎", "中耳炎", "蛀牙", "贫血", "哮喘", "肺炎", "脂肪肝", "肾结石"]
+        # 扩充多维度高频词库
+    priority_dict = {
+        "eye": ["近视", "远视", "散光", "白内障", "青光眼", "结膜炎", "角膜炎", "干眼症", "麦粒肿"],
+        "gyn": ["痛经", "月经不调", "阴道炎", "盆腔炎", "子宫肌瘤", "乳腺增生", "孕期", "妊娠"],
+        "peds": ["小儿", "儿童", "幼儿", "新生儿", "手足口病", "水痘", "小儿感冒"],
+        "derm": ["湿疹", "皮炎", "荨麻疹", "痤疮", "牛皮癣", "白癜风", "脱发", "带状疱疹"],
+        "global": ["感冒", "发烧", "发热", "高血压", "糖尿病", "胃炎", "失眠", "头痛", "便秘", "腹泻", "鼻炎", "关节炎", "痛风", "痔疮", "冠心病"]
+    }
 
-    index = []
-    # 【数据量扩大】：取前 1500 条
-    for item in raw_records[:1500]:
+        index = []
+    # 1. 遍历全部数据（不再预先截断，让所有病都有机会被选中）
+    for item in raw_records:
         title = clean_text(item.get("name"), 50)
         if not title:
             continue
@@ -74,12 +80,18 @@ def build_search_index():
         raw_dept = clean_text(item.get("cure_department"), 100)
         mapped_dept = map_department(raw_dept)
 
-        # 提取药品，去重，只取前 5 个
+        # 计算权重得分（命中你刚才配置的 priority_dict 词库，得分越高）
+        score = 0
+        for cat, kws in priority_dict.items():
+            if any(kw in title for kw in kws):
+                score += 1
+
         drugs = []
         if item.get("recommand_drug"):
             drugs.extend(item["recommand_drug"])
         if item.get("common_drug"):
             drugs.extend(item["common_drug"])
+        # 药品去重后，只保留前 3 个
         unique_drugs = list(dict.fromkeys(drugs))[:5]
             
         index.append({
@@ -91,15 +103,19 @@ def build_search_index():
             "prevent": clean_text(item.get("prevent")),
             "department": raw_dept,
             "mapped_dept": mapped_dept,
-            "drugs": unique_drugs
+            "drugs": unique_drugs,
+            "_score": score  # 暂存得分用于排序
         })
 
-    # 排序逻辑：先按高频词置顶，再按名称长度升序
-    def sort_weight(item):
-        is_common = any(kw in item["title"] for kw in common_keywords)
-        return (0 if is_common else 1, len(item["title"]))
+    # 2. 排序规则：先按得分降序（命中心词的排在前面），得分相同的按名称长度升序
+    index.sort(key=lambda x: (-x["_score"], len(x["title"])))
 
-    index.sort(key=sort_weight)
+    # 3. 最后一步截断：排好序后，只取前 1500 条！
+    index = index[:1500]
+
+    # 清理掉临时得分字段，避免写入 JSON 文件增大体积
+    for item in index:
+        del item["_score"]
 
     os.makedirs("data", exist_ok=True)
     with open("data/search_index.json", "w", encoding="utf-8") as f:
