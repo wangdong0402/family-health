@@ -1,7 +1,15 @@
 {
-  "updated": "2026-11-18T13:54:11.236119+00:00",
-  "count": 67,
+  "updated": "2026-11-18T23:56:48.079434+00:00",
+  "count": 64,
   "items": [
+    {
+      "title": "1罕见神经发育疾病研究提出从基因诊断到个体化疗法筛选的流程↗",
+      "link": "https://healviews.com/news/item-38746",
+      "summary": "1罕见神经发育疾病研究提出从基因诊断到个体化疗法筛选的流程↗",
+      "source": "明白健康",
+      "category": "权威聚合",
+      "published": "2026-11-18T22:32:16+00:00"
+    },
     {
       "title": "第四届医学人文巡讲川渝行在重庆举行 讲述一线医者故事",
       "link": "https://www.chinanews.com.cn/jk/2026/11-18/10734347.shtml",
@@ -113,38 +121,6 @@
       "source": "明白健康",
       "category": "权威聚合",
       "published": "2026-11-18T10:28:29+00:00"
-    },
-    {
-      "title": "新生儿眼屎多：警惕泪囊炎科学护理指南",
-      "link": "https://healviews.com/news/item-38600",
-      "summary": "新生儿眼屎多：警惕泪囊炎科学护理指南",
-      "source": "明白健康",
-      "category": "权威聚合",
-      "published": "2026-11-18T10:28:06+00:00"
-    },
-    {
-      "title": "急性附睾炎与附睾结核，症状区别一文讲清",
-      "link": "https://healviews.com/news/item-38599",
-      "summary": "急性附睾炎与附睾结核，症状区别一文讲清",
-      "source": "明白健康",
-      "category": "权威聚合",
-      "published": "2026-11-18T10:28:06+00:00"
-    },
-    {
-      "title": "狗喝过的奶碰到伤口，会感染狂犬病吗？",
-      "link": "https://healviews.com/news/item-38598",
-      "summary": "狗喝过的奶碰到伤口，会感染狂犬病吗？",
-      "source": "明白健康",
-      "category": "权威聚合",
-      "published": "2026-11-18T10:28:06+00:00"
-    },
-    {
-      "title": "智齿拔了不用补？缺牙修复得看位置",
-      "link": "https://healviews.com/news/item-38597",
-      "summary": "智齿拔了不用补？缺牙修复得看位置",
-      "source": "明白健康",
-      "category": "权威聚合",
-      "published": "2026-11-18T10:28:06+00:00"
     },
     {
       "title": "感冒“扛一扛”就能好？出现这4种情况别大意！",
@@ -339,6 +315,14 @@
       "published": "2026-11-15T14:13:18+00:00"
     },
     {
+      "title": "What health conditions can medical cannabis treat?",
+      "link": "https://patient.info/features/general-health/the-health-conditions-cannabis-could-treat",
+      "summary": "Cannabis has been used as a medicine for centuries, but new research is revealing more about how it works and which parts of the plant may have health benefits.",
+      "source": "患者信息",
+      "category": "慢病指南",
+      "published": "2026-11-09T00:00:00+00:00"
+    },
+    {
       "title": "Immunisation for flu",
       "link": "https://patient.info/infections/influenza-and-flu-like-illness/immunisation-for-flu",
       "summary": "Getting the flu vaccine is a safe and effective way to protect against becoming seriously ill with flu.",
@@ -411,17 +395,17 @@
       "published": "2026-08-04T00:00:00+00:00"
     },
     {
-      "title": "Chikungunya fever",
-      "link": "https://patient.info/travel-and-vaccinations/chikungunya-fever-leaflet",
-      "summary": "Chikungunya fever is an illness caused by a virus. The virus infects you when you are bitten by a certain type of mosquito. You cannot catch chikungunya fever in the UK but you may be at risk of catching it when abroad. It usually causes a high temperature (the 'fever') and joint pains. In most peop",
+      "title": "Dengue",
+      "link": "https://patient.info/travel-and-vaccinations/dengue-leaflet",
+      "summary": "Dengue (which used to be called dengue fever) is a viral illness which is very common in the tropics and subtropics. It is usually a flu-like illness lasting under a week but it can sometimes be very serious, even fatal.",
       "source": "患者信息",
       "category": "慢病指南",
       "published": "2026-08-04T00:00:00+00:00"
     },
     {
-      "title": "Dengue",
-      "link": "https://patient.info/travel-and-vaccinations/dengue-leaflet",
-      "summary": "Dengue (which used to be called dengue fever) is a viral illness which is very common in the tropics and subtropics. It is usually a flu-like illness lasting under a week but it can sometimes be very serious, even fatal.",
+      "title": "Chikungunya fever",
+      "link": "https://patient.info/travel-and-vaccinations/chikungunya-fever-leaflet",
+      "summary": "Chikungunya fever is an illness caused by a virus. The virus infects you when you are bitten by a certain type of mosquito. You cannot catch chikungunya fever in the UK but you may be at risk of catching it when abroad. It usually causes a high temperature (the 'fever') and joint pains. In most peop",
       "source": "患者信息",
       "category": "慢病指南",
       "published": "2026-08-04T00:00:00+00:00"
@@ -449,14 +433,6 @@
       "source": "MedlinePlus 官方索引",
       "category": "健康指南",
       "published": "2026-06-30T04:00:00+00:00"
-    },
-    {
-      "title": "Swollen eyelid",
-      "link": "https://patient.info/eye-care/swollen-eyelid",
-      "summary": "A swollen eyelid is very common and is usually due to allergy, inflammation, infection, or injury. It can affect either the upper or lower eyelid, or both.",
-      "source": "患者信息",
-      "category": "慢病指南",
-      "published": "2026-05-27T00:00:00+00:00"
     },
     {
       "title": "Two New Medical Tests Added to MedlinePlus",
