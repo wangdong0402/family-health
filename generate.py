@@ -553,13 +553,13 @@ function renderVideoCard(){{
   }}
   let html = "";
   filterData.forEach(function(item){{
-    html += "<div class=\"video-card\" data-url=\"" + item.url + "\">"
+    html += "<div class=\\\"video-card\\\" data-url=\\\"" + item.url + "\\\">"
       + "<h4>" + item.title + "</h4>"
-      + "<div class=\"video-tag-row\">"
-      + "<span class=\"src-tag\">" + item.source + "</span>"
-      + "<span class=\"cat-tag\">" + item.category + "</span>"
+      + "<div class=\\\"video-tag-row\\\">"
+      + "<span class=\\\"src-tag\\\">" + item.source + "</span>"
+      + "<span class=\\\"cat-tag\\\">" + item.category + "</span>"
       + "</div>"
-      + "<p class=\"video-desc\">" + item.desc + "</p >"
+      + "<p class=\\\"video-desc\\\">" + item.desc + "</p >"
       + "</div>";
   }})
   if(filterData.length === 0){{
@@ -567,7 +567,6 @@ function renderVideoCard(){{
   }}
   box.innerHTML = html;
 
-  // 渲染完成后，给卡片绑定点击打开新页面
   document.querySelectorAll(".video-card").forEach(function(card){{
     card.onclick = function(){{
       const u = this.dataset.url;
