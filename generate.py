@@ -254,58 +254,50 @@ let diseaseData = null;
 let isLoadingData = false;
 let currentDept = 'all';
 
-// 【新增】本地缓存加载逻辑
-function preloadData() {
+function preloadData() {{
   if (diseaseData || isLoadingData) return;
   isLoadingData = true;
 
-  // 1. 尝试从手机本地存储读取缓存
-  try {
+  try {{
     const cachedStr = localStorage.getItem('health_disease_cache');
-    if (cachedStr) {
+    if (cachedStr) {{
       const cacheObj = JSON.parse(cachedStr);
       const now = new Date().getTime();
-      // 缓存有效期为 12 小时 (12 * 60 * 60 * 1000)
-      if (now - cacheObj.timestamp < 43200000) {
-        console.log("命中本地缓存，秒开！");
+      if (now - cacheObj.timestamp < 43200000) {{
         diseaseData = cacheObj.data;
         isLoadingData = false;
         performSearch(); 
-        return; // 直接结束，不发起网络请求
-      }
-    }
-  } catch (e) {
+        return; 
+      }}
+    }}
+  }} catch (e) {{
     console.warn("读取缓存失败，走网络请求", e);
-  }
+  }}
 
-  // 2. 如果没有缓存或缓存过期，去网络请求
-  // 注意：去掉了 ?t= 时间戳，允许浏览器自身的 HTTP 缓存生效
   fetch('search_index.json') 
-    .then(res => {
+    .then(res => {{
       if (!res.ok) throw new Error("HTTP " + res.status);
       return res.json();
-    })
-    .then(data => {
+    }})
+    .then(data => {{
       diseaseData = data;
       isLoadingData = false;
       performSearch();
       
-      // 3. 将下载的数据存入手机本地
-      try {
-        localStorage.setItem('health_disease_cache', JSON.stringify({
+      try {{
+        localStorage.setItem('health_disease_cache', JSON.stringify({{
           timestamp: new Date().getTime(),
           data: data
-        }));
-      } catch (e) {
-        // 如果手机存储空间满了(通常限额5MB)，捕获异常不影响使用
-        console.warn("存储空间不足，无法写入缓存", e);
-      }
-    })
-    .catch(err => {
+        }}));
+      }} catch (e) {{
+        console.warn("存储空间不足", e);
+      }}
+    }})
+    .catch(err => {{
       isLoadingData = false;
-      document.getElementById('disease-results').innerHTML = `<div class="search-tips" style="color:red;">⚠️ 加载失败: ${err.message}</div>`;
-    });
-}
+      document.getElementById('disease-results').innerHTML = `<div class="search-tips" style="color:red;">⚠️ 加载失败: ${{err.message}}</div>`;
+    }});
+}}
 
 function switchTab(tab) {{
   document.getElementById('tab-news').style.display = 'none';
