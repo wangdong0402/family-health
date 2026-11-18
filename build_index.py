@@ -70,7 +70,7 @@ def build_search_index():
         "global": ["感冒", "发烧", "发热", "高血压", "糖尿病", "胃炎", "失眠", "头痛", "便秘", "腹泻", "鼻炎", "关节炎", "痛风", "痔疮", "冠心病"]
     }
 
-        index = []
+    index = []
     # 1. 遍历全部数据（不再预先截断，让所有病都有机会被选中）
     for item in raw_records:
         title = clean_text(item.get("name"), 50)
