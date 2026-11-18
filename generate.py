@@ -121,29 +121,27 @@ def main():
 body {{ margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f5f7; color: #1d1d1f; }}
 header {{ position: sticky; top: 0; backdrop-filter: blur(12px); background: rgba(245, 245, 247, .85); border-bottom: 1px solid rgba(0, 0, 0, .08); padding: 16px 16px 0; z-index: 100; }}
 /* 优化后的头部样式 */
-.header-top { margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; }
-h1 { 
+.header-top {{ margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; }}
+h1 {{ 
   font-size: 22px; 
   margin: 0; 
   font-weight: 800;
   letter-spacing: 0.5px;
-  /* 健康主题渐变色文字 */
   background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
-}
-.sub { 
+}}
+.sub {{ 
   font-size: 12px; 
   color: #6e6e73; 
-  /* 胶囊样式 */
   background: rgba(0, 0, 0, 0.04);
   padding: 4px 10px;
   border-radius: 12px;
   display: inline-block;
   align-self: flex-start;
   font-weight: 500;
-}
+}}
 .tabs {{ display: flex; gap: 20px; overflow-x: auto; border-bottom: 1px solid #e5e7eb; }}
 .tab-btn {{ background: none; border: none; padding: 10px 0; font-size: 15px; font-weight: bold; color: #6e6e73; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }}
 .tab-btn.active {{ color: #1d1d1f; border-bottom-color: #1d1d1f; }}
