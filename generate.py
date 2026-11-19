@@ -315,9 +315,9 @@ h2 a:hover {{ text-decoration: underline; }}
     ⚠️ 导航提示：本板块仅收录官方权威科普链接，内容版权归属原发布单位；所有视频仅作知识参考，不能替代医生面诊。
   </div>
   <div class="video-filter">
-    <button class="filter-item active" data-cat="all">全部</button>
-    <button class="filter-item" data-cat="代谢三高">代谢三高</button>
-    <button class="filter-item" data-cat="消化胃肠">消化胃肠</button>
+    <button class="btn-tab active" data-filter="all">全部</button>
+    <button class="btn-tab" data-filter="央视健康">央视健康</button>
+    <button class="btn-tab" data-filter="健康中国">健康中国</button>
   </div>
   <div class="video-list" id="videoListBox"></div>
   </div>
@@ -531,7 +531,7 @@ async function getVideoIndex(jsonUrl = "./videos_index.json") {{
 }}
 
 let allVideoData = [];
-let currentVideoCat = "all";
+let activeFilter = "all";
 
 async function loadVideoPage() {{
   if(allVideoData.length > 0){{
@@ -557,13 +557,12 @@ function renderVideoCard(){{
   }}
   let html = "";
   filterData.forEach(function(item){{
-    html += "<div class=\\\"video-card\\\" data-url=\\\"" + item.url + "\\\">"
+    html += "<div class=\"video-card\" onclick=\"window.open('"+item.url+"','_blank')\">"
       + "<h4>" + item.title + "</h4>"
-      + "<div class=\\\"video-tag-row\\\">"
-      + "<span class=\\\"src-tag\\\">" + item.source + "</span>"
-      + "<span class=\\\"cat-tag\\\">" + item.category + "</span>"
+      + "<div class=\"video-tag-row\">"
+      + "<span class=\"src-tag\">" + item.source + "</span>"
       + "</div>"
-      + "<p class=\\\"video-desc\\\">" + item.desc + "</p >"
+      + "<p class=\"video-desc\">" + item.desc + "</p >"
       + "</div>";
   }})
   if(filterData.length === 0){{
@@ -585,10 +584,10 @@ document.querySelectorAll(".filter-item").forEach(function(btn){{
       b.classList.remove("active");
     }});
     this.classList.add("active");
-    currentVideoCat = this.dataset.cat;
+    activeFilter = this.dataset.filter;
     renderVideoCard();
-  }}
-}})
+  }};
+}});
 
 function filterNews(category, btn) {{
   const buttons = document.querySelectorAll('.filter-btn');
