@@ -317,49 +317,49 @@ h2 a:hover {{ text-decoration: underline; }}
 let diseaseData = null;
 let isLoadingData = false;
 let currentDept = 'all';
-function preloadData() {{
+function preloadData() {
   if (diseaseData || isLoadingData) return;
   isLoadingData = true;
-  try {{
+  try {
     const cachedStr = localStorage.getItem('health_disease_cache');
-    if (cachedStr) {{
+    if (cachedStr) {
       const cacheObj = JSON.parse(cachedStr);
       const now = new Date().getTime();
-      if (now - cacheObj.timestamp < 43200000) {{
+      if (now - cacheObj.timestamp < 43200000) {
         diseaseData = cacheObj.data;
         isLoadingData = false;
         performSearch(); 
         return; 
-      }}
-    }}
-  }} catch (e) {{
+      }
+    }
+  } catch (e) {
     console.warn("读取缓存失败，走网络请求", e);
-  }}
+  }
   fetch('search_index.json') 
-    .then(res => {{
+    .then(res => {
       if (!res.ok) throw new Error("HTTP " + res.status);
       return res.json();
-    }})
-    .then(data => {{
+    })
+    .then(data => {
       diseaseData = data;
       isLoadingData = false;
       performSearch();
       
-      try {{
-        localStorage.setItem('health_disease_cache', JSON.stringify({{
+      try {
+        localStorage.setItem('health_disease_cache', JSON.stringify({
           timestamp: new Date().getTime(),
           data: data
-        }}));
-      }} catch (e) {{
+        }));
+      } catch (e) {
         console.warn("存储空间不足", e);
-      }}
-    }})
-    .catch(err => {{
+      }
+    })
+    .catch(err => {
       isLoadingData = false;
-      document.getElementById('disease-results').innerHTML = `<div class="search-tips" style="color:red;">⚠️ 加载失败: ${{err.message}}</div>`;
-    }});
-}}
-function switchTab(tab) {{
+      document.getElementById('disease-results').innerHTML = `<div class="search-tips" style="color:red;">⚠️ 加载失败: ${err.message}</div>`;
+    });
+}
+function switchTab(tab) {
   document.getElementById('tab-news').style.display = 'none';
   document.getElementById('tab-disease').style.display = 'none';
   document.getElementById('tab-videos').style.display = 'none';
@@ -368,150 +368,150 @@ function switchTab(tab) {{
   document.getElementById('btn-videos').classList.remove('active');
   document.getElementById('tab-' + tab).style.display = 'block';
   document.getElementById('btn-' + tab).classList.add('active');
-  if (tab === 'disease') {{
+  if (tab === 'disease') {
     preloadData();
-  }} else if (tab === 'videos') {{
+  } else if (tab === 'videos') {
     loadVideoPage();
-  }}
-}}
+  }
+}
 let videoMemoryCache = null;
 let videoMemoryEtag = null;
 const VIDEO_DB_NAME = "HealthVideoCache";
 const VIDEO_STORE_NAME = "videoStore";
 let videoDbInstance = null;
 const VIDEO_CACHE_TTL = 7 * 24 * 60 * 60 * 1000;
-async function videoOpenDB() {{
+async function videoOpenDB() {
   if (videoDbInstance) return videoDbInstance;
-  return new Promise(function(resolve, reject) {{
+  return new Promise(function(resolve, reject) {
     const req = indexedDB.open(VIDEO_DB_NAME, 1);
-    req.onupgradeneeded = function(e) {{
+    req.onupgradeneeded = function(e) {
       const db = e.target.result;
-      if (!db.objectStoreNames.contains(VIDEO_STORE_NAME)) {{
+      if (!db.objectStoreNames.contains(VIDEO_STORE_NAME)) {
         db.createObjectStore(VIDEO_STORE_NAME);
-      }}
-    }};
-    req.onsuccess = function(e) {{
+      }
+    };
+    req.onsuccess = function(e) {
       videoDbInstance = e.target.result;
       resolve(videoDbInstance);
-    }};
-    req.onerror = function(e) {{
+    };
+    req.onerror = function(e) {
       reject(e.target.error);
-    }};
-  }});
-}}
-async function videoDbPut(key, value) {{
+    };
+  });
+}
+async function videoDbPut(key, value) {
   const db = await videoOpenDB();
-  return new Promise(function(resolve, reject) {{
+  return new Promise(function(resolve, reject) {
     const tx = db.transaction(VIDEO_STORE_NAME, "readwrite");
     const store = tx.objectStore(VIDEO_STORE_NAME);
     const req = store.put(value, key);
     req.onsuccess = resolve;
-    req.onerror = function(e) {{
+    req.onerror = function(e) {
       reject(e.target.error);
-    }};
-  }});
-}}
-async function videoDbGet(key) {{
+    };
+  });
+}
+async function videoDbGet(key) {
   const db = await videoOpenDB();
-  return new Promise(function(resolve, reject) {{
+  return new Promise(function(resolve, reject) {
     const tx = db.transaction(VIDEO_STORE_NAME, "readonly");
     const store = tx.objectStore(VIDEO_STORE_NAME);
     const req = store.get(key);
-    req.onsuccess = function(e) {{
+    req.onsuccess = function(e) {
       resolve(e.target.result);
-    }};
-    req.onerror = function(e) {{
+    };
+    req.onerror = function(e) {
       reject(e.target.error);
-    }};
-  }});
-}}
-async function getVideoIndex(jsonUrl = "./videos_index.json") {{
-  if (videoMemoryCache) {{
+    };
+  });
+}
+async function getVideoIndex(jsonUrl = "./videos_index.json") {
+  if (videoMemoryCache) {
     return videoMemoryCache;
-  }}
+  }
   let localCacheData = null;
   let localEtag = null;
   let localCacheTime = 0;
-  try {{
+  try {
     localCacheData = await videoDbGet("videoData");
     localEtag = await videoDbGet("videoEtag");
     localCacheTime = await videoDbGet("videoCacheTs") || 0;
-  }} catch (err) {{
+  } catch (err) {
     console.warn("视频缓存读取失败，重新下载：", err);
-  }}
+  }
   let remoteEtag = null;
-  try {{
+  try {
     const controller = new AbortController();
-    const timer = setTimeout(function() {{ controller.abort(); }}, 5000);
-    const headResp = await fetch(jsonUrl, {{
+    const timer = setTimeout(function() { controller.abort(); }, 5000);
+    const headResp = await fetch(jsonUrl, {
       method: "HEAD",
       signal: controller.signal
-    }});
+    });
     clearTimeout(timer);
     remoteEtag = headResp.headers.get("etag");
-  }} catch (e) {{
+  } catch (e) {
     console.warn("视频HEAD校验超时，使用时间兜底缓存");
-  }}
+  }
   let cacheValid = false;
-  if (localCacheData) {{
-    if (remoteEtag && localEtag === remoteEtag) {{
+  if (localCacheData) {
+    if (remoteEtag && localEtag === remoteEtag) {
       cacheValid = true;
-    }} else if (!remoteEtag) {{
+    } else if (!remoteEtag) {
       const now = Date.now();
-      if ((now - localCacheTime) < VIDEO_CACHE_TTL) {{
+      if ((now - localCacheTime) < VIDEO_CACHE_TTL) {
         cacheValid = true;
-      }}
-    }}
-  }}
-  if (cacheValid) {{
+      }
+    }
+  }
+  if (cacheValid) {
     console.log("[视频缓存命中]");
     videoMemoryCache = localCacheData;
     videoMemoryEtag = localEtag;
     return localCacheData;
-  }}
+  }
   console.log("[视频缓存未命中] 拉取讲座列表");
   const resp = await fetch(jsonUrl);
   const newEtag = resp.headers.get("etag");
   const data = await resp.json();
   videoMemoryCache = data;
   videoMemoryEtag = newEtag;
-  try {{
+  try {
     await videoDbPut("videoData", data);
     await videoDbPut("videoEtag", newEtag);
     await videoDbPut("videoCacheTs", Date.now());
-  }} catch (err) {{
+  } catch (err) {
     console.warn("写入视频缓存失败：", err);
-  }}
+  }
   return data;
-}}
+}
 let allVideoData = [];
 let activeFilter = "all";
-async function loadVideoPage() {{
-  if(allVideoData.length > 0){{
+async function loadVideoPage() {
+  if(allVideoData.length > 0){
     renderVideoCard();
     return;
-  }}
-  try{{
+  }
+  try{
     allVideoData = await getVideoIndex();
     renderVideoCard();
-  }}catch(e){{
+  }catch(e){
     document.getElementById("videoListBox").innerHTML = "<p>讲座列表加载失败，请稍后重试</p>";
     console.error(e);
-  }}
-}}
-function renderVideoCard(){{
+  }
+}
+function renderVideoCard(){
   const box = document.getElementById("videoListBox");
   let filterData = allVideoData;
-  if(activeFilter !== "all"){{
-    filterData = allVideoData.filter(function(item) {{
+  if(activeFilter !== "all"){
+    filterData = allVideoData.filter(function(item) {
       return item.source === activeFilter;
-    }});
-  }}
+    });
+  }
   let html = "";
-  if(filterData.length === 0){{
+  if(filterData.length === 0){
     html = "<p>当前分类暂无讲座内容</p>";
-  }} else {{
-    filterData.forEach(function(item){{
+  } else {
+    filterData.forEach(function(item){
       html += "<div class=\"video-card\" data-url=\"" + item.url + "\">"
         + "<h4>" + item.title + "</h4>"
         + "<div class=\"video-tag-row\">"
@@ -519,149 +519,149 @@ function renderVideoCard(){{
         + "</div>"
         + "<p class=\"video-desc\">" + item.desc + "</p>"
         + "</div>";
-    }})
-  }}
+    })
+  }
   box.innerHTML = html;
-}}
+}
 
-document.getElementById("videoListBox").onclick = function(e){{
+document.getElementById("videoListBox").onclick = function(e){
   const card = e.target.closest(".video-card");
-  if(card){{
+  if(card){
     window.open(card.dataset.url, '_blank');
-  }}
-}}
+  }
+}
 
-document.querySelectorAll(".filter-item").forEach(function(btn){{
-  btn.onclick = function(){{
-    document.querySelectorAll(".filter-item").forEach(function(b){{
+document.querySelectorAll(".filter-item").forEach(function(btn){
+  btn.onclick = function(){
+    document.querySelectorAll(".filter-item").forEach(function(b){
       b.classList.remove("active");
-    }});
+    });
     this.classList.add("active");
     activeFilter = this.dataset.filter;
     renderVideoCard();
-  }};
-}});
+  }
+});
 
-function filterNews(category, btn) {{
+function filterNews(category, btn) {
   const buttons = document.querySelectorAll('.filter-btn');
-  buttons.forEach(function(b) {{ b.classList.remove('active'); }});
+  buttons.forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
   const cards = document.querySelectorAll('.news-card');
-  cards.forEach(function(card) {{
-    if (category === 'all' || card.getAttribute('data-category') === category) {{
+  cards.forEach(function(card) {
+    if (category === 'all' || card.getAttribute('data-category') === category) {
       card.style.display = 'block';
-    }} else {{
+    } else {
       card.style.display = 'none';
-    }}
-  }});
-}}
-function filterDept(dept, btn) {{
+    }
+  });
+}
+function filterDept(dept, btn) {
   currentDept = dept;
   document.querySelectorAll('.dept-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   performSearch();
-}}
+}
 let searchTimer = null;
-function debounceSearch() {{
+function debounceSearch() {
   clearTimeout(searchTimer);
   searchTimer = setTimeout(performSearch, 300);
-}}
-async function performSearch() {{
+}
+async function performSearch() {
   const query = document.getElementById('disease-search').value.trim();
   const resultContainer = document.getElementById('disease-results');
-  if (!diseaseData) {{
+  if (!diseaseData) {
     resultContainer.innerHTML = '<div class="search-tips">⏳ 正在加载知识库，请稍候...</div>';
-    try {{
+    try {
       const response = await fetch('search_index.json?t=' + new Date().getTime());
       if (!response.ok) throw new Error("HTTP Status: " + response.status);
       diseaseData = await response.json();
-    }} catch (err) {{
-      resultContainer.innerHTML = `<div class="search-tips" style="color:red;">⚠️ 加载失败: ${{err.message}}</div>`;
+    } catch (err) {
+      resultContainer.innerHTML = `<div class="search-tips" style="color:red;">⚠️ 加载失败: ${err.message}</div>`;
       return;
-    }}
-  }}
+    }
+  }
   let matches = [];
   
-  if (query.length > 0) {{
+  if (query.length > 0) {
     matches = diseaseData.filter(item => 
       item.title.includes(query) && (currentDept === 'all' || item.mapped_dept === currentDept)
     ).slice(0, 30);
-  }} else {{
-    if (currentDept === 'all') {{
+  } else {
+    if (currentDept === 'all') {
       matches = diseaseData.slice(0, 30);
-    }} else {{
+    } else {
       matches = diseaseData.filter(item => item.mapped_dept === currentDept).slice(0, 30);
-    }}
-  }}
-  if (matches.length === 0) {{
+    }
+  }
+  if (matches.length === 0) {
     resultContainer.innerHTML = '<div class="search-tips">未找到相关疾病，请尝试其他关键词或科室。</div>';
     return;
-  }}
+  }
   let htmlStr = '';
   window.currentSearchResults = matches;
-  matches.forEach((item, index) => {{
+  matches.forEach((item, index) => {
     const safeTitle = item.title.replace(/</g, "&lt;");
     const shortDesc = (item.desc || "暂无简介").substring(0, 40) + "...";
-    const deptTag = `<span style="font-size:11px; background:#e5e7eb; color:#6b7280; padding:2px 6px; border-radius:4px; float:right; margin-top:2px;">${{item.mapped_dept}}</span>`;
+    const deptTag = `<span style="font-size:11px; background:#e5e7eb; color:#6b7280; padding:2px 6px; border-radius:4px; float:right; margin-top:2px;">${item.mapped_dept}</span>`;
     
     htmlStr += `
-      <div class="disease-list-card" onclick="openModal(${{index}})">
-        <h3>${{safeTitle}} ${{deptTag}}</h3>
-        <p>${{shortDesc}}</p>
+      <div class="disease-list-card" onclick="openModal(${index})">
+        <h3>${safeTitle} ${deptTag}</h3>
+        <p>${shortDesc}</p>
       </div>
     `;
-  }});
+  });
   resultContainer.innerHTML = htmlStr;
-}}
-function openModal(index) {{
+}
+function openModal(index) {
   const item = window.currentSearchResults[index];
   if (!item) return;
   document.getElementById('modal-title').innerText = item.title;
   
   let bodyHtml = '';
-  if (item.desc) bodyHtml += `<div class="detail-section"><span class="detail-label label-desc">简介</span><div>${{item.desc}}</div></div>`;
-  if (item.cause) bodyHtml += `<div class="detail-section"><span class="detail-label label-cause">病因</span><div>${{item.cause}}</div></div>`;
-  if (item.symptom) bodyHtml += `<div class="detail-section"><span class="detail-label label-symptom">症状</span><div>${{item.symptom}}</div></div>`;
-  if (item.cure_way) bodyHtml += `<div class="detail-section"><span class="detail-label label-cure">治疗</span><div>${{item.cure_way}}</div></div>`;
-  if (item.prevent) bodyHtml += `<div class="detail-section"><span class="detail-label label-prevent">预防</span><div>${{item.prevent}}</div></div>`;
+  if (item.desc) bodyHtml += `<div class="detail-section"><span class="detail-label label-desc">简介</span><div>${item.desc}</div></div>`;
+  if (item.cause) bodyHtml += `<div class="detail-section"><span class="detail-label label-cause">病因</span><div>${item.cause}</div></div>`;
+  if (item.symptom) bodyHtml += `<div class="detail-section"><span class="detail-label label-symptom">症状</span><div>${item.symptom}</div></div>`;
+  if (item.cure_way) bodyHtml += `<div class="detail-section"><span class="detail-label label-cure">治疗</span><div>${item.cure_way}</div></div>`;
+  if (item.prevent) bodyHtml += `<div class="detail-section"><span class="detail-label label-prevent">预防</span><div>${item.prevent}</div></div>`;
   
-  if (item.drugs && item.drugs.length > 0) {{
-    let drugTags = item.drugs.map(d => `<span class="drug-tag">${{d}}</span>`).join('');
+  if (item.drugs && item.drugs.length > 0) {
+    let drugTags = item.drugs.map(d => `<span class="drug-tag">${d}</span>`).join('');
     bodyHtml += `
       <div class="detail-section">
         <span class="detail-label label-drug">用药参考</span>
-        <div class="drug-tags">${{drugTags}}</div>
+        <div class="drug-tags">${drugTags}</div>
       </div>
     `;
-  }}
-  if (item.department) bodyHtml += `<div class="detail-section"><span class="detail-label label-desc">就诊科室</span><div>${{item.department}}</div></div>`;
+  }
+  if (item.department) bodyHtml += `<div class="detail-section"><span class="detail-label label-desc">就诊科室</span><div>${item.department}</div></div>`;
   document.getElementById('modal-body').innerHTML = bodyHtml;
   
   document.getElementById('modal-overlay').classList.add('show');
   document.getElementById('modal-content').classList.add('show');
   document.body.style.overflow = 'hidden';
-}}
-function closeModal() {{
+}
+function closeModal() {
   document.getElementById('modal-overlay').classList.remove('show');
   document.getElementById('modal-content').classList.remove('show');
   document.body.style.overflow = '';
-}}
-window.onscroll = function() {{
+}
+window.onscroll = function() {
   const btn = document.getElementById('backToTop');
-  if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {{
+  if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
     btn.style.display = 'flex';
-  }} else {{
+  } else {
     btn.style.display = 'none';
-  }}
-}};
-function scrollToTop() {{
-  window.scrollTo({{ top: 0, behavior: 'smooth' }});
-}}
+  }
+};
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 </script>
 </body>
 </html>'''
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(html_doc)
-    print(f"已生成 {OUTPUT_FILE}，加入了门诊分类功能与修复逻辑。")
+    print(f"已生成 {OUTPUT_FILE}，修复JS语法错误。")
 if __name__ == "__main__":
     main()
