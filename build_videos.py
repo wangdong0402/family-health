@@ -4,14 +4,14 @@ import re
 import requests
 import sys
 
-# 修复Action ASCII编码报错
 os.environ["PYTHONIOENCODING"] = "utf-8"
 sys.stdout.reconfigure(encoding="utf-8")
 sys.stderr.reconfigure(encoding="utf-8")
 
 OUTPUT_PATH = "data/videos_index.json"
 MANUAL_PATH = "data/manual_videos.json"
-CCTV_URL = "https://tv.cctv.com/lm/jkzl/videos/"
+# ✅ 修正后的正确链接
+CCTV_URL = "https://tv.cctv.com/lm/jkzl/"
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
@@ -37,7 +37,6 @@ def fetch_cctv():
         resp = requests.get(CCTV_URL, headers=HEADERS, timeout=15)
         resp.raise_for_status()
         html = resp.text
-        # 匹配VID单集播放页链接
         pattern = re.compile(r'href="(https://tv.cctv.com/[^"]+/VID[^"]+\.shtml)"[^>]*title="([^"]+)"')
         matches = pattern.findall(html)
         item_id = 1000
