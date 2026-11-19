@@ -166,7 +166,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">13 分钟前</span>
+            <span class="time-text">30 分钟前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-19/10734677.shtml" target="_blank" rel="noopener noreferrer">北京出台专项措施促特殊医学用途配方食品创新发展</a></h2>
           <p class="summary">中新网北京11月19日电 (记者 吕少威 杜燕)《促进特殊医学用途配方食品创新发展若干措施》(下称若干措施)19日发布，由北京市市场监督管理局等八部门联合出台，聚焦特殊医学用途配方食品(下称特医食品)研发、生产、应用等环节，推出12项支持举措。</p>
@@ -176,7 +176,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">39 分钟前</span>
+            <span class="time-text">57 分钟前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-19/10734660.shtml" target="_blank" rel="noopener noreferrer">“癌王”！通常发现就是晚期，4个信号需警惕</a></h2>
           <p class="summary">今天(11月19日)</p>
@@ -276,7 +276,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">1 小时前</span>
+            <span class="time-text">2 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-19/10734619.shtml" target="_blank" rel="noopener noreferrer">女子耳内“有虫爬” 竟是家中宠物惹的祸</a></h2>
           <p class="summary">近日，市民余女士(化姓)出现耳鸣、耳道异物感，让她最难受的是还感觉有小虫子在耳朵里面慢慢爬，于是她来到南京江北医院耳鼻喉科就诊。接诊后，副主任医师魏新民为她安排了耳内镜检查，但常规观察条件下，耳道内并未发现明显异常。直到改用高清放大专业内镜进一步细查后，才发现了耳道内螨虫样微小生物在顺光移动。进一步追问生活史，问题根源指向了家中饲养的一只猫和一条狗。</p>
@@ -356,7 +356,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">18 小时前</span>
+            <span class="time-text">19 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-18/10734314.shtml" target="_blank" rel="noopener noreferrer">别把“慢阻肺”当衰老 中医专家：老年患者健脾、补肾亦是治肺之法</a></h2>
           <p class="summary">中新网上海11月18日电(陈静 瞿乃婴)爬两层楼就喘、穿件外套都费劲，是因为老了吗？记者18日了解到，不一定，这也可能是慢阻肺的早期信号。</p>
@@ -1076,13 +1076,13 @@ function renderVideoCard(){
     html = "<p>当前分类暂无讲座内容</p>";
   } else {
     filterData.forEach(function(item){
-      html += "<div class="video-card" data-url="" + item.url + "">"
-        + "<h4>" + item.title + "</h4>"
-        + "<div class="video-tag-row">"
-        + "<span class="src-tag">" + item.source + "</span>"
-        + "</div>"
-        + "<p class="video-desc">" + item.desc + "</p>"
-        + "</div>";
+      html += '<div class="video-card" data-url="' + item.url + '">'
+        + '<h4>' + item.title + '</h4>'
+        + '<div class="video-tag-row">'
+        + '<span class="src-tag">' + item.source + '</span>'
+        + '</div>'
+        + '<p class="video-desc">' + item.desc + '</p >'
+        + '</div>';
     })
   }
   box.innerHTML = html;
