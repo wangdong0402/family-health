@@ -463,7 +463,7 @@ async function videoDbGet(key) {{
   }});
 }}
 
-async function getVideoIndex(jsonUrl = "data/videos_index.json") {{
+async function getVideoIndex(jsonUrl = "./videos_index.json") {{
   if (videoMemoryCache) {{
     return videoMemoryCache;
   }}
