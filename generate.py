@@ -512,13 +512,13 @@ function renderVideoCard(){{
     html = "<p>当前分类暂无讲座内容</p>";
   }} else {{
     filterData.forEach(function(item){{
-      html += "<div class=\"video-card\" data-url=\"" + item.url + "\">"
-        + "<h4>" + item.title + "</h4>"
-        + "<div class=\"video-tag-row\">"
-        + "<span class=\"src-tag\">" + item.source + "</span>"
-        + "</div>"
-        + "<p class=\"video-desc\">" + item.desc + "</p>"
-        + "</div>";
+      html += '<div class="video-card" data-url="' + item.url + '">'
+        + '<h4>' + item.title + '</h4>'
+        + '<div class="video-tag-row">'
+        + '<span class="src-tag">' + item.source + '</span>'
+        + '</div>'
+        + '<p class="video-desc">' + item.desc + '</p >'
+        + '</div>';
     }})
   }}
   box.innerHTML = html;
