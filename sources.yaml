@@ -22,3 +22,8 @@ sources:
   - name: 每日科学健康医学
     url: https://www.sciencedaily.com/rss/health_medicine.xml
     category: 医学研究
+ 
+video_sources:
+  - name: 明白健康科普视频
+    url: "https://healviews.com/feed.xml"
+    default_category: 代谢三高
