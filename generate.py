@@ -6,6 +6,7 @@ from datetime import datetime, timezone, timedelta
 
 NEWS_FILE = "data/news.json"
 INDEX_FILE = "data/search_index.json"
+VIDEO_FILE = "data/videos_index.json"
 OUTPUT_FILE = "dist/index.html"
 
 def format_relative_time(value):
@@ -108,7 +109,10 @@ def main():
     
     if os.path.exists(INDEX_FILE):
         shutil.copy(INDEX_FILE, "dist/search_index.json")
-
+    
+    if os.path.exists(VIDEO_FILE):
+        shutil.copy(VIDEO_FILE, "dist/videos_index.json")
+    
     html_doc = f'''<!doctype html>
 <html lang="zh-CN">
 <head>
