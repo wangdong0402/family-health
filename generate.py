@@ -315,9 +315,9 @@ h2 a:hover {{ text-decoration: underline; }}
     ⚠️ 导航提示：本板块仅收录官方权威科普链接，内容版权归属原发布单位；所有视频仅作知识参考，不能替代医生面诊。
   </div>
   <div class="video-filter">
-    <button class="btn-tab active" data-filter="all">全部</button>
-    <button class="btn-tab" data-filter="央视健康">央视健康</button>
-    <button class="btn-tab" data-filter="健康中国">健康中国</button>
+    <button class="filter-item active" data-filter="all">全部</button>
+    <button class="filter-item" data-filter="央视健康">央视健康</button>
+    <button class="filter-item" data-filter="健康中国">健康中国</button>
   </div>
   <div class="video-list" id="videoListBox"></div>
   </div>
@@ -562,7 +562,7 @@ function renderVideoCard(){{
       + "<div class=\"video-tag-row\">"
       + "<span class=\"src-tag\">" + item.source + "</span>"
       + "</div>"
-      + "<p class=\"video-desc\">" + item.desc + "</p >"
+      + "<p class=\"video-desc\">" + item.desc + "</p>"
       + "</div>";
   }})
   if(filterData.length === 0){{
