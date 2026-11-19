@@ -24,6 +24,9 @@ sources:
     category: 医学研究
  
 video_sources:
-  - name: 明白健康科普视频
-    url: "https://healviews.com/feed.xml"
+  - name: 央视健康之路
+    url: https://rsshub.app/cctv/healthroad
     default_category: 代谢三高
+  - name: 健康时报科普
+    url: https://rsshub.app/jksb/health
+    default_category: 消化胃肠
