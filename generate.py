@@ -318,7 +318,7 @@ let diseaseData = null;
 let isLoadingData = false;
 let currentDept = 'all';
 function preloadData() {
-  if (diseaseData || isLoadingData) return;
+  if (diseaseData || isLoadingData) {{ return; }}
   isLoadingData = true;
   try {
     const cachedStr = localStorage.getItem('health_disease_cache');
