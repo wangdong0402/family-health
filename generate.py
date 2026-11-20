@@ -3,10 +3,13 @@ import os
 import html
 import shutil
 from datetime import datetime, timezone, timedelta
+
 NEWS_FILE = "data/news.json"
 INDEX_FILE = "data/search_index.json"
 VIDEO_FILE = "data/videos_index.json"
 OUTPUT_FILE = "dist/index.html"
+
+
 def format_relative_time(value):
     if not value:
         return ""
@@ -26,15 +29,19 @@ def format_relative_time(value):
             return local_dt.strftime('%m-%d %H:%M')
     except Exception:
         return str(value)[:16]
+
+
 def load_data():
     if not os.path.exists(NEWS_FILE):
         return {"updated": "", "count": 0, "items": []}
     with open(NEWS_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
 def build_cards(items):
     if not items:
         return '<div class="empty">还没有数据。请等待每日自动任务运行。</div>'
-    
+
     existing_categories = set(item.get("category", "") for item in items if item.get("category"))
     desired_order = ["国内健康新闻", "权威聚合", "医学研究", "慢病指南"]
     sorted_categories = []
@@ -43,11 +50,13 @@ def build_cards(items):
             sorted_categories.append(cat)
             existing_categories.remove(cat)
     sorted_categories.extend(sorted(list(existing_categories)))
+
     filter_html = '<div class="filter-bar" id="filter-bar">'
     filter_html += f'<button class="filter-btn active" onclick="filterNews(\'all\', this)">全部</button>'
     for cat in sorted_categories:
         filter_html += f'<button class="filter-btn" onclick="filterNews(\'{cat}\', this)">{cat}</button>'
     filter_html += '</div>'
+
     cards = []
     for item in items:
         title = html.escape(item.get("title", ""))
@@ -56,7 +65,7 @@ def build_cards(items):
         source = html.escape(item.get("source", ""))
         category = html.escape(item.get("category", ""))
         published = format_relative_time(item.get("published", ""))
-        
+
         tag_style = ""
         border_color = "#e5e7eb"
         if "权威聚合" in category:
@@ -76,8 +85,9 @@ def build_cards(items):
             border_color = "#a855f7"
         else:
             tag_style = "background: #f3f4f6; color: #374151;"
+
         summary_html = f'<p class="summary">{summary}</p>' if summary else ""
-        
+
         cards.append(f'''
         <article class="card news-card" data-category="{category}" style="border-left: 4px solid {border_color};">
           <div class="meta">
@@ -89,20 +99,23 @@ def build_cards(items):
           {summary_html}
         </article>''')
     return filter_html + "\n".join(cards)
+
+
 def main():
     data = load_data()
     items = data.get("items", [])
     updated = format_relative_time(data.get("updated", ""))
     count = data.get("count", len(items))
     cards_html = build_cards(items)
+
     os.makedirs("dist", exist_ok=True)
-    
+
     if os.path.exists(INDEX_FILE):
         shutil.copy(INDEX_FILE, "dist/search_index.json")
-    
+
     if os.path.exists(VIDEO_FILE):
         shutil.copy(VIDEO_FILE, "dist/videos_index.json")
-    
+
     html_doc = f'''<!doctype html>
 <html lang="zh-CN">
 <head>
@@ -233,6 +246,7 @@ h2 a:hover {{ text-decoration: underline; }}
   border-radius:8px;
   padding:14px;
   cursor:pointer;
+  background:#fff;
 }}
 .video-tag-row {{
   display:flex;
@@ -374,6 +388,7 @@ function preloadData() {{
       document.getElementById('disease-results').innerHTML = '<div class="search-tips" style="color:red;">⚠️ 加载失败: ' + err.message + '</div>';
     }});
 }}
+
 function switchTab(tab) {{
   document.getElementById('tab-news').style.display = 'none';
   document.getElementById('tab-disease').style.display = 'none';
@@ -381,23 +396,17 @@ function switchTab(tab) {{
   document.getElementById('btn-news').classList.remove('active');
   document.getElementById('btn-disease').classList.remove('active');
   document.getElementById('btn-videos').classList.remove('active');
-
   document.getElementById('tab-' + tab).style.display = 'block';
   document.getElementById('btn-' + tab).classList.add('active');
-  // 记住当前选中tab，刷新/返回页面自动恢复
   localStorage.setItem('lastActiveTab', tab);
-
   if (tab === 'disease') {{
     preloadData();
   }} else if (tab === 'videos') {{
     loadVideoPage();
   }}
 }}
-let videoMemoryCache = null;
-let videoMemoryEtag = null;
-const VIDEO_DB_NAME = "HealthVideoCache";
-const VIDEO_STORE_NAME = "videoCache";
 
+let videoMemoryCache = null;
 async function getVideoIndex(url) {{
   if (videoMemoryCache) {{
     return videoMemoryCache;
@@ -412,51 +421,43 @@ async function getVideoIndex(url) {{
 }}
 
 async function loadVideoPage() {{
-  const box = document.getElementById('tab-videos');
-  box.innerHTML = '<p style="padding:20px;color:#666;">⏳ 正在加载视频资源...</p>';
+  const listBox = document.getElementById('videoListBox');
+  // 加载提示写进内部容器，不会冲掉上方 notice‑tip
+  listBox.innerHTML = '<div style="padding:20px;text-align:center;color:#666;">⏳ 正在加载视频资源...</div>';
   try {{
     const allVideoData = await getVideoIndex('./videos_index.json');
     renderSourceCardList(allVideoData);
   }} catch(e) {{
-    box.innerHTML = '<p style="padding:20px;color:#f56c6c;">❌ 数据源加载失败</p>';
+    listBox.innerHTML = '<div style="padding:20px;text-align:center;color:#c00;">❌ 数据源加载失败</div>';
     console.error(e);
   }}
 }}
 
 function renderSourceCardList(list) {{
-  const box = document.getElementById('tab-videos');
-  // 空数据提示
+  const listBox = document.getElementById('videoListBox');
   if (!list || list.length === 0) {{
-    box.innerHTML = "<div style='padding:20px;color:#666'>暂无视频资源</div>";
+    listBox.innerHTML = '<div style="padding:20px;text-align:center;color:#666;">暂无视频资源</div>';
     return;
   }}
   let html = '';
-  list.forEach(function(item) {{
-    html += "<div class='video-card' data-url='" + item.url + "'>";
-    html += "<h3>" + item.title + "</h3>";
-    html += "<p>" + item.desc + "</p>";
-    html += "</div>";
+  list.forEach(function(item){{
+    html += `<div class="video-card" data-url="${{item.url}}">
+      <h3>${{item.title}}</h3>
+      <p class="video-desc">${{item.desc}}</p>
+    </div>`;
   }});
-  box.innerHTML = html;
+  listBox.innerHTML = html;
 
-  const cards = box.querySelectorAll('.video-card');
-  cards.forEach(function(card) {{
-    card.onclick = function() {{
-      const targetUrl = this.dataset.url;
-      if(targetUrl){{
-        window.open(targetUrl, '_blank');
+  const cards = listBox.querySelectorAll('.video-card');
+  cards.forEach(function(card){{
+    card.onclick = function(){{
+      const u = this.dataset.url;
+      if(u){{
+        window.open(u, '_blank');
       }}
     }};
   }});
 }}
-
-document.addEventListener("click", function(e){{
-  const sourceCard = e.target.closest(".source-card");
-  if(sourceCard){{
-    const url = sourceCard.dataset.url;
-    if(url) window.open(url, '_blank');
-  }}
-}});
 
 function filterNews(category, btn) {{
   const buttons = document.querySelectorAll('.filter-btn');
@@ -471,17 +472,20 @@ function filterNews(category, btn) {{
     }}
   }});
 }}
+
 function filterDept(dept, btn) {{
   currentDept = dept;
   document.querySelectorAll('.dept-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   performSearch();
 }}
+
 let searchTimer = null;
 function debounceSearch() {{
   clearTimeout(searchTimer);
   searchTimer = setTimeout(performSearch, 300);
 }}
+
 async function performSearch() {{
   const query = document.getElementById('disease-search').value.trim();
   const resultContainer = document.getElementById('disease-results');
@@ -529,6 +533,7 @@ async function performSearch() {{
   }});
   resultContainer.innerHTML = htmlStr;
 }}
+
 function openModal(index) {{
   const item = window.currentSearchResults[index];
   if (!item) return;
@@ -554,11 +559,13 @@ function openModal(index) {{
   document.getElementById('modal-content').classList.add('show');
   document.body.style.overflow = 'hidden';
 }}
+
 function closeModal() {{
   document.getElementById('modal-overlay').classList.remove('show');
   document.getElementById('modal-content').classList.remove('show');
   document.body.style.overflow = '';
 }}
+
 window.onscroll = function() {{
   const btn = document.getElementById('backToTop');
   if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {{
@@ -567,10 +574,11 @@ window.onscroll = function() {{
     btn.style.display = 'none';
   }}
 }};
+
 function scrollToTop() {{
   window.scrollTo({{ top: 0, behavior: 'smooth' }});
 }}
-// 页面加载完成，自动恢复上次打开的tab
+
 window.onload = function(){{
   const lastTab = localStorage.getItem('lastActiveTab');
   if(lastTab){{
@@ -580,8 +588,11 @@ window.onload = function(){{
 </script>
 </body>
 </html>'''
+
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(html_doc)
     print(f"已生成 {OUTPUT_FILE}，修复JS语法错误。")
+
+
 if __name__ == "__main__":
     main()
