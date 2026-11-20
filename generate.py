@@ -567,25 +567,25 @@ function switchToVideoList(sourceName) {{
 }}
 
 async function loadVideoPage() {{
-  if(allVideoData.length > 0){{
-    if(videoViewMode === "source"){{
-      document.getElementById("videoListBackBar").style.display = "none";
-      renderSourceCardList();
-    }}else{{
-      document.getElementById("videoListBackBar").style.display = "block";
-      const groupData = groupVideoBySource(allVideoData);
-      renderVideoCardList(groupData[currentSelectSource] || []);
-    }}
-    return;
-  }}
-  try{{
-    allVideoData = await getVideoIndex();
-    videoViewMode = "source";
-    currentSelectSource = "";
-    document.getElementById("videoListBackBar").style.display = "none";
-    renderSourceCardList();
-  }}catch(e){{
-    document.getElementById("videoListBox").innerHTML = "<p>讲座列表加载失败，请稍后重试</p>";
+  const box = document.getElementById('tab-videos');
+  const backBtnWrap = document.getElementById('videoListBackWrap');
+  // 进来直接展示平台入口卡片
+  backBtnWrap.style.display = 'none';
+  try {{
+    const res = await fetch('videos_index.json');
+    const list = await res.json();
+    let html = '';
+    list.forEach(item => {{
+      html += `
+        <div class="video-card" onclick="window.open('${item.url}', '_blank')">
+          <h3>${item.title}</h3>
+          <p>${item.desc}</p>
+        </div>
+      `;
+    }})
+    box.innerHTML = html;
+  }} catch(e) {{
+    box.innerHTML = '<p>平台入口加载失败</p>';
     console.error(e);
   }}
 }}
