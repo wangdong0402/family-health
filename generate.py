@@ -569,7 +569,6 @@ function switchToVideoList(sourceName) {{
 async function loadVideoPage() {{
   const box = document.getElementById('tab-videos');
   const backBtnWrap = document.getElementById('videoListBackWrap');
-  // 进来直接展示平台入口卡片
   backBtnWrap.style.display = 'none';
   try {{
     const res = await fetch('videos_index.json');
@@ -577,9 +576,9 @@ async function loadVideoPage() {{
     let html = '';
     list.forEach(item => {{
       html += `
-        <div class="video-card" onclick="window.open('${item.url}', '_blank')">
-          <h3>${item.title}</h3>
-          <p>${item.desc}</p>
+        <div class="video-card" onclick="window.open('${'{item.url}'}', '_blank')">
+          <h3>${'{item.title}'}</h3>
+          <p>${'{item.desc}'}</p>
         </div>
       `;
     }})
