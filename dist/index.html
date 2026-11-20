@@ -323,7 +323,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">7 小时前</span>
+            <span class="time-text">8 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-20/10735009.shtml" target="_blank" rel="noopener noreferrer">“零添加”“0蔗糖”未必更健康</a></h2>
           <p class="summary">本报记者 王美华</p>
@@ -343,7 +343,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">18 小时前</span>
+            <span class="time-text">19 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-19/10734904.shtml" target="_blank" rel="noopener noreferrer">冬季吃火锅如何不上火？中医专家介绍4个“小妙招”</a></h2>
           <p class="summary">中新网北京11月19日电 (记者 李纯)国家中医药管理局19日在北京举行专题发布会，介绍“冬季的中医药保健”相关知识。谈及“冬季吃火锅如何不上火”，江苏省江阴市城东社区卫生服务中心副主任医师匡宇娟在会上介绍了4个“小妙招”。</p>
@@ -959,7 +959,7 @@ async function loadVideoPage() {
   const box = document.getElementById('tab-videos');
   box.innerHTML = '<p style="padding:20px;color:#666;">⏳ 正在加载视频资源...</p>';
   try {
-    const allVideoData = await getVideoIndex('./manual_videos.json');
+    const allVideoData = await getVideoIndex('./data/manual_videos.json');
     renderSourceCardList(allVideoData);
   } catch(e) {
     box.innerHTML = '<p style="padding:20px;color:#f56c6c;">❌ 数据源加载失败</p>';
