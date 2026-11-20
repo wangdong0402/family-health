@@ -441,14 +441,14 @@ function renderSourceCardList(list) {{
   }}
   let html = '';
   list.forEach(function(item){{
-    html += `<div class="video-card" data-url="${{item.url}}">
-      <h3>${{item.title}}</h3>
-      <p class="video-desc">${{item.desc}}</p>
+    html += `<div class="disease-list-card" data-url="${{item.url}}">
+      <h3>${{item.title}} <span style="font-size:11px; background:#e5e7eb; color:#6b7280; padding:2px 6px; border-radius:4px; float:right;">视频合集</span></h3>
+      <p>${{item.desc}}</p>
     </div>`;
   }});
   listBox.innerHTML = html;
 
-  const cards = listBox.querySelectorAll('.video-card');
+  const cards = listBox.querySelectorAll('.disease-list-card');
   cards.forEach(function(card){{
     card.onclick = function(){{
       const u = this.dataset.url;
