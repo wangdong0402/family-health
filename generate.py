@@ -570,21 +570,29 @@ async function loadVideoPage() {{
   const box = document.getElementById('tab-videos');
   const backBtnWrap = document.getElementById('videoListBackWrap');
   backBtnWrap.style.display = 'none';
+
   try {{
     const res = await fetch('videos_index.json');
+    if (!res.ok) {{
+      box.innerHTML = '<p>❌ videos_index.json 文件加载失败（404，没有复制到输出目录）</p>';
+      return;
+    }}
     const list = await res.json();
     let html = '';
-    list.forEach(item => {{
-      html += `
-        <div class="video-card" onclick="window.open('${'{item.url}'}', '_blank')">
-          <h3>${'{item.title}'}</h3>
-          <p>${'{item.desc}'}</p>
-        </div>
-      `;
-    }})
-    box.innerHTML = html;
+    for (let i = 0; i < list.length; i++) {{
+      const item = list[i];
+      html += '<div class="video-card" onclick="window.open(\'' + item.url + '\', \'_blank\')">';
+      html += '<h3>' + item.title + '</h3>';
+      html += '<p>' + item.desc + '</p>';
+      html += '</div>';
+    }}
+    if (html === '') {{
+      box.innerHTML = '<p>✅ 文件读到了，但是里面是空数组</p>';
+    }} else {{
+      box.innerHTML = html;
+    }}
   }} catch(e) {{
-    box.innerHTML = '<p>平台入口加载失败</p>';
+    box.innerHTML = '<p>❌ JSON解析失败，格式写错</p>';
     console.error(e);
   }}
 }}
