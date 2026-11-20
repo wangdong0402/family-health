@@ -1,1 +1,44 @@
-[{"id":1,"title":"央视健康","cover":"","url":"https://tv.cctv.com/lm/jkzl/","desc":"央视健康科普讲座合集"},{"id":2,"title":"健康中国","cover":"","url":"https://www.healthchina.gov.cn/","desc":"国家卫健委官方科普平台"},{"id":3,"title":"急救科普","cover":"","url":"https://www.120.cn/","desc":"急救知识、应急培训视频"},{"id":4,"title":"中华医学会","cover":"","url":"https://www.cma.org.cn/","desc":"医学学术科普、专家讲座"},{"id":5,"title":"中国疾控中心","cover":"","url":"https://www.chinacdc.cn/","desc":"传染病、慢病防控科普资源"},{"id":6,"title":"人民健康","cover":"","url":"https://health.people.com.cn/","desc":"人民网旗下健康科普栏目"}]
+[
+  {
+    "id": 1,
+    "title": "央视健康之路",
+    "cover": "",
+    "url": "http://tv.cctv.com/lm/jkzl/videoset/",
+    "desc": "CCTV10《健康之路》完整节目视频合集，专家讲解常见病、养生、营养科普"
+  },
+  {
+    "id": 2,
+    "title": "央视健康中国",
+    "cover": "",
+    "url": "https://tv.cctv.cn/yskd/jkzg/index.shtml",
+    "desc": "CCTV4《健康中国》专题栏目合集，覆盖慢病、中老年、常见病防治科普视频"
+  },
+  {
+    "id": 3,
+    "title": "急救应急科普",
+    "cover": "",
+    "url": "http://www.cneb.gov.cn/kepushipin/yingjishipin/",
+    "desc": "国家应急广播官方急救视频合集：AED使用、心肺复苏、外伤止血、溺水、骨折救护"
+  },
+  {
+    "id": 4,
+    "title": "中华医学会科普",
+    "cover": "",
+    "url": "https://www.cma.org.cn/col/col982/index.html",
+    "desc": "中华医学会官方专家科普讲座、院士访谈、学科疾病规范诊治视频专区"
+  },
+  {
+    "id": 5,
+    "title": "国家疾控科普",
+    "cover": "",
+    "url": "https://www.ndcpa.gov.cn/jbkzzx/",
+    "desc": "国家疾控局官方科普宣教视频：传染病、慢病防控、疫苗、流感、近视防控"
+  },
+  {
+    "id": 6,
+    "title": "人民网人民健康",
+    "cover": "",
+    "url": "http://health.people.com.cn/GB/26466/431463/432282/433614/index.html",
+    "desc": "人民网老年健康系列科普视频合集，覆盖老年慢病、用药、居家照护、传染病预防"
+  }
+]
