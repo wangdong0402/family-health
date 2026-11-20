@@ -373,7 +373,7 @@ function preloadData() {{
     }})
     .catch(err => {{
       isLoadingData = false;
-      document.getElementById('disease-results').innerHTML = `<div class="search-tips" style="color:red;">⚠️ 加载失败: ${{err.message}}</div>`;
+      document.getElementById('disease-results').innerHTML = '<div class="search-tips" style="color:red;">⚠️ 加载失败: ' + err.message + '</div>';
     }});
 }}
 function switchTab(tab) {{
@@ -622,21 +622,23 @@ async function performSearch() {{
       if (!response.ok) throw new Error("HTTP Status: " + response.status);
       diseaseData = await response.json();
     }} catch (err) {{
-      resultContainer.innerHTML = `<div class="search-tips" style="color:red;">⚠️ 加载失败: ${{err.message}}</div>`;
+      resultContainer.innerHTML = '<div class="search-tips" style="color:red;">⚠️ 加载失败: ' + err.message + '</div>';
       return;
     }}
   }}
   let matches = [];
   
   if (query.length > 0) {{
-    matches = diseaseData.filter(item => 
-      item.title.includes(query) && (currentDept === 'all' || item.mapped_dept === currentDept)
-    ).slice(0, 30);
+    matches = diseaseData.filter(function(item){{
+      return item.title.includes(query) && (currentDept === 'all' || item.mapped_dept === currentDept);
+    }}).slice(0, 30);
   }} else {{
     if (currentDept === 'all') {{
       matches = diseaseData.slice(0, 30);
     }} else {{
-      matches = diseaseData.filter(item => item.mapped_dept === currentDept).slice(0, 30);
+      matches = diseaseData.filter(function(item){{
+        return item.mapped_dept === currentDept;
+      }}).slice(0, 30);
     }}
   }}
   if (matches.length === 0) {{
@@ -645,17 +647,15 @@ async function performSearch() {{
   }}
   let htmlStr = '';
   window.currentSearchResults = matches;
-  matches.forEach((item, index) => {{
+  matches.forEach(function(item, index) {{
     const safeTitle = item.title.replace(/</g, "&lt;");
     const shortDesc = (item.desc || "暂无简介").substring(0, 40) + "...";
-    const deptTag = `<span style="font-size:11px; background:#e5e7eb; color:#6b7280; padding:2px 6px; border-radius:4px; float:right; margin-top:2px;">${{item.mapped_dept}}</span>`;
+    const deptTag = '<span style="font-size:11px; background:#e5e7eb; color:#6b7280; padding:2px 6px; border-radius:4px; float:right; margin-top:2px;">' + item.mapped_dept + '</span>';
     
-    htmlStr += `
-      <div class="disease-list-card" onclick="openModal(${{index}})">
-        <h3>${{safeTitle}} ${{deptTag}}</h3>
-        <p>${{shortDesc}}</p>
-      </div>
-    `;
+    htmlStr += '<div class="disease-list-card" onclick="openModal(' + index + ')">'
+      + '<h3>' + safeTitle + ' ' + deptTag + '</h3>'
+      + '<p>' + shortDesc + '</p>'
+      + '</div>';
   }});
   resultContainer.innerHTML = htmlStr;
 }}
@@ -665,22 +665,19 @@ function openModal(index) {{
   document.getElementById('modal-title').innerText = item.title;
   
   let bodyHtml = '';
-  if (item.desc) bodyHtml += `<div class="detail-section"><span class="detail-label label-desc">简介</span><div>${{item.desc}}</div></div>`;
-  if (item.cause) bodyHtml += `<div class="detail-section"><span class="detail-label label-cause">病因</span><div>${{item.cause}}</div></div>`;
-  if (item.symptom) bodyHtml += `<div class="detail-section"><span class="detail-label label-symptom">症状</span><div>${{item.symptom}}</div></div>`;
-  if (item.cure_way) bodyHtml += `<div class="detail-section"><span class="detail-label label-cure">治疗</span><div>${{item.cure_way}}</div></div>`;
-  if (item.prevent) bodyHtml += `<div class="detail-section"><span class="detail-label label-prevent">预防</span><div>${{item.prevent}}</div></div>`;
+  if (item.desc) bodyHtml += '<div class="detail-section"><span class="detail-label label-desc">简介</span><div>' + item.desc + '</div></div>';
+  if (item.cause) bodyHtml += '<div class="detail-section"><span class="detail-label label-cause">病因</span><div>' + item.cause + '</div></div>';
+  if (item.symptom) bodyHtml += '<div class="detail-section"><span class="detail-label label-symptom">症状</span><div>' + item.symptom + '</div></div>';
+  if (item.cure_way) bodyHtml += '<div class="detail-section"><span class="detail-label label-cure">治疗</span><div>' + item.cure_way + '</div></div>';
+  if (item.prevent) bodyHtml += '<div class="detail-section"><span class="detail-label label-prevent">预防</span><div>' + item.prevent + '</div></div>';
   
   if (item.drugs && item.drugs.length > 0) {{
-    let drugTags = item.drugs.map(d => `<span class="drug-tag">${{d}}</span>`).join('');
-    bodyHtml += `
-      <div class="detail-section">
-        <span class="detail-label label-drug">用药参考</span>
-        <div class="drug-tags">${{drugTags}}</div>
-      </div>
-    `;
+    let drugTags = item.drugs.map(function(d){{
+      return '<span class="drug-tag">' + d + '</span>';
+    }}).join('');
+    bodyHtml += '<div class="detail-section"><span class="detail-label label-drug">用药参考</span><div class="drug-tags">' + drugTags + '</div></div>';
   }}
-  if (item.department) bodyHtml += `<div class="detail-section"><span class="detail-label label-desc">就诊科室</span><div>${{item.department}}</div></div>`;
+  if (item.department) bodyHtml += '<div class="detail-section"><span class="detail-label label-desc">就诊科室</span><div>' + item.department + '</div></div>';
   document.getElementById('modal-body').innerHTML = bodyHtml;
   
   document.getElementById('modal-overlay').classList.add('show');
