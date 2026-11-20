@@ -524,12 +524,12 @@ function renderSourceCardList() {{
   if(sourceKeys.length === 0){{
     html = "<p>暂无视频数据源</p>";
   }}else{{
-    sourceKeys.forEach(function(sourceName){{
-      const firstItem = groupData[sourceName][0];
-      html += '<div class="source-card" onclick="switchToVideoList(\'' + sourceName + '\')">'
-        + '<h3>' + sourceName + '</h3>'
-        + '<p class="source-desc">' + firstItem.desc + '</p>'
-        + '</div>';
+  sourceKeys.forEach(function(sourceName){{
+  const firstItem = groupData[sourceName][0];
+  html += '<div class="source-card" data-source="' + sourceName + '">'
+    + '<h3>' + sourceName + '</h3>'
+    + '<p class="source-desc">' + firstItem.desc + '</p>'
+    + '</div>';
     }})
   }}
   box.innerHTML = html;
@@ -581,12 +581,18 @@ async function loadVideoPage() {{
   }}
 }}
 
-document.getElementById("videoListBox").onclick = function(e){{
-  const card = e.target.closest(".video-card");
-  if(card){{
-    window.open(card.dataset.url, '_blank');
+document.getElementById("videoListBox").addEventListener("click", function(e){{
+  const sourceCard = e.target.closest(".source-card");
+  if(sourceCard){{
+    const name = sourceCard.dataset.source;
+    switchToVideoList(name);
+    return;
   }}
-}}
+  const videoCard = e.target.closest(".video-card");
+  if(videoCard){{
+    window.open(videoCard.dataset.url, '_blank');
+  }}
+}});
 
 function filterNews(category, btn) {{
   const buttons = document.querySelectorAll('.filter-btn');
