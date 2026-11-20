@@ -283,7 +283,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">4 小时前</span>
+            <span class="time-text">5 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-20/10735122.shtml" target="_blank" rel="noopener noreferrer">进入高发季！出现这6个信号，可能是心梗</a></h2>
           <p class="summary">寒潮来袭</p>
@@ -293,7 +293,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">4 小时前</span>
+            <span class="time-text">5 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-20/10735121.shtml" target="_blank" rel="noopener noreferrer">似睡非睡4年 竟拖成顽固性失眠</a></h2>
           <p class="summary">今年52岁的张女士(化姓)，被失眠折磨四年有余。起初只是入睡稍慢，她误以为这是更年期的正常表现，居家调理就能好转。她尝试过泡脚、食疗，也断断续续服用过多种助眠药物，但睡眠问题反反复复。发展到后期，她躺在床上几小时毫无睡意，夜里频繁惊醒，整夜处于似睡非睡的状态。直到前往南京市妇幼保健院麻醉治疗与睡眠门诊就诊，才得知自己已经发展成为顽固性失眠。</p>
@@ -303,7 +303,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">4 小时前</span>
+            <span class="time-text">5 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-20/10735118.shtml" target="_blank" rel="noopener noreferrer">出现红斑揉一揉，再用气圈垫一垫？ 这些“好心护理法”正在加重压疮</a></h2>
           <p class="summary">11月的第三个星期四，是世界压疮预防日(全球压力性损伤预防日)。2026年国际官方主题为：每一个动作，皆有意义。随着我国逐渐步入老龄化社会，大量卧床老人的居家照护问题日益显著，而其中一个非常重要且容易被大家忽视的问题就是压疮。</p>
@@ -313,7 +313,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span class="time-text">7 小时前</span>
+            <span class="time-text">8 小时前</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261118073918.htm" target="_blank" rel="noopener noreferrer">Experimental compound burns fat without sacrificing muscle</a></h2>
           <p class="summary">Researchers at UC Berkeley have identified a compound that could transform weight-loss treatment by helping the body burn more energy instead of suppressing appetite like Ozempic and Wegovy. In mice, the compound boosted energy expenditure by up to 18%, improved blood sugar control, reduced liver fa</p>
@@ -363,7 +363,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span class="time-text">20 小时前</span>
+            <span class="time-text">21 小时前</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261118073749.htm" target="_blank" rel="noopener noreferrer">Scientists tested 212 plant-based foods. Every single one contained fungal toxins</a></h2>
           <p class="summary">A new study has uncovered a surprising concern hiding in popular plant-based foods and drinks. Researchers tested 212 vegan and vegetarian products sold in the UK, including meat alternatives, oat milk, almond milk, and soy milk, and found that every single one contained at least one potentially har</p>
@@ -959,7 +959,7 @@ async function loadVideoPage() {
   const box = document.getElementById('tab-videos');
   box.innerHTML = '<p style="padding:20px;color:#666;">⏳ 正在加载视频资源...</p>';
   try {
-    const allVideoData = await getVideoIndex('./data/manual_videos.json');
+    const allVideoData = await getVideoIndex('./videos_index.json');
     renderSourceCardList(allVideoData);
   } catch(e) {
     box.innerHTML = '<p style="padding:20px;color:#f56c6c;">❌ 数据源加载失败</p>';
