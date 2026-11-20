@@ -308,6 +308,9 @@ h2 a:hover {{ text-decoration: underline; }}
   <div class="notice-tip">
     ⚠️ 导航提示：本板块仅收录官方科普频道合集，内容版权归属原发布单位；所有视频仅作知识参考，不能替代医生面诊。
   </div>
+  <div id="videoListBackBar" style="display:none;margin-bottom:12px;">
+  <button onclick="backToSourceHome()" style="padding:8px 12px;border-radius:8px;border:1px solid #ccc;background:#fff;">← 返回数据源首页</button>
+  </div>
   <div class="video-list" id="videoListBox"></div>
   </div>
   
@@ -392,6 +395,12 @@ const VIDEO_DB_NAME = "HealthVideoCache";
 const VIDEO_STORE_NAME = "videoStore";
 let videoDbInstance = null;
 const VIDEO_CACHE_TTL = 7 * 24 * 60 * 60 * 1000;
+function backToSourceHome() {{
+  videoViewMode = "source";
+  currentSelectSource = "";
+  document.getElementById("videoListBackBar").style.display = "none";
+  renderSourceCardList();
+}}
 async function videoOpenDB() {{
   if (videoDbInstance) return videoDbInstance;
   return new Promise(function(resolve, reject) {{
@@ -552,6 +561,7 @@ function renderVideoCardList(filterData){{
 function switchToVideoList(sourceName) {{
   videoViewMode = "video";
   currentSelectSource = sourceName;
+  document.getElementById("videoListBackBar").style.display = "block";
   const groupData = groupVideoBySource(allVideoData);
   renderVideoCardList(groupData[sourceName] || []);
 }}
@@ -559,8 +569,10 @@ function switchToVideoList(sourceName) {{
 async function loadVideoPage() {{
   if(allVideoData.length > 0){{
     if(videoViewMode === "source"){{
+      document.getElementById("videoListBackBar").style.display = "none";
       renderSourceCardList();
     }}else{{
+      document.getElementById("videoListBackBar").style.display = "block";
       const groupData = groupVideoBySource(allVideoData);
       renderVideoCardList(groupData[currentSelectSource] || []);
     }}
@@ -569,6 +581,8 @@ async function loadVideoPage() {{
   try{{
     allVideoData = await getVideoIndex();
     videoViewMode = "source";
+    currentSelectSource = "";
+    document.getElementById("videoListBackBar").style.display = "none";
     renderSourceCardList();
   }}catch(e){{
     document.getElementById("videoListBox").innerHTML = "<p>讲座列表加载失败，请稍后重试</p>";
