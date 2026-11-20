@@ -381,8 +381,12 @@ function switchTab(tab) {{
   document.getElementById('btn-news').classList.remove('active');
   document.getElementById('btn-disease').classList.remove('active');
   document.getElementById('btn-videos').classList.remove('active');
+
   document.getElementById('tab-' + tab).style.display = 'block';
   document.getElementById('btn-' + tab).classList.add('active');
+  // 记住当前选中tab，刷新/返回页面自动恢复
+  localStorage.setItem('lastActiveTab', tab);
+
   if (tab === 'disease') {{
     preloadData();
   }} else if (tab === 'videos') {{
@@ -419,6 +423,11 @@ async function loadVideoPage() {{
 
 function renderSourceCardList(list) {{
   const box = document.getElementById('tab-videos');
+  // 空数据提示
+  if (!list || list.length === 0) {{
+    box.innerHTML = "<div style='padding:20px;color:#666'>暂无视频资源</div>";
+    return;
+  }}
   let html = '';
   list.forEach(function(item) {{
     html += "<div class='video-card' data-url='" + item.url + "'>";
@@ -428,11 +437,13 @@ function renderSourceCardList(list) {{
   }});
   box.innerHTML = html;
 
-  // 统一绑定点击
   const cards = box.querySelectorAll('.video-card');
   cards.forEach(function(card) {{
     card.onclick = function() {{
-      window.open(this.dataset.url);
+      const targetUrl = this.dataset.url;
+      if(targetUrl){{
+        window.open(targetUrl, '_blank');
+      }}
     }};
   }});
 }}
@@ -556,6 +567,13 @@ window.onscroll = function() {{
 }};
 function scrollToTop() {{
   window.scrollTo({{ top: 0, behavior: 'smooth' }});
+}}
+// 页面加载完成，自动恢复上次打开的tab
+window.onload = function(){{
+  const lastTab = localStorage.getItem('lastActiveTab');
+  if(lastTab){{
+    switchTab(lastTab);
+  }}
 }}
 </script>
 </body>
