@@ -421,12 +421,10 @@ function renderSourceCardList(list) {{
   const box = document.getElementById('tab-videos');
   let html = '';
   list.forEach(function(item) {{
-    html += `
-    <div class="video-card" onclick="window.open('${item.url}')">
-      <h3>${item.title}</h3>
-      <p>${item.desc}</p>
-    </div>
-    `;
+    html += '<div class="video-card" onclick="window.open(\'' + item.url + '\')">';
+    html += '<h3>' + item.title + '</h3>';
+    html += '<p>' + item.desc + '</p>';
+    html += '</div>';
   }})
   box.innerHTML = html;
 }}
