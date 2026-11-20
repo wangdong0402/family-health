@@ -383,7 +383,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">23 小时前</span>
+            <span class="time-text">昨天 15:59</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-19/10734677.shtml" target="_blank" rel="noopener noreferrer">北京出台专项措施促特殊医学用途配方食品创新发展</a></h2>
           <p class="summary">中新网北京11月19日电 (记者 吕少威 杜燕)《促进特殊医学用途配方食品创新发展若干措施》(下称若干措施)19日发布，由北京市市场监督管理局等八部门联合出台，聚焦特殊医学用途配方食品(下称特医食品)研发、生产、应用等环节，推出12项支持举措。</p>
@@ -959,7 +959,7 @@ async function loadVideoPage() {
   const box = document.getElementById('tab-videos');
   box.innerHTML = '<p style="padding:20px;color:#666;">⏳ 正在加载视频资源...</p>';
   try {
-    const allVideoData = await getVideoIndex('./videos_index.json');
+    const allVideoData = await getVideoIndex('./manual_videos.json');
     renderSourceCardList(allVideoData);
   } catch(e) {
     box.innerHTML = '<p style="padding:20px;color:#f56c6c;">❌ 数据源加载失败</p>';
