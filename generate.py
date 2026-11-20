@@ -251,23 +251,23 @@ h2 a:hover {{ text-decoration: underline; }}
   font-size:14px;
   color:#555;
 }}
-.source-card {
+.source-card {{
   border: 1px solid #eee;
   border-radius: 12px;
   padding:16px;
   margin-bottom:12px;
   background:#fff;
-}
-.source-card h3 {
+}}
+.source-card h3 {{
   margin:0 0 8px 0;
   font-size:18px;
-}
-.source-card .source-desc {
+}}
+.source-card .source-desc {{
   margin:0;
   color:#666;
   font-size:14px;
   line-height:1.5;
-}
+}}
 </style>
 </head>
 <body>
