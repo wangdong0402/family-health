@@ -308,11 +308,6 @@ h2 a:hover {{ text-decoration: underline; }}
   <div class="notice-tip">
     ⚠️ 导航提示：本板块仅收录官方科普频道合集，内容版权归属原发布单位；所有视频仅作知识参考，不能替代医生面诊。
   </div>
-  <div class="video-filter">
-    <button class="filter-item active" data-filter="all">全部</button>
-    <button class="filter-item" data-filter="央视健康">央视健康</button>
-    <button class="filter-item" data-filter="健康中国">健康中国</button>
-  </div>
   <div class="video-list" id="videoListBox"></div>
   </div>
   
