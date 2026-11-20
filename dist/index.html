@@ -183,7 +183,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #ccfbf1; color: #0f766e;">权威聚合</span>
             <span>明白健康</span>
-            <span class="time-text">15 分钟前</span>
+            <span class="time-text">23 分钟前</span>
           </div>
           <h2><a href="https://healviews.com/news/2026-qi-ye-ai-zhi-shi-ku-chan-pin-pai-hang-yu-xuan-xing-39096" target="_blank" rel="noopener noreferrer">2026企业AI知识库产品排行与选型</a></h2>
           <p class="summary">本文对比了腾讯乐享、ONES、Confluence等9款主流企业AI知识库产品，从AI能力、部署方式、适用规模与安全合规等维度提供选型参考，重点拆解各产品定位与适配场景。</p>
@@ -193,7 +193,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">23 分钟前</span>
+            <span class="time-text">31 分钟前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-20/10735122.shtml" target="_blank" rel="noopener noreferrer">进入高发季！出现这6个信号，可能是心梗</a></h2>
           <p class="summary">寒潮来袭</p>
@@ -203,7 +203,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">27 分钟前</span>
+            <span class="time-text">35 分钟前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-20/10735121.shtml" target="_blank" rel="noopener noreferrer">似睡非睡4年 竟拖成顽固性失眠</a></h2>
           <p class="summary">今年52岁的张女士(化姓)，被失眠折磨四年有余。起初只是入睡稍慢，她误以为这是更年期的正常表现，居家调理就能好转。她尝试过泡脚、食疗，也断断续续服用过多种助眠药物，但睡眠问题反反复复。发展到后期，她躺在床上几小时毫无睡意，夜里频繁惊醒，整夜处于似睡非睡的状态。直到前往南京市妇幼保健院麻醉治疗与睡眠门诊就诊，才得知自己已经发展成为顽固性失眠。</p>
@@ -213,7 +213,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">32 分钟前</span>
+            <span class="time-text">39 分钟前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-20/10735118.shtml" target="_blank" rel="noopener noreferrer">出现红斑揉一揉，再用气圈垫一垫？ 这些“好心护理法”正在加重压疮</a></h2>
           <p class="summary">11月的第三个星期四，是世界压疮预防日(全球压力性损伤预防日)。2026年国际官方主题为：每一个动作，皆有意义。随着我国逐渐步入老龄化社会，大量卧床老人的居家照护问题日益显著，而其中一个非常重要且容易被大家忽视的问题就是压疮。</p>
@@ -383,7 +383,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">14 小时前</span>
+            <span class="time-text">15 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-19/10734808.shtml" target="_blank" rel="noopener noreferrer">从“看见”到“听见” 浙江脑机接口加速走向病床</a></h2>
           <p class="summary">中新网杭州11月19日电 题：从“看见”到“听见” 浙江脑机接口加速走向病床</p>
@@ -533,7 +533,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span class="time-text">昨天 11:49</span>
+            <span class="time-text">11-18 11:49</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261116023354.htm" target="_blank" rel="noopener noreferrer">Tiny magnets deep inside the brain could transform Parkinson’s treatment</a></h2>
           <p class="summary">Scientists have developed a new technique that uses magnetic nanoparticles to stimulate deep brain regions, dramatically improving Parkinson’s-like movement problems in mice without permanently implanted electrodes. The breakthrough could pave the way for less invasive treatments using injectable pa</p>
@@ -947,7 +947,7 @@ function preloadData() {
     })
     .catch(err => {
       isLoadingData = false;
-      document.getElementById('disease-results').innerHTML = `<div class="search-tips" style="color:red;">⚠️ 加载失败: ${err.message}</div>`;
+      document.getElementById('disease-results').innerHTML = '<div class="search-tips" style="color:red;">⚠️ 加载失败: ' + err.message + '</div>';
     });
 }
 function switchTab(tab) {
@@ -1196,21 +1196,23 @@ async function performSearch() {
       if (!response.ok) throw new Error("HTTP Status: " + response.status);
       diseaseData = await response.json();
     } catch (err) {
-      resultContainer.innerHTML = `<div class="search-tips" style="color:red;">⚠️ 加载失败: ${err.message}</div>`;
+      resultContainer.innerHTML = '<div class="search-tips" style="color:red;">⚠️ 加载失败: ' + err.message + '</div>';
       return;
     }
   }
   let matches = [];
   
   if (query.length > 0) {
-    matches = diseaseData.filter(item => 
-      item.title.includes(query) && (currentDept === 'all' || item.mapped_dept === currentDept)
-    ).slice(0, 30);
+    matches = diseaseData.filter(function(item){
+      return item.title.includes(query) && (currentDept === 'all' || item.mapped_dept === currentDept);
+    }).slice(0, 30);
   } else {
     if (currentDept === 'all') {
       matches = diseaseData.slice(0, 30);
     } else {
-      matches = diseaseData.filter(item => item.mapped_dept === currentDept).slice(0, 30);
+      matches = diseaseData.filter(function(item){
+        return item.mapped_dept === currentDept;
+      }).slice(0, 30);
     }
   }
   if (matches.length === 0) {
@@ -1219,17 +1221,15 @@ async function performSearch() {
   }
   let htmlStr = '';
   window.currentSearchResults = matches;
-  matches.forEach((item, index) => {
+  matches.forEach(function(item, index) {
     const safeTitle = item.title.replace(/</g, "&lt;");
     const shortDesc = (item.desc || "暂无简介").substring(0, 40) + "...";
-    const deptTag = `<span style="font-size:11px; background:#e5e7eb; color:#6b7280; padding:2px 6px; border-radius:4px; float:right; margin-top:2px;">${item.mapped_dept}</span>`;
+    const deptTag = '<span style="font-size:11px; background:#e5e7eb; color:#6b7280; padding:2px 6px; border-radius:4px; float:right; margin-top:2px;">' + item.mapped_dept + '</span>';
     
-    htmlStr += `
-      <div class="disease-list-card" onclick="openModal(${index})">
-        <h3>${safeTitle} ${deptTag}</h3>
-        <p>${shortDesc}</p>
-      </div>
-    `;
+    htmlStr += '<div class="disease-list-card" onclick="openModal(' + index + ')">'
+      + '<h3>' + safeTitle + ' ' + deptTag + '</h3>'
+      + '<p>' + shortDesc + '</p>'
+      + '</div>';
   });
   resultContainer.innerHTML = htmlStr;
 }
@@ -1239,22 +1239,19 @@ function openModal(index) {
   document.getElementById('modal-title').innerText = item.title;
   
   let bodyHtml = '';
-  if (item.desc) bodyHtml += `<div class="detail-section"><span class="detail-label label-desc">简介</span><div>${item.desc}</div></div>`;
-  if (item.cause) bodyHtml += `<div class="detail-section"><span class="detail-label label-cause">病因</span><div>${item.cause}</div></div>`;
-  if (item.symptom) bodyHtml += `<div class="detail-section"><span class="detail-label label-symptom">症状</span><div>${item.symptom}</div></div>`;
-  if (item.cure_way) bodyHtml += `<div class="detail-section"><span class="detail-label label-cure">治疗</span><div>${item.cure_way}</div></div>`;
-  if (item.prevent) bodyHtml += `<div class="detail-section"><span class="detail-label label-prevent">预防</span><div>${item.prevent}</div></div>`;
+  if (item.desc) bodyHtml += '<div class="detail-section"><span class="detail-label label-desc">简介</span><div>' + item.desc + '</div></div>';
+  if (item.cause) bodyHtml += '<div class="detail-section"><span class="detail-label label-cause">病因</span><div>' + item.cause + '</div></div>';
+  if (item.symptom) bodyHtml += '<div class="detail-section"><span class="detail-label label-symptom">症状</span><div>' + item.symptom + '</div></div>';
+  if (item.cure_way) bodyHtml += '<div class="detail-section"><span class="detail-label label-cure">治疗</span><div>' + item.cure_way + '</div></div>';
+  if (item.prevent) bodyHtml += '<div class="detail-section"><span class="detail-label label-prevent">预防</span><div>' + item.prevent + '</div></div>';
   
   if (item.drugs && item.drugs.length > 0) {
-    let drugTags = item.drugs.map(d => `<span class="drug-tag">${d}</span>`).join('');
-    bodyHtml += `
-      <div class="detail-section">
-        <span class="detail-label label-drug">用药参考</span>
-        <div class="drug-tags">${drugTags}</div>
-      </div>
-    `;
+    let drugTags = item.drugs.map(function(d){
+      return '<span class="drug-tag">' + d + '</span>';
+    }).join('');
+    bodyHtml += '<div class="detail-section"><span class="detail-label label-drug">用药参考</span><div class="drug-tags">' + drugTags + '</div></div>';
   }
-  if (item.department) bodyHtml += `<div class="detail-section"><span class="detail-label label-desc">就诊科室</span><div>${item.department}</div></div>`;
+  if (item.department) bodyHtml += '<div class="detail-section"><span class="detail-label label-desc">就诊科室</span><div>' + item.department + '</div></div>';
   document.getElementById('modal-body').innerHTML = bodyHtml;
   
   document.getElementById('modal-overlay').classList.add('show');
