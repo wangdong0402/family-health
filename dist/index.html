@@ -333,7 +333,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">5 小时前</span>
+            <span class="time-text">6 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-20/10735004.shtml" target="_blank" rel="noopener noreferrer">起床后这4件事易引发心梗，冬天尤其别做</a></h2>
           <p class="summary">今天是“中国心梗救治日”</p>
@@ -353,7 +353,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #fee2e2; color: #b91c1c;">国内健康新闻</span>
             <span>中国新闻网健康</span>
-            <span class="time-text">16 小时前</span>
+            <span class="time-text">17 小时前</span>
           </div>
           <h2><a href="https://www.chinanews.com.cn/jk/2026/11-19/10734808.shtml" target="_blank" rel="noopener noreferrer">从“看见”到“听见” 浙江脑机接口加速走向病床</a></h2>
           <p class="summary">中新网杭州11月19日电 题：从“看见”到“听见” 浙江脑机接口加速走向病床</p>
@@ -373,7 +373,7 @@ h2 a:hover { text-decoration: underline; }
           <div class="meta">
             <span class="tag" style="background: #f3e8ff; color: #7e22ce;">医学研究</span>
             <span>每日科学健康医学</span>
-            <span class="time-text">20 小时前</span>
+            <span class="time-text">21 小时前</span>
           </div>
           <h2><a href="https://www.sciencedaily.com/releases/2026/11/261118065518.htm" target="_blank" rel="noopener noreferrer">Why don&#x27;t weight-loss drugs like Ozempic and Wegovy work for everyone?</a></h2>
           <p class="summary">Why do Ozempic and Wegovy produce dramatic weight loss for some people but disappointing results for others? Scientists are investigating whether the body&#x27;s hidden energy-saving response could help explain the difference and unlock more effective, personalized weight-loss treatments.</p>
@@ -1111,32 +1111,15 @@ function switchToVideoList(sourceName) {
 }
 
 async function loadVideoPage() {
-  const box = document.getElementById('tab-videos');
   const backBtnWrap = document.getElementById('videoListBackWrap');
-  backBtnWrap.style.display = 'none';
-
+  if(backBtnWrap){
+    backBtnWrap.style.display = 'none';
+  }
   try {
-    const res = await fetch('videos_index.json');
-    if (!res.ok) {
-      box.innerHTML = '<p>❌ videos_index.json 文件加载失败（404，没有复制到输出目录）</p>';
-      return;
-    }
-    const list = await res.json();
-    let html = '';
-    for (let i = 0; i < list.length; i++) {
-      const item = list[i];
-      html += '<div class="video-card" onclick="window.open('' + item.url + '', '_blank')">';
-      html += '<h3>' + item.title + '</h3>';
-      html += '<p>' + item.desc + '</p>';
-      html += '</div>';
-    }
-    if (html === '') {
-      box.innerHTML = '<p>✅ 文件读到了，但是里面是空数组</p>';
-    } else {
-      box.innerHTML = html;
-    }
+    allVideoData = await getVideoIndex('./videos_index.json');
+    renderSourceCardList();
   } catch(e) {
-    box.innerHTML = '<p>❌ JSON解析失败，格式写错</p>';
+    document.getElementById('tab-videos').innerHTML = '<p>❌ 视频列表加载失败</p>';
     console.error(e);
   }
 }
