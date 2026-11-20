@@ -418,18 +418,16 @@ async function loadVideoPage() {{
 }}
 
 function renderSourceCardList(list) {{
-  const box = document.getElementById("videoListBox");
-  let html = "";
-  if (!list || list.length === 0){{
-    html = "<p style='padding:20px;color:#666;'>暂无数据源</p>";
-  }}else{{
-    list.forEach(function(item){{
-      html += '<div class="source-card" data-url="' + item.homeUrl + '">'
-        + '<h3>' + item.source + '</h3>'
-        + '<p class="source-desc">' + item.desc + '</p>'
-        + '</div>';
-    }})
-  }}
+  const box = document.getElementById('tab-videos');
+  let html = '';
+  list.forEach(function(item) {{
+    html += `
+    <div class="video-card" onclick="window.open('${item.url}')">
+      <h3>${item.title}</h3>
+      <p>${item.desc}</p>
+    </div>
+    `;
+  }})
   box.innerHTML = html;
 }}
 
