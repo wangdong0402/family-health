@@ -251,6 +251,23 @@ h2 a:hover {{ text-decoration: underline; }}
   font-size:14px;
   color:#555;
 }}
+.source-card {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding:16px;
+  margin-bottom:12px;
+  background:#fff;
+}
+.source-card h3 {
+  margin:0 0 8px 0;
+  font-size:18px;
+}
+.source-card .source-desc {
+  margin:0;
+  color:#666;
+  font-size:14px;
+  line-height:1.5;
+}
 </style>
 </head>
 <body>
@@ -289,7 +306,7 @@ h2 a:hover {{ text-decoration: underline; }}
   
   <div class="tab-content" id="tab-videos" style="display: none;">
   <div class="notice-tip">
-    ⚠️ 导航提示：本板块仅收录官方权威科普链接，内容版权归属原发布单位；所有视频仅作知识参考，不能替代医生面诊。
+    ⚠️ 导航提示：本板块仅收录官方科普频道合集，内容版权归属原发布单位；所有视频仅作知识参考，不能替代医生面诊。
   </div>
   <div class="video-filter">
     <button class="filter-item active" data-filter="all">全部</button>
@@ -485,28 +502,41 @@ async function getVideoIndex(jsonUrl = "./videos_index.json") {{
   return data;
 }}
 let allVideoData = [];
-let activeFilter = "all";
-async function loadVideoPage() {{
-  if(allVideoData.length > 0){{
-    renderVideoCard();
-    return;
-  }}
-  try{{
-    allVideoData = await getVideoIndex();
-    renderVideoCard();
-  }}catch(e){{
-    document.getElementById("videoListBox").innerHTML = "<p>讲座列表加载失败，请稍后重试</p>";
-    console.error(e);
-  }}
+let videoViewMode = "source";
+let currentSelectSource = "";
+
+function groupVideoBySource(videoList) {{
+  const group = {{}};
+  videoList.forEach(function(item) {{
+    if (!group[item.source]) {{
+      group[item.source] = [];
+    }}
+    group[item.source].push(item);
+  }});
+  return group;
 }}
-function renderVideoCard(){{
+
+function renderSourceCardList() {{
   const box = document.getElementById("videoListBox");
-  let filterData = allVideoData;
-  if(activeFilter !== "all"){{
-    filterData = allVideoData.filter(function(item) {{
-      return item.source === activeFilter;
-    }});
+  const groupData = groupVideoBySource(allVideoData);
+  const sourceKeys = Object.keys(groupData);
+  let html = "";
+  if(sourceKeys.length === 0){{
+    html = "<p>暂无视频数据源</p>";
+  }}else{{
+    sourceKeys.forEach(function(sourceName){{
+      const firstItem = groupData[sourceName][0];
+      html += '<div class="source-card" onclick="switchToVideoList(\'' + sourceName + '\')">'
+        + '<h3>' + sourceName + '</h3>'
+        + '<p class="source-desc">' + firstItem.desc + '</p>'
+        + '</div>';
+    }})
   }}
+  box.innerHTML = html;
+}}
+
+function renderVideoCardList(filterData){{
+  const box = document.getElementById("videoListBox");
   let html = "";
   if(filterData.length === 0){{
     html = "<p>当前分类暂无讲座内容</p>";
@@ -524,23 +554,39 @@ function renderVideoCard(){{
   box.innerHTML = html;
 }}
 
+function switchToVideoList(sourceName) {{
+  videoViewMode = "video";
+  currentSelectSource = sourceName;
+  const groupData = groupVideoBySource(allVideoData);
+  renderVideoCardList(groupData[sourceName] || []);
+}}
+
+async function loadVideoPage() {{
+  if(allVideoData.length > 0){{
+    if(videoViewMode === "source"){{
+      renderSourceCardList();
+    }}else{{
+      const groupData = groupVideoBySource(allVideoData);
+      renderVideoCardList(groupData[currentSelectSource] || []);
+    }}
+    return;
+  }}
+  try{{
+    allVideoData = await getVideoIndex();
+    videoViewMode = "source";
+    renderSourceCardList();
+  }}catch(e){{
+    document.getElementById("videoListBox").innerHTML = "<p>讲座列表加载失败，请稍后重试</p>";
+    console.error(e);
+  }}
+}}
+
 document.getElementById("videoListBox").onclick = function(e){{
   const card = e.target.closest(".video-card");
   if(card){{
     window.open(card.dataset.url, '_blank');
   }}
 }}
-
-document.querySelectorAll(".filter-item").forEach(function(btn){{
-  btn.onclick = function(){{
-    document.querySelectorAll(".filter-item").forEach(function(b){{
-      b.classList.remove("active");
-    }});
-    this.classList.add("active");
-    activeFilter = this.dataset.filter;
-    renderVideoCard();
-  }};
-}});
 
 function filterNews(category, btn) {{
   const buttons = document.querySelectorAll('.filter-btn');
