@@ -412,11 +412,13 @@ async function getVideoIndex(url) {{
 }}
 
 async function loadVideoPage() {{
+  const box = document.getElementById('tab-videos');
+  box.innerHTML = '<p style="padding:20px;color:#666;">⏳ 正在加载视频资源...</p>';
   try {{
     const allVideoData = await getVideoIndex('./videos_index.json');
     renderSourceCardList(allVideoData);
   }} catch(e) {{
-    document.getElementById('tab-videos').innerHTML = '<p style="padding:20px;color:#666;">❌ 数据源加载失败</p>';
+    box.innerHTML = '<p style="padding:20px;color:#f56c6c;">❌ 数据源加载失败</p>';
     console.error(e);
   }}
 }}
