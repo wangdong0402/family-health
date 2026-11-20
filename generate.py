@@ -392,204 +392,52 @@ function switchTab(tab) {{
 let videoMemoryCache = null;
 let videoMemoryEtag = null;
 const VIDEO_DB_NAME = "HealthVideoCache";
-const VIDEO_STORE_NAME = "videoStore";
-let videoDbInstance = null;
-const VIDEO_CACHE_TTL = 7 * 24 * 60 * 60 * 1000;
-function backToSourceHome() {{
-  videoViewMode = "source";
-  currentSelectSource = "";
-  document.getElementById("videoListBackBar").style.display = "none";
-  renderSourceCardList();
-}}
-async function videoOpenDB() {{
-  if (videoDbInstance) return videoDbInstance;
-  return new Promise(function(resolve, reject) {{
-    const req = indexedDB.open(VIDEO_DB_NAME, 1);
-    req.onupgradeneeded = function(e) {{
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains(VIDEO_STORE_NAME)) {{
-        db.createObjectStore(VIDEO_STORE_NAME);
-      }}
-    }};
-    req.onsuccess = function(e) {{
-      videoDbInstance = e.target.result;
-      resolve(videoDbInstance);
-    }};
-    req.onerror = function(e) {{
-      reject(e.target.error);
-    }};
-  }});
-}}
-async function videoDbPut(key, value) {{
-  const db = await videoOpenDB();
-  return new Promise(function(resolve, reject) {{
-    const tx = db.transaction(VIDEO_STORE_NAME, "readwrite");
-    const store = tx.objectStore(VIDEO_STORE_NAME);
-    const req = store.put(value, key);
-    req.onsuccess = resolve;
-    req.onerror = function(e) {{
-      reject(e.target.error);
-    }};
-  }});
-}}
-async function videoDbGet(key) {{
-  const db = await videoOpenDB();
-  return new Promise(function(resolve, reject) {{
-    const tx = db.transaction(VIDEO_STORE_NAME, "readonly");
-    const store = tx.objectStore(VIDEO_STORE_NAME);
-    const req = store.get(key);
-    req.onsuccess = function(e) {{
-      resolve(e.target.result);
-    }};
-    req.onerror = function(e) {{
-      reject(e.target.error);
-    }};
-  }});
-}}
-async function getVideoIndex(jsonUrl = "./videos_index.json") {{
+const VIDEO_STORE_NAME = "videoCache";
+
+async function getVideoIndex(url) {{
   if (videoMemoryCache) {{
     return videoMemoryCache;
   }}
-  let localCacheData = null;
-  let localEtag = null;
-  let localCacheTime = 0;
-  try {{
-    localCacheData = await videoDbGet("videoData");
-    localEtag = await videoDbGet("videoEtag");
-    localCacheTime = await videoDbGet("videoCacheTs") || 0;
-  }} catch (err) {{
-    console.warn("视频缓存读取失败，重新下载：", err);
+  const res = await fetch(url);
+  if (!res.ok) {{
+    throw new Error("视频索引文件加载失败");
   }}
-  let remoteEtag = null;
-  try {{
-    const controller = new AbortController();
-    const timer = setTimeout(function() {{ controller.abort(); }}, 5000);
-    const headResp = await fetch(jsonUrl, {{
-      method: "HEAD",
-      signal: controller.signal
-    }});
-    clearTimeout(timer);
-    remoteEtag = headResp.headers.get("etag");
-  }} catch (e) {{
-    console.warn("视频HEAD校验超时，使用时间兜底缓存");
-  }}
-  let cacheValid = false;
-  if (localCacheData) {{
-    if (remoteEtag && localEtag === remoteEtag) {{
-      cacheValid = true;
-    }} else if (!remoteEtag) {{
-      const now = Date.now();
-      if ((now - localCacheTime) < VIDEO_CACHE_TTL) {{
-        cacheValid = true;
-      }}
-    }}
-  }}
-  if (cacheValid) {{
-    console.log("[视频缓存命中]");
-    videoMemoryCache = localCacheData;
-    videoMemoryEtag = localEtag;
-    return localCacheData;
-  }}
-  console.log("[视频缓存未命中] 拉取讲座列表");
-  const resp = await fetch(jsonUrl);
-  const newEtag = resp.headers.get("etag");
-  const data = await resp.json();
+  const data = await res.json();
   videoMemoryCache = data;
-  videoMemoryEtag = newEtag;
-  try {{
-    await videoDbPut("videoData", data);
-    await videoDbPut("videoEtag", newEtag);
-    await videoDbPut("videoCacheTs", Date.now());
-  }} catch (err) {{
-    console.warn("写入视频缓存失败：", err);
-  }}
   return data;
 }}
-let allVideoData = [];
-let videoViewMode = "source";
-let currentSelectSource = "";
 
-function groupVideoBySource(videoList) {{
-  const group = {{}};
-  videoList.forEach(function(item) {{
-    if (!group[item.source]) {{
-      group[item.source] = [];
-    }}
-    group[item.source].push(item);
-  }});
-  return group;
-}}
-
-function renderSourceCardList() {{
-  const box = document.getElementById("videoListBox");
-  const groupData = groupVideoBySource(allVideoData);
-  const sourceKeys = Object.keys(groupData);
-  let html = "";
-  if(sourceKeys.length === 0){{
-    html = "<p>暂无视频数据源</p>";
-  }}else{{
-  sourceKeys.forEach(function(sourceName){{
-  const firstItem = groupData[sourceName][0];
-  html += '<div class="source-card" data-source="' + sourceName + '">'
-    + '<h3>' + sourceName + '</h3>'
-    + '<p class="source-desc">' + firstItem.desc + '</p>'
-    + '</div>';
-    }})
+async function loadVideoPage() {{
+  try {{
+    const allVideoData = await getVideoIndex('./videos_index.json');
+    renderSourceCardList(allVideoData);
+  }} catch(e) {{
+    document.getElementById('tab-videos').innerHTML = '<p style="padding:20px;color:#666;">❌ 数据源加载失败</p>';
+    console.error(e);
   }}
-  box.innerHTML = html;
 }}
 
-function renderVideoCardList(filterData){{
+function renderSourceCardList(list) {{
   const box = document.getElementById("videoListBox");
   let html = "";
-  if(filterData.length === 0){{
-    html = "<p>当前分类暂无讲座内容</p>";
-  }} else {{
-    filterData.forEach(function(item){{
-      html += '<div class="video-card" data-url="' + item.url + '">'
-        + '<h4>' + item.title + '</h4>'
-        + '<div class="video-tag-row">'
-        + '<span class="src-tag">' + item.source + '</span>'
-        + '</div>'
-        + '<p class="video-desc">' + item.desc + '</p >'
+  if (!list || list.length === 0){{
+    html = "<p style='padding:20px;color:#666;'>暂无数据源</p>";
+  }}else{{
+    list.forEach(function(item){{
+      html += '<div class="source-card" data-url="' + item.homeUrl + '">'
+        + '<h3>' + item.source + '</h3>'
+        + '<p class="source-desc">' + item.desc + '</p>'
         + '</div>';
     }})
   }}
   box.innerHTML = html;
 }}
 
-function switchToVideoList(sourceName) {{
-  videoViewMode = "video";
-  currentSelectSource = sourceName;
-  document.getElementById("videoListBackBar").style.display = "block";
-  const groupData = groupVideoBySource(allVideoData);
-  renderVideoCardList(groupData[sourceName] || []);
-}}
-
-async function loadVideoPage() {{
-  const backBtnWrap = document.getElementById('videoListBackWrap');
-  if(backBtnWrap){{
-    backBtnWrap.style.display = 'none';
-  }}
-  try {{
-    allVideoData = await getVideoIndex('./videos_index.json');
-    renderSourceCardList();
-  }} catch(e) {{
-    document.getElementById('tab-videos').innerHTML = '<p>❌ 视频列表加载失败</p>';
-    console.error(e);
-  }}
-}}
-
-document.getElementById("videoListBox").addEventListener("click", function(e){{
+document.addEventListener("click", function(e){{
   const sourceCard = e.target.closest(".source-card");
   if(sourceCard){{
-    const name = sourceCard.dataset.source;
-    switchToVideoList(name);
-    return;
-  }}
-  const videoCard = e.target.closest(".video-card");
-  if(videoCard){{
-    window.open(videoCard.dataset.url, '_blank');
+    const url = sourceCard.dataset.url;
+    if(url) window.open(url, '_blank');
   }}
 }});
 
