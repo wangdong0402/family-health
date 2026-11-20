@@ -1,1 +1,7 @@
-[{"id":1,"title":"管控血糖宜与忌","source":"央视健康","url":"https://tv.cctv.com/lm/jkzl/","desc":"内分泌专家讲解血糖管控饮食与生活注意事项"},{"id":2,"title":"胃炎胃溃疡日常养护","source":"央视健康","url":"https://tv.cctv.com/lm/jkzl/","desc":"消化科专家科普消化道慢病家庭养护要点"},{"id":3,"title":"健康中国科普示例","source":"健康中国","url":"https://www.healthchina.gov.cn/","desc":"健康中国官方平台科普内容，后续替换真实链接"}]
+[
+    {"id":1,"title":"管控血糖宜与忌","source":"央视健康","url":"https://tv.cctv.com/lm/jkzl/videoset/","desc":"内分泌专家讲解血糖管控饮食与生活注意事项"},
+    {"id":2,"title":"胃炎胃溃疡日常养护","source":"央视健康","url":"https://tv.cctv.com/lm/jkzl/videoset/","desc":"消化科专家科普消化道慢病家庭养护要点"},
+    {"id":3,"title":"健康中国官方科普","source":"健康中国","url":"https://www.nhc.gov.cn/wjw/jkzgxmt/xmt.shtml","desc":"国家卫健委健康中国官方新媒体科普专题"},
+    {"id":4,"title":"慢病防控专题","source":"中国疾控中心","url":"https://ncncd.chinacdc.cn/jkzt_14579/","desc":"糖尿病、高血脂等慢病预防科普视频专题"},
+    {"id":5,"title":"公共卫生宣教","source":"国家疾控局","url":"https://www.ndcpa.gov.cn/","desc":"传染病、日常防护类官方科普视频"}
+]
