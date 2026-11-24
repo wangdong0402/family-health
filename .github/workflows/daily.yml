@@ -2,26 +2,27 @@ name: 每日健康资讯自动更新
 
 on:
   schedule:
-    - cron: '15 23 * * *'
-    - cron: '30 4 * * *'
-    - cron: '45 12 * * *'
+    - cron: '15 23 * * *'  # 北京时间 07:15
+    - cron: '30 4 * * *'   # 北京时间 12:30
+    - cron: '45 12 * * *'  # 北京时间 20:45
   workflow_dispatch:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
 
 jobs:
   update-and-deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: 下载仓库文件
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: 安装 Python
         uses: actions/setup-python@v5
@@ -36,7 +37,7 @@ jobs:
 
       - name: 构建病情知识索引
         run: python build_index.py
-      
+
       - name: 构建健康讲座视频索引
         run: python build_videos.py
 
@@ -50,23 +51,29 @@ jobs:
             mkdir -p dist
             echo "<html><body>构建失败，请查看 Actions 日志</body></html>" > dist/index.html
           fi
+          test -f dist/index.html || { echo "::error::dist/index.html 不存在"; exit 1; }
+          du -sh dist
 
-      - name: 保存数据和网页到仓库
+      - name: 保存数据到仓库
         run: |
+          set -e
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ dist/
+          # search_index.json 有 3.9MB 且每次全量重写，不提交到 main，避免仓库体积爆炸
+          git add data/ ':(exclude)data/search_index.json'
           git diff --staged --quiet || git commit -m "自动更新 $(date -u +'%Y-%m-%d %H:%M UTC')"
-          git push
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || {
+            git rebase --abort || true
+            git reset --soft "origin/${GITHUB_REF_NAME}"
+            git add data/ ':(exclude)data/search_index.json'
+            git commit -m "自动更新 $(date -u +'%Y-%m-%d %H:%M UTC')"
+          }
+          git push origin "HEAD:${GITHUB_REF_NAME}"
 
-      - name: 配置 GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: 上传网页文件
-        uses: actions/upload-pages-artifact@v3
+      - name: 发布到 gh-pages 分支
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: dist
-
-      - name: 发布到 GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          force_orphan: true
