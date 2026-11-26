@@ -282,9 +282,19 @@ h2 a:hover {{ text-decoration: underline; }}
   font-size:14px;
   line-height:1.5;
 }}
+
+.dl-bar {{
+  position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 9999;
+  background: rgba(16,185,129,.10); pointer-events: none;
+  opacity: 1; transition: opacity .5s ease;
+}}
+.dl-bar.done {{ opacity: 0; }}
+.dl-bar i {{ display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg,#10b981,#34d399); transition: width .25s ease; }}
 </style>
 </head>
 <body>
+<div class="dl-bar" id="dlBar"><i></i></div>
 <header>
   <div class="header-top">
     <h1>家庭健康资讯</h1>
@@ -344,49 +354,174 @@ h2 a:hover {{ text-decoration: underline; }}
 <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
 <script>
 let diseaseData = null;
-let isLoadingData = false;
+let diseaseLoading = null;
 let currentDept = 'all';
-function preloadData() {{
-  if (diseaseData || isLoadingData) return;
-  isLoadingData = true;
+
+const DISEASE_URL = 'search_index.json';
+const DISEASE_CACHE = 'health-disease-v1.4';
+const DISEASE_META_KEY = 'health_disease_meta';
+const DISEASE_RECHECK_MS = 10 * 60 * 1000;
+const DISEASE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
+// 旧版把 3.8MB 塞进 localStorage；这里顺手清掉，释放配额
+try {{ localStorage.removeItem('health_disease_cache'); }} catch (e) {{}}
+
+function dlMb(n) {{ return (n / 1048576).toFixed(1) + ' MB'; }}
+
+function dlSet(pct, text) {{
+  var fill = document.querySelector('#dlBar i');
+  var wrap = document.getElementById('dlBar');
+  if (fill && pct !== null && pct !== undefined) {{
+    fill.style.width = Math.max(0, Math.min(100, pct)) + '%';
+  }}
+  if (wrap && pct >= 100) {{ wrap.classList.add('done'); }}
+  if (text) {{ window.__dlText = text; }}
+  var msg = document.getElementById('dl-msg');
+  if (msg && text) {{ msg.textContent = '⏳ ' + text; }}
+}}
+
+function readMeta() {{
+  try {{ return JSON.parse(localStorage.getItem(DISEASE_META_KEY) || '{{}}') || {{}}; }}
+  catch (e) {{ return {{}}; }}
+}}
+
+function writeMeta(patch) {{
   try {{
-    const cachedStr = localStorage.getItem('health_disease_cache');
-    if (cachedStr) {{
-      const cacheObj = JSON.parse(cachedStr);
-      const now = new Date().getTime();
-      if (now - cacheObj.timestamp < 43200000) {{
-        diseaseData = cacheObj.data;
-        isLoadingData = false;
-        performSearch(); 
-        return; 
+    var m = readMeta();
+    for (var k in patch) {{ m[k] = patch[k]; }}
+    localStorage.setItem(DISEASE_META_KEY, JSON.stringify(m));
+  }} catch (e) {{}}
+}}
+
+function headerStamp(headers) {{
+  return (headers.get('last-modified') || '') + '|' + (headers.get('etag') || '');
+}}
+
+async function openDiseaseCache() {{
+  try {{
+    if (typeof caches === 'undefined' || !caches.open) return null;
+    return await caches.open(DISEASE_CACHE);
+  }} catch (e) {{
+    console.warn('Cache Storage 不可用，本次退化为内存模式', e);
+    return null;
+  }}
+}}
+
+async function fetchWithProgress(url, fallbackTotal) {{
+  var res = await fetch(url, {{ cache: 'no-store' }});
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  var total = parseInt(res.headers.get('content-length') || '0', 10) || (fallbackTotal || 0);
+  var reader = (res.body && res.body.getReader) ? res.body.getReader() : null;
+  if (!reader) {{
+    var txt = await res.text();
+    return {{ text: txt, bytes: txt.length, headers: res.headers }};
+  }}
+  var chunks = [];
+  var received = 0;
+  while (true) {{
+    var step = await reader.read();
+    if (step.done) break;
+    chunks.push(step.value);
+    received += step.value.length;
+    var real = total ? Math.round(received / Math.max(total, received) * 100) : null;
+    var pct = real === null ? null : Math.round(real * 0.84);
+    dlSet(pct, '知识库下载中 ' + (real === null ? '' : real + '% · ') +
+      dlMb(received) + (total ? ' / ' + dlMb(total) : ''));
+  }}
+  var blob = new Blob(chunks, {{ type: 'application/json' }});
+  return {{ blob: blob, bytes: received, headers: res.headers }};
+}}
+
+async function innerLoadDisease() {{
+  var cache = await openDiseaseCache();
+  var cached = null;
+  if (cache) {{
+    try {{ cached = await cache.match(DISEASE_URL); }} catch (e) {{ cached = null; }}
+  }}
+  var meta = readMeta();
+
+  if (cached && meta.stamp && meta.checkedAt &&
+      (Date.now() - meta.checkedAt) < DISEASE_RECHECK_MS) {{
+    return await cached.json();
+  }}
+
+  var remoteStamp = '';
+  try {{
+    var head = await fetch(DISEASE_URL, {{ method: 'HEAD', cache: 'no-store' }});
+    if (head.ok) remoteStamp = headerStamp(head.headers);
+  }} catch (e) {{}}
+
+  if (cached && remoteStamp && meta.stamp === remoteStamp) {{
+    writeMeta({{ stamp: remoteStamp, checkedAt: Date.now() }});
+    dlSet(null, '');
+    return await cached.json();
+  }}
+
+  try {{
+    dlSet(0, '知识库准备中…');
+    var got = await fetchWithProgress(DISEASE_URL, meta.bytes || 0);
+    var text = got.blob ? await got.blob.text() : got.text;
+    var data = JSON.parse(text);
+    dlSet(88, '正在解析 ' + data.length + ' 条疾病…');
+    if (cache && got.blob) {{
+      var keep = new Headers();
+      ['content-type', 'etag', 'last-modified'].forEach(function (k) {{
+        var v = got.headers.get(k);
+        if (v) keep.set(k, v);
+      }});
+      try {{
+        await cache.put(DISEASE_URL, new Response(got.blob, {{ status: 200, headers: keep }}));
+      }} catch (e) {{
+        console.warn('写入缓存失败，本次内存中仍可用', e);
       }}
     }}
-  }} catch (e) {{
-    console.warn("读取缓存失败，走网络请求", e);
-  }}
-  fetch('search_index.json') 
-    .then(res => {{
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      return res.json();
-    }})
-    .then(data => {{
-      diseaseData = data;
-      isLoadingData = false;
-      performSearch();
-      
-      try {{
-        localStorage.setItem('health_disease_cache', JSON.stringify({{
-          timestamp: new Date().getTime(),
-          data: data
-        }}));
-      }} catch (e) {{
-        console.warn("存储空间不足", e);
-      }}
-    }})
-    .catch(err => {{
-      isLoadingData = false;
-      document.getElementById('disease-results').innerHTML = '<div class="search-tips" style="color:red;">⚠️ 加载失败: ' + err.message + '</div>';
+    writeMeta({{
+      stamp: remoteStamp || ('local:' + Date.now()),
+      checkedAt: Date.now(),
+      bytes: got.bytes || 0
     }});
+    dlSet(100, '');
+    return data;
+  }} catch (err) {{
+    if (cached) {{
+      if (meta.checkedAt && (Date.now() - meta.checkedAt) > DISEASE_TTL_MS) {{
+        console.warn('本地缓存已超过 7 天，且下载失败，暂用旧数据', err);
+      }} else {{
+        console.warn('下载失败，退回本地缓存', err);
+      }}
+      dlSet(100, '');
+      return await cached.json();
+    }}
+    throw err;
+  }}
+}}
+
+function loadDiseaseData() {{
+  if (diseaseData) return Promise.resolve(diseaseData);
+  if (diseaseLoading) return diseaseLoading;
+  var p = innerLoadDisease().then(function (data) {{
+    diseaseData = data;
+    diseaseLoading = null;
+    return data;
+  }}, function (err) {{
+    diseaseLoading = null;
+    throw err;
+  }});
+  diseaseLoading = p;
+  return p;
+}}
+
+function showDiseaseLoadingTip() {{
+  var box = document.getElementById('disease-results');
+  if (!box) return;
+  box.innerHTML = '<div class="search-tips" id="dl-msg">⏳ ' + (window.__dlText || '知识库准备中…') + '</div>';
+}}
+
+function scheduleDiseasePrefetch() {{
+  var nc = navigator.connection || {{}};
+  if (nc.saveData === true) {{ console.log('省流量模式，跳过疾病知识库预取'); return; }}
+  if (/slow-2g|2g/.test(nc.effectiveType || '')) {{ console.log('当前网络较慢，跳过预取'); return; }}
+  loadDiseaseData().catch(function (e) {{ console.warn('疾病知识库预取失败', e); }});
 }}
 
 function switchTab(tab) {{
@@ -400,7 +535,11 @@ function switchTab(tab) {{
   document.getElementById('btn-' + tab).classList.add('active');
   localStorage.setItem('lastActiveTab', tab);
   if (tab === 'disease') {{
-    preloadData();
+    showDiseaseLoadingTip();
+    loadDiseaseData().then(performSearch, function (err) {{
+      document.getElementById('disease-results').innerHTML =
+        '<div class="search-tips" style="color:red;">⚠️ 加载失败: ' + err.message + '</div>';
+    }});
   }} else if (tab === 'videos') {{
     loadVideoPage();
   }}
@@ -490,11 +629,9 @@ async function performSearch() {{
   const query = document.getElementById('disease-search').value.trim();
   const resultContainer = document.getElementById('disease-results');
   if (!diseaseData) {{
-    resultContainer.innerHTML = '<div class="search-tips">⏳ 正在加载知识库，请稍候...</div>';
+    resultContainer.innerHTML = '<div class="search-tips" id="dl-msg">⏳ 正在准备疾病知识库…</div>';
     try {{
-      const response = await fetch('search_index.json?t=' + new Date().getTime());
-      if (!response.ok) throw new Error("HTTP Status: " + response.status);
-      diseaseData = await response.json();
+      await loadDiseaseData();
     }} catch (err) {{
       resultContainer.innerHTML = '<div class="search-tips" style="color:red;">⚠️ 加载失败: ' + err.message + '</div>';
       return;
@@ -583,6 +720,11 @@ window.onload = function(){{
   const lastTab = localStorage.getItem('lastActiveTab');
   if(lastTab){{
     switchTab(lastTab);
+  }}
+  if ('requestIdleCallback' in window) {{
+    requestIdleCallback(scheduleDiseasePrefetch, {{ timeout: 4000 }});
+  }} else {{
+    setTimeout(scheduleDiseasePrefetch, 2500);
   }}
 }}
 </script>
